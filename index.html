@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>课堂整理工具</title>
-<!-- verified fix -->
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
@@ -236,7 +235,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
         <span class="sidebar-brand-text">课堂整理</span>
       </div>
       <div class="sidebar-actions">
-        <button class="btn-icon" onclick="toggleDarkMode()" id="darkModeBtn" title="切换深色模式">☾</button>
+        <button class="btn-icon" onclick="toggleDarkMode()" id="darkModeBtn" title="切换深色模式" onclick="toggleDarkMode()">☾</button>
         <button class="btn-icon" onclick="openAISettings()" title="AI 设置" style="font-size:13px;font-weight:700;color:var(--primary)">AI</button>
         <button class="btn-icon" onclick="openCourseModal()" title="添加课程" style="font-size:18px;font-weight:300">+</button>
       </div>
@@ -398,7 +397,7 @@ function closeAISettings(){$("aiSettingsModal").classList.remove("show")}
 // AI Summary
 var aiSummaryResult=null;
 function aiSummarizeNote(noteId){loadAISettings();if(!aiSettings.key){alert("请先在右上角 AI 设置中配置 API Key");openAISettings();return}var course=getCourse();if(!course)return;var note=course.notes.find(function(n){return n.id===noteId});if(!note||!note.content.trim()){alert("笔记内容为空，无法总结");return}var btn=$("ai-btn-"+noteId);if(btn){btn.disabled=true;btn.classList.add("loading")}callAISummary(note.content,note.title,function(result){if(btn){btn.disabled=false;btn.classList.remove("loading")}if(result){aiSummaryResult={noteId:noteId,summary:result.summary,keyPoints:result.keyPoints,courseId:course.id};showAISummary(result.summary,result.keyPoints)}})}
-function callAISummary(text,title,callback){var prompt='你是一个课堂笔记整理助手。请对以下课堂笔记内容进行提炼总结：\n\n1. 去除重复、废话、语气词\n2. 保留核心知识点和逻辑结构\n3. 用清晰简洁的语言重新组织\n4. 提取 3-5 个最重要的知识点作为重点\n\n笔记标题：'+(title||'')+'\n笔记内容：\n'+text+'\n\n请按以下 JSON 格式返回结果：\n{\n  \"summary\": \"提炼后的笔记内容\",\n  \"keyPoints\": [\"重点1\", \"重点2\", \"重点3\"]\n}'";var xhr=new XMLHttpRequest();xhr.open("POST",aiSettings.endpoint+"/chat/completions");xhr.setRequestHeader("Content-Type","application/json");xhr.setRequestHeader("Authorization","Bearer "+aiSettings.key);xhr.onload=function(){if(xhr.status===200){try{var resp=JSON.parse(xhr.responseText);var content=resp.choices[0].message.content;var cleaned=content.replace(/```json
+function callAISummary(text,title,callback){var prompt='你是一个课堂笔记整理助手。请对以下课堂笔记内容进行提炼总结：\n\n1. 去除重复、废话、语气词\n2. 保留核心知识点和逻辑结构\n3. 用清晰简洁的语言重新组织\n4. 提取 3-5 个最重要的知识点作为重点\n\n笔记标题：'+(title||'')+'\n笔记内容：\n'+text+'\n\n请按以下 JSON 格式返回结果'：\n{\n  \"summary\": \"提炼后的笔记内容\",\n  \"keyPoints\": [\"重点1\", \"重点2\", \"重点3\"]\n}'";var xhr=new XMLHttpRequest();xhr.open("POST",aiSettings.endpoint+"/chat/completions");xhr.setRequestHeader("Content-Type","application/json");xhr.setRequestHeader("Authorization","Bearer "+aiSettings.key);xhr.onload=function(){if(xhr.status===200){try{var resp=JSON.parse(xhr.responseText);var content=resp.choices[0].message.content;var cleaned=content.replace(/```json
 ?/g,"").replace(/```
 ?/g,"").trim();var parsed=JSON.parse(cleaned);callback(parsed)}catch(e){alert("AI 返回格式异常，请重试");callback(null)}}else{try{var err=JSON.parse(xhr.responseText);alert("API 错误: "+(err.error?err.error.message:xhr.statusText))}catch(e){alert("API 请求失败: "+xhr.status)}callback(null)}};xhr.onerror=function(){alert("网络请求失败，请检查 API 地址和网络连接");callback(null)};xhr.send(JSON.stringify({model:aiSettings.model,messages:[{role:"system",content:"你是一个课堂笔记整理助手，擅长从杂乱文本中提取核心知识点，去除冗余内容。"},{role:"user",content:prompt}],temperature:0.3,max_tokens:2048}))}
 function showAISummary(summary,keyPoints){$("summaryContent").textContent=summary;var kpEl=$("summaryKeyPoints");kpEl.innerHTML=keyPoints.map(function(kp){return"<div class=\"summary-kp-item\">"+esc(kp)+"</div>"}).join("");$("aiSummaryModal").classList.add("show")}
