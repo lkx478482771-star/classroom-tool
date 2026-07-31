@@ -5,44 +5,25 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>安大学生工具箱</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;background:#f5f7fa;color:#1a1d26;line-height:1.6;-webkit-font-smoothing:antialiased}
-.nav{position:fixed;top:0;left:0;right:0;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.08);z-index:100;display:flex;justify-content:center;gap:0}
-.nav a{display:inline-block;padding:16px 28px;color:#5a6170;text-decoration:none;font-size:14px;font-weight:500;transition:all .2s;position:relative}
-.nav a::after{content:"";position:absolute;bottom:0;left:50%;width:0;height:2px;background:#6366f1;transition:all .2s;transform:translateX(-50%)}
-.nav a:hover{color:#6366f1}.nav a:hover::after{width:24px}.nav a.active{color:#6366f1;font-weight:600}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;background:#f5f7fa;color:#1a1d26;line-height:1.6;-webkit-font-smoothing:antialiased}
+.nav{position:fixed;top:0;left:0;right:0;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.08);z-index:100;display:flex;justify-content:center}.nav a{display:inline-block;padding:16px 28px;color:#5a6170;text-decoration:none;font-size:14px;font-weight:500;transition:all .2s;position:relative}.nav a::after{content:"";position:absolute;bottom:0;left:50%;width:0;height:2px;background:#6366f1;transition:all .2s;transform:translateX(-50%)}.nav a:hover{color:#6366f1}.nav a:hover::after{width:24px}.nav a.active{color:#6366f1;font-weight:600}
 .container{max-width:680px;margin:0 auto;padding:80px 20px 40px}.section{margin-bottom:48px}
-.card{background:#fff;border-radius:14px;padding:28px;box-shadow:0 2px 12px rgba(0,0,0,.06);transition:all .2s}
-.card:hover{box-shadow:0 4px 20px rgba(0,0,0,.1)}
-.card h2{font-size:20px;font-weight:700;margin-bottom:20px;color:#1a1d26;display:flex;align-items:center;gap:8px}
-.input-row{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap}
-.input-row input{flex:1;min-width:80px;padding:10px 14px;border:1.5px solid #e2e6ee;border-radius:10px;font-size:14px;outline:none;transition:all .2s;background:#f9fafb}
-.input-row input:focus{border-color:#6366f1;box-shadow:0 0 0 3px rgba(99,102,241,.1);background:#fff}
-.btn{padding:10px 22px;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:4px}
-.btn:hover{transform:translateY(-1px)}
-.btn-primary{background:linear-gradient(135deg,#6366f1,#7c3aed);color:#fff;box-shadow:0 2px 8px rgba(99,102,241,.3)}
-.btn-primary:hover{box-shadow:0 4px 14px rgba(99,102,241,.4)}
+.card{background:#fff;border-radius:14px;padding:28px;box-shadow:0 2px 12px rgba(0,0,0,.06);transition:all .2s}.card:hover{box-shadow:0 4px 20px rgba(0,0,0,.1)}.card h2{font-size:20px;font-weight:700;margin-bottom:20px;color:#1a1d26;display:flex;align-items:center;gap:8px}
+.input-row{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap}.input-row input{flex:1;min-width:80px;padding:10px 14px;border:1.5px solid #e2e6ee;border-radius:10px;font-size:14px;outline:none;transition:all .2s;background:#f9fafb}.input-row input:focus{border-color:#6366f1;box-shadow:0 0 0 3px rgba(99,102,241,.1);background:#fff}
+.btn{padding:10px 22px;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:4px}.btn:hover{transform:translateY(-1px)}
+.btn-primary{background:linear-gradient(135deg,#6366f1,#7c3aed);color:#fff;box-shadow:0 2px 8px rgba(99,102,241,.3)}.btn-primary:hover{box-shadow:0 4px 14px rgba(99,102,241,.4)}
 .btn-outline{background:#fff;color:#6366f1;border:1.5px solid #6366f1}.btn-outline:hover{background:#eef2ff}
-.btn-danger{background:#fff;color:#ef4444;border:1.5px solid #fecaca}.btn-danger:hover{background:#fef2f2}
+.btn-danger-sm{padding:6px 14px;font-size:12px;border-radius:8px;background:#fff;color:#ef4444;border:1.5px solid #fecaca;cursor:pointer;transition:all .2s}.btn-danger-sm:hover{background:#fef2f2}
 .btn-sm{padding:6px 14px;font-size:12px;border-radius:8px}
-.course-table{width:100%;border-collapse:collapse;margin-top:8px;font-size:13px}
-.course-table th{text-align:left;padding:8px 12px;color:#949bac;font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.5px;border-bottom:1.5px solid #e2e6ee}
-.course-table td{padding:10px 12px;border-bottom:1px solid #f0f2f6;color:#5a6170}
-.result-box{padding:16px 20px;background:linear-gradient(135deg,#eef2ff,rgba(124,58,237,.05));border-radius:12px;margin-top:16px;display:flex;align-items:center;gap:16px}
-.result-value{font-size:32px;font-weight:800;color:#6366f1}.result-label{font-size:12px;color:#949bac}
+.course-table{width:100%;border-collapse:collapse;margin-top:8px;font-size:13px}.course-table th{text-align:left;padding:8px 12px;color:#949bac;font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.5px;border-bottom:1.5px solid #e2e6ee}.course-table td{padding:10px 12px;border-bottom:1px solid #f0f2f6;color:#5a6170}
+.result-box{padding:16px 20px;background:linear-gradient(135deg,#eef2ff,rgba(124,58,237,.05));border-radius:12px;margin-top:16px;display:flex;align-items:center;gap:16px}.result-value{font-size:32px;font-weight:800;color:#6366f1}.result-label{font-size:12px;color:#949bac}
 .quick-btns{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
-.countdown-item{display:flex;align-items:center;gap:12px;padding:14px 16px;background:#f9fafb;border-radius:10px;margin-bottom:8px;transition:all .2s}
-.countdown-item:hover{background:#f0f2f6}
-.countdown-name{flex:1;font-weight:600;font-size:14px}
-.countdown-time{font-size:20px;font-weight:700;color:#6366f1;font-variant-numeric:tabular-nums;min-width:120px}
-.clock-display{text-align:center;padding:16px 0}
-.clock-time{font-size:48px;font-weight:800;color:#1a1d26;letter-spacing:2px}
-.clock-date{font-size:14px;color:#949bac;margin-top:4px}
-.rule-table{width:100%;border-collapse:collapse;font-size:12px;margin-top:8px}
-.rule-table td{padding:6px 10px;border-bottom:1px solid #f0f2f6}
-.back-top{position:fixed;bottom:24px;right:24px;width:40px;height:40px;background:#6366f1;color:#fff;border:none;border-radius:50%;cursor:pointer;font-size:18px;display:none;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(99,102,241,.3);transition:all .2s;z-index:99}
-.back-top:hover{transform:translateY(-2px)}
-.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);padding:10px 20px;border-radius:10px;font-size:13px;font-weight:500;z-index:200;opacity:0;transition:all .3s;pointer-events:none;background:#10b981;color:#fff}
-.toast.show{opacity:1;transform:translateX(-50%) translateY(-8px)}.toast.error{background:#ef4444}
+.countdown-item{display:flex;align-items:center;gap:12px;padding:14px 16px;background:#f9fafb;border-radius:10px;margin-bottom:8px;transition:all .2s}.countdown-item:hover{background:#f0f2f6}.countdown-name{flex:1;font-weight:600;font-size:14px}.countdown-time{font-size:20px;font-weight:700;color:#6366f1;font-variant-numeric:tabular-nums;min-width:120px}
+.clock-display{text-align:center;padding:16px 0}.clock-time{font-size:48px;font-weight:800;color:#1a1d26;letter-spacing:2px}.clock-date{font-size:14px;color:#949bac;margin-top:4px}
+.rule-table{width:100%;border-collapse:collapse;font-size:12px;margin-top:8px}.rule-table td{padding:6px 10px;border-bottom:1px solid #f0f2f6}
+.back-top{position:fixed;bottom:24px;right:24px;width:40px;height:40px;background:#6366f1;color:#fff;border:none;border-radius:50%;cursor:pointer;font-size:18px;display:none;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(99,102,241,.3);transition:all .2s;z-index:99}.back-top:hover{transform:translateY(-2px)}
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);padding:10px 20px;border-radius:10px;font-size:13px;font-weight:500;z-index:200;opacity:0;transition:all .3s;pointer-events:none;background:#10b981;color:#fff}.toast.show{opacity:1;transform:translateX(-50%) translateY(-8px)}.toast.error{background:#ef4444}
 @media(max-width:600px){.container{padding:70px 12px 30px}.input-row{flex-direction:column}.countdown-time{font-size:16px;min-width:100px}.card{padding:20px}}
 </style>
 </head>
@@ -54,7 +35,7 @@
 <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
 <button class="btn btn-outline btn-sm" onclick="addCourse()">+ 添加课程</button>
 <button class="btn btn-primary btn-sm" onclick="calcGPA()">计算绩点</button>
-<button class="btn btn-danger btn-sm" onclick="clearCourses()">清空</button>
+<button class="btn btn-danger-sm" onclick="clearCourses()">清空</button>
 <button class="btn btn-outline btn-sm" onclick="exportCourses()">导出</button></div>
 <div class="result-box" id="gpaResult" style="display:none"><div><div class="result-value" id="gpaValue">0.00</div><div class="result-label">加权平均绩点</div></div><div><div class="result-value" id="gpaTotal">0</div><div class="result-label">总学分</div></div></div>
 <details style="margin-top:12px"><summary style="font-size:12px;color:#949bac;cursor:pointer">安大绩点换算规则</summary><table class="rule-table"><tr><td>90-100</td><td>4.0</td><td>85-89</td><td>3.7</td><td>82-84</td><td>3.3</td></tr><tr><td>78-81</td><td>3.0</td><td>75-77</td><td>2.7</td><td>72-74</td><td>2.3</td></tr><tr><td>68-71</td><td>2.0</td><td>64-67</td><td>1.5</td><td>60-63</td><td>1.0</td></tr><tr><td>&lt;60</td><td>0</td></tr></table><p style="font-size:11px;color:#949bac;margin-top:4px">当前采用安徽大学成绩-绩点换算规则，其他学校请自行核对。</p></details>
@@ -64,7 +45,7 @@
 <div id="countdownList"></div>
 <div class="input-row" style="margin-top:12px"><input id="cdName" placeholder="事件名称"><input id="cdDate" type="date"><button class="btn btn-primary btn-sm" onclick="addCountdown()">添加</button></div>
 </div></section>
-<section class="section" id="clock" style="margin-bottom:60px"><div class="card"><h2>时钟</h2><div class="clock-display"><div class="clock-time" id="clockTime">00:00:00</div><div class="clock-date" id="clockDate"></div></div></div></section>
+<section class="section" id="clock"><div class="card"><h2>时钟</h2><div class="clock-display"><div class="clock-time" id="clockTime">00:00:00</div><div class="clock-date" id="clockDate"></div></div></div></section>
 </div>
 <button class="back-top" id="backTop" onclick="scrollToTop()">↑</button>
 <div class="toast" id="toast"></div>
@@ -83,11 +64,11 @@ function exportCourses(){var t="课程\t学分\t成绩\n";courses.forEach(functi
 function scoreToGPA(s){var n=parseFloat(s);if(isNaN(n))return 0;if(n>=90)return 4.0;if(n>=85)return 3.7;if(n>=82)return 3.3;if(n>=78)return 3.0;if(n>=75)return 2.7;if(n>=72)return 2.3;if(n>=68)return 2.0;if(n>=64)return 1.5;if(n>=60)return 1.0;return 0}
 function calcGPA(){if(!courses.length){showToast("请先添加课程",true);return}var tc=0,tp=0,he=false;courses.forEach(function(c){var cr=parseFloat(c.credit),sc=parseFloat(c.score);if(isNaN(cr)||isNaN(sc)||!c.credit||!c.score){he=true;return}tc+=cr;tp+=cr*scoreToGPA(sc)});if(he){showToast("请填写完整的学分和成绩",true);return}if(!tc){showToast("学分总和不能为0",true);return}var g=tp/tc;document.getElementById("gpaResult").style.display="flex";document.getElementById("gpaValue").textContent=g.toFixed(2);document.getElementById("gpaTotal").textContent=tc;showToast("绩点计算完成")}
 function esc(s){var d=document.createElement("div");d.textContent=s||"";return d.innerHTML}
-function renderCourses(){var el=document.getElementById("courseList"),h="",i,s,v;h+="<table class=course-table><tr><th>课程名称</th><th>学分</th><th>成绩</th><th></th></tr>";for(i=0;i<courses.length;i++){var c=courses[i];h+="<tr><td><input value=\""+esc(c.name)+"\" placeholder=\"课程名称\" style=\"width:100%;border:none;background:transparent;font-size:13px;outline:none\" onchange=\"courses["+i+"].name=this.value;saveCourses()\"></td><td><input value=\""+(c.credit||"")+"\" placeholder=\"学分\" type=number step=0.5 style=\"width:60px;border:none;background:transparent;font-size:13px;outline:none;text-align:center\" onchange=\"courses["+i+"].credit=this.value;saveCourses()\"></td><td><input value=\""+(c.score||"")+"\" placeholder=\"成绩\" type=number style=\"width:60px;border:none;background:transparent;font-size:13px;outline:none;text-align:center\" onchange=\"courses["+i+"].score=this.value;saveCourses()\"></td><td><button onclick=\"removeCourse("+i+")\" style=\"padding:4px 10px;color:#ef4444;border:1px solid #fecaca;border-radius:8px;background:#fff;cursor:pointer;font-size:12px\">删除</button></td></tr>"}h+="</table>";el.innerHTML=h}
+function renderCourses(){var el=document.getElementById("courseList"),h="";h+="<table class=course-table><tr><th>课程名称</th><th>学分</th><th>成绩</th><th></th></tr>";for(var i=0;i<courses.length;i++){var c=courses[i];h+="<tr><td><input value=\""+esc(c.name)+"\" placeholder=\"课程名称\" style=\"width:100%;border:none;background:transparent;font-size:13px;outline:none\" onchange=\"courses["+i+"].name=this.value;saveCourses()\"></td><td><input value=\""+(c.credit||"")+"\" placeholder=\"学分\" type=number step=0.5 style=\"width:60px;border:none;background:transparent;font-size:13px;outline:none;text-align:center\" onchange=\"courses["+i+"].credit=this.value;saveCourses()\"></td><td><input value=\""+(c.score||"")+"\" placeholder=\"成绩\" type=number style=\"width:60px;border:none;background:transparent;font-size:13px;outline:none;text-align:center\" onchange=\"courses["+i+"].score=this.value;saveCourses()\"></td><td><button onclick=\"removeCourse("+i+")\" class=\"btn-danger-sm\" style=\"padding:4px 10px\">删除</button></td></tr>"}h+="</table>";el.innerHTML=h}
 function quickAdd(nm,dt){countdowns.push({name:nm,date:dt,id:Date.now()});saveCDs();renderCDs();showToast("已添加 "+nm)}
 function addCountdown(){var nm=document.getElementById("cdName").value.trim(),dt=document.getElementById("cdDate").value;if(!nm||!dt){showToast("请填写事件名称和日期",true);return}countdowns.push({name:nm,date:dt,id:Date.now()});saveCDs();renderCDs();document.getElementById("cdName").value="";document.getElementById("cdDate").value="";showToast("已添加")}
 function removeCD(id){countdowns=countdowns.filter(function(c){return c.id!==id});saveCDs();renderCDs()}
-function renderCDs(){var el=document.getElementById("countdownList"),h="";countdowns.forEach(function(c){var d=new Date(c.date),now=new Date();var diff=Math.max(0,Math.floor((d-now)/86400000));var label=diff===0?"今天":diff+" 天";if(new Date(c.date+"T00:00:00")<new Date())label="已过去";h+="<div class=countdown-item><span class=countdown-name>"+esc(c.name)+"</span><span class=countdown-time>"+label+"</span><button onclick=\"removeCD("+c.id+")\" style=\"padding:4px 10px;color:#ef4444;border:1px solid #fecaca;border-radius:8px;background:#fff;cursor:pointer;font-size:12px\">删除</button></div>"});if(!h)h+="<p style=\"color:#949bac;font-size:13px;text-align:center;padding:20px\">还没有倒计时，点击上方快捷按钮或手动添加</p>";el.innerHTML=h}
+function renderCDs(){var el=document.getElementById("countdownList"),h="";countdowns.forEach(function(c){var d=new Date(c.date),now=new Date();var diff=Math.max(0,Math.floor((d-now)/86400000));var label=diff===0?"今天":diff+" 天";if(new Date(c.date+"T00:00:00")<new Date())label="已过去";h+="<div class=countdown-item><span class=countdown-name>"+esc(c.name)+"</span><span class=countdown-time>"+label+"</span><button onclick=\"removeCD("+c.id+")\" class=\"btn-danger-sm\" style=\"padding:4px 10px\">删除</button></div>"});if(!h)h+="<p style=\"color:#949bac;font-size:13px;text-align:center;padding:20px\">还没有倒计时，点击上方快捷按钮或手动添加</p>";el.innerHTML=h}
 function updateClock(){var d=new Date();document.getElementById("clockTime").textContent=d.toLocaleTimeString("zh-CN",{hour12:false});document.getElementById("clockDate").textContent=d.getFullYear()+"年"+(d.getMonth()+1)+"月"+d.getDate()+"日 星期"+["日","一","二","三","四","五","六"][d.getDay()]}
 function scrollToTop(){window.scrollTo({top:0,behavior:"smooth"})}
 window.onscroll=function(){var bt=document.getElementById("backTop");bt.style.display=window.scrollY>300?"flex":"none";var secs=document.querySelectorAll(".section");var navs=document.querySelectorAll(".nav a");secs.forEach(function(s,i){var r=s.getBoundingClientRect();if(r.top<=100&&r.bottom>100)navs.forEach(function(n){n.classList.remove("active")});if(navs[i])navs[i].classList.add("active")})};
