@@ -95,7 +95,7 @@ el.innerHTML=h.join("");
 }function updateClock(){var d=new Date();document.getElementById("clockTime").textContent=d.toLocaleTimeString("zh-CN",{hour12:false});document.getElementById("clockDate").textContent=d.getFullYear()+"年"+(d.getMonth()+1)+"月"+d.getDate()+"日 星期"+["日","一","二","三","四","五","六"][d.getDay()]}
 function scrollToTop(){window.scrollTo({top:0,behavior:"smooth"})}
 window.onscroll=function(){var bt=document.getElementById("backTop");bt.style.display=window.scrollY>300?"flex":"none";var secs=document.querySelectorAll(".section");var navs=document.querySelectorAll(".nav a");secs.forEach(function(s,i){var r=s.getBoundingClientRect();if(r.top<=100&&r.bottom>100)navs.forEach(function(n){n.classList.remove("active")});if(navs[i])navs[i].classList.add("active")})};
-document.querySelectorAll(".nav a").forEach(function(a){a.onclick=function(e){e.preventDefault();document.querySelector(this.getAttribute("href")).scrollIntoView({behavior:"smooth"})}});
+document.querySelectorAll(".nav a").forEach(function(a){a.onclick=function(e){var h=this.getAttribute("href");if(h.startsWith("#")){e.preventDefault();document.querySelector(h).scrollIntoView({behavior:"smooth"})}}});
 loadData();renderCourses();renderCDs();setInterval(function(){renderCDs();updateClock()},1000);updateClock();
 </script>
 </body>
