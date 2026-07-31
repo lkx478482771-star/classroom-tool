@@ -64,12 +64,35 @@ function exportCourses(){var t="课程\t学分\t成绩\n";courses.forEach(functi
 function scoreToGPA(s){var n=parseFloat(s);if(isNaN(n))return 0;if(n>=90)return 4.0;if(n>=85)return 3.7;if(n>=82)return 3.3;if(n>=78)return 3.0;if(n>=75)return 2.7;if(n>=72)return 2.3;if(n>=68)return 2.0;if(n>=64)return 1.5;if(n>=60)return 1.0;return 0}
 function calcGPA(){if(!courses.length){showToast("请先添加课程",true);return}var tc=0,tp=0,he=false;courses.forEach(function(c){var cr=parseFloat(c.credit),sc=parseFloat(c.score);if(isNaN(cr)||isNaN(sc)||!c.credit||!c.score){he=true;return}tc+=cr;tp+=cr*scoreToGPA(sc)});if(he){showToast("请填写完整的学分和成绩",true);return}if(!tc){showToast("学分总和不能为0",true);return}var g=tp/tc;document.getElementById("gpaResult").style.display="flex";document.getElementById("gpaValue").textContent=g.toFixed(2);document.getElementById("gpaTotal").textContent=tc;showToast("绩点计算完成")}
 function esc(s){var d=document.createElement("div");d.textContent=s||"";return d.innerHTML}
-function renderCourses(){var el=document.getElementById("courseList"),h="";h+="<table class=course-table><tr><th>课程名称</th><th>学分</th><th>成绩</th><th></th></tr>";for(var i=0;i<courses.length;i++){var c=courses[i];h+="<tr><td><input value=\""+esc(c.name)+"\" placeholder=\"课程名称\" style=\"width:100%;border:none;background:transparent;font-size:13px;outline:none\" onchange=\"courses["+i+"].name=this.value;saveCourses()\"></td><td><input value=\""+(c.credit||"")+"\" placeholder=\"学分\" type=number step=0.5 style=\"width:60px;border:none;background:transparent;font-size:13px;outline:none;text-align:center\" onchange=\"courses["+i+"].credit=this.value;saveCourses()\"></td><td><input value=\""+(c.score||"")+"\" placeholder=\"成绩\" type=number style=\"width:60px;border:none;background:transparent;font-size:13px;outline:none;text-align:center\" onchange=\"courses["+i+"].score=this.value;saveCourses()\"></td><td><button onclick=\"removeCourse("+i+")\" class=\"btn-danger-sm\" style=\"padding:4px 10px\">删除</button></td></tr>"}h+="</table>";el.innerHTML=h}
-function quickAdd(nm,dt){countdowns.push({name:nm,date:dt,id:Date.now()});saveCDs();renderCDs();showToast("已添加 "+nm)}
+function renderCourses(){
+var el=document.getElementById("courseList"),h=[],i;
+h.push("<table class=course-table><tr><th>课程名称</th><th>学分</th><th>成绩</th><th></th></tr>");
+for(i=0;i<courses.length;i++){
+var c=courses[i];
+h.push("<tr>");
+h.push("<td><input value='"+esc(c.name)+"' placeholder='课程名称' style='width:100%;border:none;background:transparent;font-size:13px;outline:none' onchange='courses["+i+"].name=this.value;saveCourses()'></td>");
+h.push("<td><input value='"+(c.credit||"")+"' placeholder='学分' type=number step=0.5 style='width:60px;border:none;background:transparent;font-size:13px;outline:none;text-align:center' onchange='courses["+i+"].credit=this.value;saveCourses()'></td>");
+h.push("<td><input value='"+(c.score||"")+"' placeholder='成绩' type=number style='width:60px;border:none;background:transparent;font-size:13px;outline:none;text-align:center' onchange='courses["+i+"].score=this.value;saveCourses()'></td>");
+h.push("<td><button onclick='removeCourse("+i+")' class='btn-danger-sm' style='padding:4px 10px'>删除</button></td>");
+h.push("</tr>");
+}
+h.push("</table>");
+el.innerHTML=h.join("");
+}function quickAdd(nm,dt){countdowns.push({name:nm,date:dt,id:Date.now()});saveCDs();renderCDs();showToast("已添加 "+nm)}
 function addCountdown(){var nm=document.getElementById("cdName").value.trim(),dt=document.getElementById("cdDate").value;if(!nm||!dt){showToast("请填写事件名称和日期",true);return}countdowns.push({name:nm,date:dt,id:Date.now()});saveCDs();renderCDs();document.getElementById("cdName").value="";document.getElementById("cdDate").value="";showToast("已添加")}
 function removeCD(id){countdowns=countdowns.filter(function(c){return c.id!==id});saveCDs();renderCDs()}
-function renderCDs(){var el=document.getElementById("countdownList"),h="";countdowns.forEach(function(c){var d=new Date(c.date),now=new Date();var diff=Math.max(0,Math.floor((d-now)/86400000));var label=diff===0?"今天":diff+" 天";if(new Date(c.date+"T00:00:00")<new Date())label="已过去";h+="<div class=countdown-item><span class=countdown-name>"+esc(c.name)+"</span><span class=countdown-time>"+label+"</span><button onclick=\"removeCD("+c.id+")\" class=\"btn-danger-sm\" style=\"padding:4px 10px\">删除</button></div>"});if(!h)h+="<p style=\"color:#949bac;font-size:13px;text-align:center;padding:20px\">还没有倒计时，点击上方快捷按钮或手动添加</p>";el.innerHTML=h}
-function updateClock(){var d=new Date();document.getElementById("clockTime").textContent=d.toLocaleTimeString("zh-CN",{hour12:false});document.getElementById("clockDate").textContent=d.getFullYear()+"年"+(d.getMonth()+1)+"月"+d.getDate()+"日 星期"+["日","一","二","三","四","五","六"][d.getDay()]}
+function renderCDs(){
+var el=document.getElementById("countdownList"),h=[];
+countdowns.forEach(function(c){
+var d=new Date(c.date),now=new Date();
+var diff=Math.max(0,Math.floor((d-now)/86400000));
+var label=diff===0?"今天":diff+" 天";
+if(new Date(c.date+"T00:00:00")<new Date())label="已过去";
+h.push("<div class=countdown-item><span class=countdown-name>"+esc(c.name)+"</span><span class=countdown-time>"+label+"</span><button onclick='removeCD("+c.id+")' class='btn-danger-sm' style='padding:4px 10px'>删除</button></div>");
+});
+if(!h.length)h.push("<p style='color:#949bac;font-size:13px;text-align:center;padding:20px'>还没有倒计时，点击上方快捷按钮或手动添加</p>");
+el.innerHTML=h.join("");
+}function updateClock(){var d=new Date();document.getElementById("clockTime").textContent=d.toLocaleTimeString("zh-CN",{hour12:false});document.getElementById("clockDate").textContent=d.getFullYear()+"年"+(d.getMonth()+1)+"月"+d.getDate()+"日 星期"+["日","一","二","三","四","五","六"][d.getDay()]}
 function scrollToTop(){window.scrollTo({top:0,behavior:"smooth"})}
 window.onscroll=function(){var bt=document.getElementById("backTop");bt.style.display=window.scrollY>300?"flex":"none";var secs=document.querySelectorAll(".section");var navs=document.querySelectorAll(".nav a");secs.forEach(function(s,i){var r=s.getBoundingClientRect();if(r.top<=100&&r.bottom>100)navs.forEach(function(n){n.classList.remove("active")});if(navs[i])navs[i].classList.add("active")})};
 document.querySelectorAll(".nav a").forEach(function(a){a.onclick=function(e){e.preventDefault();document.querySelector(this.getAttribute("href")).scrollIntoView({behavior:"smooth"})}});
