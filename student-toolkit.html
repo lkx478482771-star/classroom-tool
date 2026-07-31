@@ -24,11 +24,26 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
 .rule-table{width:100%;border-collapse:collapse;font-size:12px;margin-top:8px}.rule-table td{padding:6px 10px;border-bottom:1px solid #f0f2f6}
 .back-top{position:fixed;bottom:24px;right:24px;width:40px;height:40px;background:#6366f1;color:#fff;border:none;border-radius:50%;cursor:pointer;font-size:18px;display:none;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(99,102,241,.3);transition:all .2s;z-index:99}.back-top:hover{transform:translateY(-2px)}
 .toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);padding:10px 20px;border-radius:10px;font-size:13px;font-weight:500;z-index:200;opacity:0;transition:all .3s;pointer-events:none;background:#10b981;color:#fff}.toast.show{opacity:1;transform:translateX(-50%) translateY(-8px)}.toast.error{background:#ef4444}
+.calendar-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:12px}
+.cal-month{background:#f9fafb;border-radius:10px;padding:16px}
+.cal-month h4{font-size:14px;font-weight:700;color:#6366f1;margin-bottom:8px}
+.cal-event{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #f0f2f6;font-size:13px}
+.cal-event:last-child{border-bottom:none}
+.cal-event-date{font-size:12px;color:#949bac;min-width:60px;text-align:right}
+.cal-event-name{font-size:13px;color:#5a6170;flex:1;margin-left:12px}
+.cal-event-tag{font-size:10px;padding:2px 8px;border-radius:10px;font-weight:600}
+.tag-holiday{background:#fef2f2;color:#ef4444}
+.tag-exam{background:#fffbeb;color:#b45309}
+.tag-important{background:#eef2ff;color:#6366f1}
+.cal-semester{font-size:18px;font-weight:800;color:#1a1d26;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.cal-semester-badge{font-size:11px;padding:3px 12px;border-radius:20px;font-weight:600;background:#eef2ff;color:#6366f1}
+@media(max-width:600px){.calendar-grid{grid-template-columns:1fr}}
+
 @media(max-width:600px){.container{padding:70px 12px 30px}.input-row{flex-direction:column}.countdown-time{font-size:16px;min-width:100px}.card{padding:20px}}
 </style>
 </head>
 <body>
-<nav class="nav"><a href="https://lkx478482771-star.github.io/classroom-tool/">📝 课堂笔记</a><a href="#gpa" class="active">绩点计算器</a><a href="#countdown">倒计时</a><a href="#clock">时钟</a></nav>
+<nav class="nav"><a href="https://lkx478482771-star.github.io/classroom-tool/">📝 课堂笔记</a><a href="#gpa" class="active">绩点计算器</a><a href="#countdown">倒计时</a><a href="#calendar">校历</a><a href="#clock">时钟</a></nav>
 <div class="container">
 <section class="section" id="gpa"><div class="card">
 <h2>绩点计算器</h2><div id="courseList"></div>
@@ -61,7 +76,59 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
 <div id="countdownList"></div>
 <div class="input-row" style="margin-top:12px"><input id="cdName" placeholder="事件名称"><input id="cdDate" type="date"><button class="btn btn-primary btn-sm" onclick="addCountdown()">添加</button></div>
 </div></section>
-<section class="section" id="clock"><div class="card"><h2>时钟</h2><div class="clock-display"><div class="clock-time" id="clockTime">00:00:00</div><div class="clock-date" id="clockDate"></div></div></div></section>
+
+<section class="section" id="calendar" style="margin-bottom:60px"><div class="card">
+<h2>安大校历</h2>
+<div class="cal-semester">2026-2027学年<span class="cal-semester-badge">秋季学期</span></div>
+<div class="calendar-grid">
+<div class="cal-month">
+<h4>9月</h4>
+<div class="cal-event"><span class="cal-event-name">新生报到注册</span><span class="cal-event-date">9月1-2日</span><span class="cal-event-tag tag-important">重要</span></div>
+<div class="cal-event"><span class="cal-event-name">正式上课</span><span class="cal-event-date">9月4日</span></div>
+<div class="cal-event"><span class="cal-event-name">补考/缓考</span><span class="cal-event-date">9月中</span></div>
+</div>
+<div class="cal-month">
+<h4>10月</h4>
+<div class="cal-event"><span class="cal-event-name">国庆节放假</span><span class="cal-event-date">10月1-7日</span><span class="cal-event-tag tag-holiday">假期</span></div>
+<div class="cal-event"><span class="cal-event-name">四六级报名</span><span class="cal-event-date">10月中</span><span class="cal-event-tag tag-exam">考试</span></div>
+</div>
+<div class="cal-month">
+<h4>11月</h4>
+<div class="cal-event"><span class="cal-event-name">期中考试周</span><span class="cal-event-date">11月中旬</span><span class="cal-event-tag tag-exam">考试</span></div>
+</div>
+<div class="cal-month">
+<h4>12月</h4>
+<div class="cal-event"><span class="cal-event-name">四六级考试</span><span class="cal-event-date">12月中旬</span><span class="cal-event-tag tag-exam">考试</span></div>
+<div class="cal-event"><span class="cal-event-name">考研初试</span><span class="cal-event-date">12月下旬</span><span class="cal-event-tag tag-exam">考试</span></div>
+<div class="cal-event"><span class="cal-event-name">元旦放假</span><span class="cal-event-date">12月31日</span><span class="cal-event-tag tag-holiday">假期</span></div>
+</div>
+<div class="cal-month">
+<h4>1月</h4>
+<div class="cal-event"><span class="cal-event-name">期末复习考试</span><span class="cal-event-date">1月上旬</span><span class="cal-event-tag tag-exam">考试</span></div>
+<div class="cal-event"><span class="cal-event-name">寒假开始</span><span class="cal-event-date">1月中旬</span><span class="cal-event-tag tag-holiday">假期</span></div>
+</div>
+<div class="cal-month">
+<h4>2月</h4>
+<div class="cal-event"><span class="cal-event-name">春季学期报到</span><span class="cal-event-date">2月下旬</span><span class="cal-event-tag tag-important">重要</span></div>
+</div>
+<div class="cal-month">
+<h4>3-4月</h4>
+<div class="cal-event"><span class="cal-event-name">春季学期上课</span><span class="cal-event-date">3月-6月</span></div>
+<div class="cal-event"><span class="cal-event-name">清明节放假</span><span class="cal-event-date">4月初</span><span class="cal-event-tag tag-holiday">假期</span></div>
+</div>
+<div class="cal-month">
+<h4>5-6月</h4>
+<div class="cal-event"><span class="cal-event-name">劳动节放假</span><span class="cal-event-date">5月1日</span><span class="cal-event-tag tag-holiday">假期</span></div>
+<div class="cal-event"><span class="cal-event-name">四六级考试</span><span class="cal-event-date">6月中旬</span><span class="cal-event-tag tag-exam">考试</span></div>
+<div class="cal-event"><span class="cal-event-name">端午节放假</span><span class="cal-event-date">6月</span><span class="cal-event-tag tag-holiday">假期</span></div>
+</div>
+<div class="cal-month">
+<h4>7-8月</h4>
+<div class="cal-event"><span class="cal-event-name">期末考试周</span><span class="cal-event-date">7月上旬</span><span class="cal-event-tag tag-exam">考试</span></div>
+<div class="cal-event"><span class="cal-event-name">暑假</span><span class="cal-event-date">7月中旬-8月底</span><span class="cal-event-tag tag-holiday">假期</span></div>
+</div>
+</div>
+</div></section><section class="section" id="clock"><div class="card"><h2>时钟</h2><div class="clock-display"><div class="clock-time" id="clockTime">00:00:00</div><div class="clock-date" id="clockDate"></div></div></div></section>
 </div>
 <button class="back-top" id="backTop" onclick="scrollToTop()">↑</button>
 <div class="toast" id="toast"></div>
