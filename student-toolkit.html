@@ -47,248 +47,29 @@
 .tool-tag{font-size:11px;padding:2px 8px;border-radius:6px;background:#eef2ff;color:#6366f1;margin-right:6px}
 .tool-card{padding:14px;background:#f9fafb;border-radius:10px;margin-bottom:10px}
 @media(max-width:600px){.container{padding:70px 12px 30px}.input-row{flex-direction:column}.countdown-time{font-size:16px;min-width:100px}.card{padding:20px}}
-\n
-*{margin:0;padding:0;box-sizing:border-box}
-:root{
-  --bg:#f0f2f6;
-  --surface:#ffffff;
-  --surface-hover:#f8f9fc;
-  --border:#e8ecf0;
-  --border-light:#f0f2f6;
-  --text:#1a1d26;
-  --text-secondary:#5a6170;
-  --text-muted:#949bac;
-  --primary:#6366f1;
-  --primary-dark:#4f46e5;
-  --primary-light:#eef2ff;
-  --primary-glow:rgba(99,102,241,0.3);
-  --danger:#ef4444;
-  --success:#10b981;
-  --warning:#f59e0b;
-  --shadow-sm:0 1px 2px rgba(0,0,0,0.04),0 1px 3px rgba(0,0,0,0.03);
-  --shadow:0 2px 8px rgba(0,0,0,0.05),0 1px 4px rgba(0,0,0,0.03);
-  --shadow-lg:0 8px 32px rgba(0,0,0,0.08),0 2px 8px rgba(0,0,0,0.04);
-  --shadow-xl:0 16px 48px rgba(0,0,0,0.12);
-  --radius:12px;
-  --radius-sm:8px;
-  --radius-xs:6px;
-  --radius-xl:16px;
-  --transition:all 0.2s cubic-bezier(0.4,0,0.2,1);
-}
-.dark{--bg:#0f1117;--surface:#1a1d2e;--surface-hover:#222639;--border:#2a2e42;--border-light:#1e2233;--text:#e8ecf4;--text-secondary:#9ca3b8;--text-muted:#6b7286;--primary-light:rgba(99,102,241,0.12);--shadow-sm:0 1px 2px rgba(0,0,0,0.2);--shadow:0 2px 8px rgba(0,0,0,0.25);--shadow-lg:0 8px 32px rgba(0,0,0,0.35);--shadow-xl:0 16px 48px rgba(0,0,0,0.4)}
-body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",system-ui,sans-serif;background:var(--bg);color:var(--text);height:100vh;overflow:hidden;-webkit-font-smoothing:antialiased;transition:background 0.3s,color 0.3s}
-.app{display:flex;height:100vh;position:relative}
-/* Sidebar */
-.sidebar{width:256px;min-width:256px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;position:relative;z-index:10;transition:var(--transition)}
-.sidebar-header{padding:22px 18px 14px;display:flex;align-items:center;justify-content:space-between}
-.sidebar-brand{display:flex;align-items:center;gap:10px}
-.sidebar-brand-icon{width:32px;height:32px;background:linear-gradient(135deg,var(--primary),#8b5cf6);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px;font-weight:700;flex-shrink:0}
-.sidebar-brand-text{font-size:15px;font-weight:700;color:var(--text);letter-spacing:-0.02em}
-.sidebar-actions{display:flex;gap:4px}
-.btn-icon{width:32px;height:32px;border:none;border-radius:var(--radius-xs);background:transparent;cursor:pointer;font-size:15px;color:var(--text-muted);display:flex;align-items:center;justify-content:center;transition:var(--transition)}
-.btn-icon:hover{background:var(--surface-hover);color:var(--text-secondary)}
-/* Search */
-.search-box{margin:0 12px 10px;position:relative}
-.search-box input{width:100%;padding:8px 12px 8px 32px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:12px;background:var(--surface);color:var(--text);outline:none;transition:var(--transition)}
-.search-box input:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-glow)}
-.search-box input::placeholder{color:var(--text-muted)}
-.search-icon{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--text-muted);font-size:12px;pointer-events:none}
-/* Course List */
-.course-list{flex:1;overflow-y:auto;padding:0 10px 8px}
-.course-list::-webkit-scrollbar{width:4px}
-.course-list::-webkit-scrollbar-track{background:transparent}
-.course-list::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
-.course-item{display:flex;align-items:center;justify-content:space-between;padding:9px 12px;border-radius:var(--radius-sm);cursor:pointer;margin-bottom:2px;transition:var(--transition);font-size:13px;color:var(--text-secondary)}
-.course-item:hover{background:var(--surface-hover);color:var(--text)}
-.course-item.active{background:var(--primary-light);color:var(--primary);font-weight:600}
-.course-item .course-color{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-right:8px}
-.course-item-name{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.course-item-del{opacity:0;width:24px;height:24px;border:none;border-radius:var(--radius-xs);background:transparent;cursor:pointer;font-size:13px;color:var(--text-muted);display:flex;align-items:center;justify-content:center;transition:var(--transition)}
-.course-item:hover .course-item-del{opacity:1}
-.course-item-del:hover{color:var(--danger);background:rgba(239,68,68,0.1)}
-.empty-courses{text-align:center;color:var(--text-muted);font-size:13px;padding:36px 16px;line-height:1.8}
-.empty-courses .icon{font-size:36px;display:block;margin-bottom:8px;opacity:0.5}
-/* Sidebar Footer Stats */
-.sidebar-footer{padding:10px 16px 14px;border-top:1px solid var(--border)}
-.stats-row{display:flex;gap:8px}
-.stat-item{flex:1;padding:8px 6px;background:var(--surface-hover);border-radius:var(--radius-xs);text-align:center}
-.stat-value{font-size:14px;font-weight:700;color:var(--text)}
-.stat-label{font-size:10px;color:var(--text-muted);margin-top:1px}
-/* Main Area */
-.main{flex:1;display:flex;flex-direction:column;overflow:hidden;margin:10px 10px 10px 4px;border-radius:var(--radius-xl);background:var(--surface);box-shadow:var(--shadow);transition:var(--transition)}
-.main-placeholder{flex:1;display:flex;align-items:center;justify-content:center;color:var(--text-muted);font-size:14px;flex-direction:column;gap:12px}
-.main-placeholder .icon{font-size:56px;opacity:0.3}
-.main-placeholder p{font-size:13px;opacity:0.7}
-/* Course Header */
-.course-header{padding:24px 28px 0;display:flex;align-items:baseline;gap:10px}
-.course-header h1{font-size:20px;font-weight:700;color:var(--text);letter-spacing:-0.02em}
-.course-header .teacher{font-size:12px;color:var(--text-muted);padding:3px 12px;background:var(--surface-hover);border-radius:20px;font-weight:500}
-.course-header .course-color-bar{width:4px;height:20px;border-radius:4px;background:linear-gradient(180deg,var(--primary),#8b5cf6);flex-shrink:0}
-/* Tabs */
-.tabs{display:flex;gap:0;padding:16px 28px 0;border-bottom:1px solid var(--border);position:relative}
-.tab{padding:10px 24px;font-size:13px;border:none;background:transparent;cursor:pointer;color:var(--text-muted);position:relative;transition:var(--transition);font-weight:500}
-.tab::after{content:"";position:absolute;bottom:-1px;left:50%;width:0;height:2px;background:var(--primary);border-radius:2px;transition:var(--transition);transform:translateX(-50%)}
-.tab:hover{color:var(--text-secondary)}
-.tab.active{color:var(--primary)}
-.tab.active::after{width:24px}
-.tab-content{flex:1;overflow-y:auto;padding:22px 28px;transition:var(--transition)}
-.tab-content::-webkit-scrollbar{width:5px}
-.tab-content::-webkit-scrollbar-track{background:transparent}
-.tab-content::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
-/* Section Header */
-.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
-.section-header .count{font-size:12px;color:var(--text-muted);font-weight:500;background:var(--surface-hover);padding:3px 10px;border-radius:12px}
-.section-header-btns{display:flex;gap:6px}
-/* Buttons */
-.btn-primary{padding:8px 20px;background:linear-gradient(135deg,var(--primary),#7c3aed);color:#fff;border:none;border-radius:var(--radius-sm);font-size:13px;cursor:pointer;font-weight:600;transition:var(--transition);letter-spacing:0.01em;box-shadow:0 2px 8px var(--primary-glow)}
-.btn-primary:hover{transform:translateY(-1px);box-shadow:0 4px 14px var(--primary-glow)}
-.btn-primary:active{transform:translateY(0)}
-.btn-recording-start{padding:8px 20px;border:2px solid var(--primary);background:transparent;color:var(--primary);border-radius:var(--radius-sm);font-size:13px;cursor:pointer;font-weight:600;transition:var(--transition)}
-.btn-recording-start:hover{background:var(--primary-light);transform:translateY(-1px)}
-.btn-secondary{padding:6px 14px;font-size:12px;border-radius:var(--radius-xs);border:1px solid var(--border);background:var(--surface);cursor:pointer;color:var(--text-secondary);transition:var(--transition);font-weight:500}
-.btn-secondary:hover{background:var(--surface-hover);border-color:var(--text-muted);color:var(--text)}
-.btn-secondary.danger{color:var(--danger)}
-.btn-secondary.danger:hover{background:rgba(239,68,68,0.08);border-color:rgba(239,68,68,0.3)}
-.btn-ai{background:linear-gradient(135deg,#7c3aed,#6366f1);color:#fff;border:none;border-radius:var(--radius-xs);font-size:12px;cursor:pointer;font-weight:600;padding:6px 14px;transition:var(--transition);display:inline-flex;align-items:center;gap:4px;box-shadow:0 2px 6px rgba(124,58,237,0.3)}
-.btn-ai:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(124,58,237,0.4)}
-.btn-ai:disabled{opacity:0.5;cursor:not-allowed;transform:none}
-.btn-ai.loading{position:relative;color:transparent}
-.btn-ai.loading::after{content:"";position:absolute;width:14px;height:14px;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:spin 0.6s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-/* Note Cards */
-.note-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;margin-bottom:10px;cursor:pointer;transition:var(--transition);box-shadow:var(--shadow-sm);position:relative;overflow:hidden}
-.note-card::before{content:"";position:absolute;top:0;left:0;width:3px;height:0;background:linear-gradient(180deg,var(--primary),#8b5cf6);border-radius:0 2px 2px 0;transition:var(--transition)}
-.note-card:hover{box-shadow:var(--shadow);transform:translateY(-1px)}
-.note-card:hover::before{height:100%}
-.note-card.pinned{background:var(--primary-light);border-color:rgba(99,102,241,0.2)}
-.note-card.pinned::before{height:100%}
-.note-card.expanded{border-color:rgba(99,102,241,0.25);box-shadow:0 0 0 1px rgba(99,102,241,0.08),var(--shadow);cursor:default;transform:none}
-.note-card-header{display:flex;align-items:center;justify-content:space-between;gap:8px}
-.note-card-title-wrap{display:flex;align-items:center;gap:6px;flex:1;min-width:0}
-.note-card-pin{width:20px;height:20px;border:none;background:transparent;cursor:pointer;font-size:13px;color:var(--text-muted);display:flex;align-items:center;justify-content:center;transition:var(--transition);flex-shrink:0;opacity:0}
-.note-card:hover .note-card-pin{opacity:1}
-.note-card.pinned .note-card-pin{opacity:1;color:var(--warning)}
-.note-card-title{font-size:14px;font-weight:600;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.note-card-meta{font-size:11px;color:var(--text-muted);flex-shrink:0;white-space:nowrap}
-.note-card-body{display:none;margin-top:14px;animation:fadeIn 0.2s ease}
-.note-card.expanded .note-card-body{display:block}
-@keyframes fadeIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
-.note-content{font-size:13px;line-height:1.75;color:var(--text-secondary);white-space:pre-wrap;margin-bottom:14px}
-.note-keypoints{margin-top:10px}
-.note-keypoints-label{font-size:10px;font-weight:700;color:#b45309;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:6px}
-.note-keypoint-item{font-size:13px;line-height:1.6;color:#92400e;background:#fffbeb;padding:8px 12px;border-radius:var(--radius-xs);margin-bottom:5px;border-left:3px solid #f59e0b}
-.dark .note-keypoint-item{color:#fbbf24;background:rgba(245,158,11,0.1);border-left-color:#f59e0b}
-.note-actions{display:flex;gap:6px;margin-top:14px;padding-top:10px;border-top:1px solid var(--border)}
-/* Empty State */
-.empty-state{text-align:center;color:var(--text-muted);font-size:13px;padding:60px 20px;line-height:2}
-.empty-state .icon{font-size:48px;display:block;margin-bottom:8px;opacity:0.4}
-.empty-state p{font-size:13px;opacity:0.7}
-/* Todo */
-.todo-section-label{font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px;margin-top:20px}
-.todo-section-label:first-child{margin-top:0}
-.todo-item{display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);margin-bottom:6px;transition:var(--transition)}
-.todo-item:hover{border-color:var(--text-muted)}
-.todo-item.done{opacity:0.5}
-.todo-item.done .todo-title{text-decoration:line-through;color:var(--text-muted)}
-.todo-check{width:20px;height:20px;border:2px solid #cbd5e1;border-radius:50%;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:var(--transition)}
-.todo-check:hover{border-color:var(--primary)}
-.todo-item.done .todo-check{background:var(--success);border-color:var(--success);animation:checkPop 0.2s ease}
-@keyframes checkPop{0%{transform:scale(0.8)}50%{transform:scale(1.15)}100%{transform:scale(1)}}
-.todo-item.done .todo-check::after{content:"\2713";color:#fff;font-size:11px;font-weight:700}
-.todo-title{flex:1;font-size:13px;color:var(--text)}
-.todo-priority{font-size:10px;padding:2px 10px;border-radius:12px;font-weight:600;flex-shrink:0;letter-spacing:0.02em}
-.priority-high{background:rgba(239,68,68,0.1);color:var(--danger)}
-.priority-medium{background:rgba(245,158,11,0.1);color:#b45309}
-.dark .priority-medium{color:#fbbf24}
-.priority-low{background:rgba(16,185,129,0.1);color:#047857}
-.dark .priority-low{color:#34d399}
-.todo-date{font-size:11px;color:var(--text-muted);flex-shrink:0;min-width:50px}
-.todo-del{width:24px;height:24px;border:none;border-radius:var(--radius-xs);background:transparent;cursor:pointer;font-size:14px;color:var(--text-muted);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:var(--transition)}
-.todo-del:hover{color:var(--danger);background:rgba(239,68,68,0.1)}
-/* Recording */
-.recording-panel{display:flex;flex-direction:column;height:100%}
-.recording-status{display:flex;align-items:center;gap:10px;padding:6px 0 14px}
-.recording-dot{width:10px;height:10px;border-radius:50%;background:#ef4444;animation:recPulse 1.2s ease-in-out infinite;box-shadow:0 0 8px rgba(239,68,68,0.5)}
-@keyframes recPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.3;transform:scale(1.3)}}
-.recording-wave{display:flex;align-items:center;gap:3px;height:20px}
-.recording-wave span{width:3px;background:#ef4444;border-radius:2px;animation:waveAnim 0.8s ease-in-out infinite}
-.recording-wave span:nth-child(1){height:8px;animation-delay:0s}
-.recording-wave span:nth-child(2){height:14px;animation-delay:0.1s}
-.recording-wave span:nth-child(3){height:20px;animation-delay:0.2s}
-.recording-wave span:nth-child(4){height:12px;animation-delay:0.3s}
-.recording-wave span:nth-child(5){height:16px;animation-delay:0.15s}
-@keyframes waveAnim{0%,100%{transform:scaleY(0.5)}50%{transform:scaleY(1)}}
-.recording-label{font-size:13px;font-weight:600;color:#ef4444}
-.recording-timer{font-size:14px;color:var(--text-secondary);font-variant-numeric:tabular-nums;margin-left:auto;font-weight:600;letter-spacing:0.02em}
-.recording-text{flex:1;overflow-y:auto;background:var(--surface-hover);border:1px solid var(--border);border-radius:var(--radius);padding:18px;font-size:14px;line-height:1.9;color:var(--text);white-space:pre-wrap;min-height:140px}
-.recording-text .interim{color:var(--text-muted)}
-.recording-controls{display:flex;gap:8px;padding-top:14px;justify-content:flex-end}
-.btn-recording{padding:9px 24px;border-radius:var(--radius-sm);font-size:13px;font-weight:600;border:none;cursor:pointer;transition:var(--transition)}
-.btn-pause{background:var(--surface-hover);color:var(--text-secondary);border:1px solid var(--border)}
-.btn-pause:hover{background:var(--border);color:var(--text)}
-.btn-stop{background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;box-shadow:0 2px 8px rgba(239,68,68,0.3)}
-.btn-stop:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(239,68,68,0.4)}
-/* Modals */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.45);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;z-index:100;animation:overlayIn 0.2s ease}
-.modal-overlay.show{display:flex}
-@keyframes overlayIn{from{opacity:0}to{opacity:1}}
-.modal{background:var(--surface);border-radius:var(--radius-xl);width:480px;max-height:85vh;display:flex;flex-direction:column;box-shadow:var(--shadow-xl);animation:modalIn 0.25s cubic-bezier(0.4,0,0.2,1)}
-@keyframes modalIn{from{opacity:0;transform:translateY(-12px) scale(0.97)}to{opacity:1;transform:translateY(0) scale(1)}}
-.modal-header{padding:22px 26px 16px;display:flex;align-items:center;justify-content:space-between}
-.modal-header h3{font-size:16px;font-weight:700;color:var(--text)}
-.modal-close{width:30px;height:30px;border:none;border-radius:var(--radius-xs);background:transparent;cursor:pointer;font-size:20px;color:var(--text-muted);display:flex;align-items:center;justify-content:center;transition:var(--transition)}
-.modal-close:hover{background:var(--surface-hover);color:var(--text)}
-.modal-body{padding:0 26px 20px;overflow-y:auto;flex:1;display:flex;flex-direction:column;gap:16px}
-.modal-footer{padding:14px 26px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:8px}
-.form-group{display:flex;flex-direction:column;gap:5px}
-.form-group label{font-size:12px;font-weight:600;color:var(--text-secondary)}
-.form-group input,.form-group textarea,.form-group select{padding:10px 14px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:13px;font-family:inherit;outline:none;transition:var(--transition);color:var(--text);background:var(--surface)}
-.form-group input:focus,.form-group textarea:focus,.form-group select:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-glow)}
-.form-group textarea{resize:vertical;min-height:80px}
-.form-hint{font-size:11px;color:var(--text-muted)}
-.btn-cancel{padding:8px 18px;background:var(--surface-hover);color:var(--text-secondary);border:1px solid var(--border);border-radius:var(--radius-sm);font-size:13px;cursor:pointer;font-weight:500;transition:var(--transition)}
-.btn-cancel:hover{background:var(--border);color:var(--text)}
-/* Summary Modal */
-.summary-modal .modal{width:600px}
-.summary-content{font-size:13px;line-height:1.8;color:var(--text);white-space:pre-wrap;background:var(--surface-hover);border:1px solid var(--border);border-radius:var(--radius);padding:16px;max-height:280px;overflow-y:auto;margin-bottom:16px}
-.summary-keypoints{margin-bottom:14px}
-.summary-keypoints-label{font-size:10px;font-weight:700;color:#b45309;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:6px}
-.summary-kp-item{font-size:13px;line-height:1.6;color:#92400e;background:rgba(245,158,11,0.08);padding:8px 12px;border-radius:var(--radius-xs);margin-bottom:5px;border-left:3px solid #f59e0b}
-.dark .summary-kp-item{color:#fbbf24;background:rgba(245,158,11,0.1)}
-.ai-settings-input-group{display:flex;flex-direction:column;gap:5px}
-.ai-settings-input-group label{font-size:12px;font-weight:600;color:var(--text-secondary)}
-.ai-settings-input-group input{padding:10px 14px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:13px;font-family:inherit;outline:none;transition:var(--transition);color:var(--text);background:var(--surface)}
-.ai-settings-input-group input:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-glow)}
-.ai-status{font-size:12px;color:var(--text-muted);margin-top:2px}
-.ai-status.success{color:var(--success)}
-.ai-status.error{color:var(--danger)}
-/* Toast */
-.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);padding:10px 20px;border-radius:var(--radius-sm);font-size:13px;font-weight:500;z-index:200;opacity:0;transition:all 0.3s cubic-bezier(0.4,0,0.2,1);pointer-events:none}
-.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-.toast.success{background:var(--success);color:#fff;box-shadow:0 4px 16px rgba(16,185,129,0.3)}
-.toast.error{background:var(--danger);color:#fff;box-shadow:0 4px 16px rgba(239,68,68,0.3)}
-\n
-/* Timeline Calendar */
+
+
 .tl-wrap{position:relative}
-.tl-tabs{display:flex;gap:2px;margin-bottom:14px;background:#f0f3f8;border-radius:12px;padding:4px}
+.tl-tabs{display:flex;gap:3px;margin-bottom:14px;background:#f0f3f8;border-radius:12px;padding:4px}
 .tl-tabs button{flex:1;padding:10px 14px;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;background:transparent;color:#949bac;transition:all .2s}
 .tl-tabs button.act{background:linear-gradient(135deg,#6366f1,#7c3aed);color:#fff;box-shadow:0 2px 10px rgba(99,102,241,.25)}
-.tl-now{background:linear-gradient(135deg,#6366f1,#7c3aed);color:#fff;padding:9px 14px;border-radius:12px;font-size:12px;font-weight:500;margin-bottom:14px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-.tl-now .bdg{background:rgba(255,255,255,.2);padding:2px 8px;border-radius:6px;font-size:11px}
-.tl{position:relative;padding-left:24px}
-.tl::before{content:"";position:absolute;left:11px;top:6px;bottom:6px;width:2px;background:linear-gradient(to bottom,#6366f1,#a78bfa,#6366f1);border-radius:1px}
-.tl-mo{position:relative;margin-bottom:22px}.tl-mo:last-child{margin-bottom:0}
-.tl-dot{position:absolute;left:-24px;top:6px;width:10px;height:10px;border-radius:50%;background:#fff;border:2.5px solid #6366f1;z-index:1}
-.tl-dot.nw{background:#6366f1;box-shadow:0 0 0 6px rgba(99,102,241,.12);animation:dp 2s infinite}
-@keyframes dp{0%,100%{box-shadow:0 0 0 6px rgba(99,102,241,.12)}50%{box-shadow:0 0 0 11px rgba(99,102,241,.05)}}
+.tl-now{background:linear-gradient(135deg,#6366f1,#7c3aed);color:#fff;padding:10px 16px;border-radius:12px;font-size:12px;font-weight:500;margin-bottom:16px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.tl-now .bdg{background:rgba(255,255,255,.2);padding:2px 10px;border-radius:7px;font-size:11px}
+.tl{position:relative;padding-left:26px}
+.tl::before{content:"";position:absolute;left:12px;top:6px;bottom:6px;width:2px;background:linear-gradient(to bottom,#6366f1,#a78bfa,#6366f1);border-radius:1px}
+.tl-mo{position:relative;margin-bottom:24px}.tl-mo:last-child{margin-bottom:0}
+.tl-dot{position:absolute;left:-27px;top:7px;width:12px;height:12px;border-radius:50%;background:#fff;border:3px solid #6366f1;z-index:1;transition:all .3s}
+.tl-dot.nw{background:#6366f1;box-shadow:0 0 0 6px rgba(99,102,241,.15);animation:dp 2s infinite}
+@keyframes dp{0%,100%{box-shadow:0 0 0 6px rgba(99,102,241,.15)}50%{box-shadow:0 0 0 12px rgba(99,102,241,.06)}}
 .tl-dot.ho{border-color:#ef4444}.tl-dot.ex{border-color:#f59e0b}
-.tl-mhd{display:flex;align-items:baseline;gap:8px;margin-bottom:6px}.tl-mn{font-size:14px;font-weight:700;color:#1a1d26}.tl-mw{font-size:10px;color:#949bac}
-.tl-ev{display:flex;align-items:center;gap:8px;padding:5px 10px;border-radius:8px;font-size:11px;transition:all .15s;margin-bottom:3px}
-.tl-ev:hover{transform:translateX(2px);background:#f9fafb}
-.tl-ev .d{width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.tl-mhd{display:flex;align-items:baseline;gap:8px;margin-bottom:8px}
+.tl-mn{font-size:14px;font-weight:700;color:#1a1d26}.tl-mw{font-size:10px;color:#949bac}
+.tl-ev{display:flex;align-items:center;gap:8px;padding:6px 12px;border-radius:8px;font-size:12px;transition:all .15s;margin-bottom:4px}
+.tl-ev:hover{transform:translateX(3px);background:#f9fafb}
+.tl-ev .d{width:6px;height:6px;border-radius:50%;flex-shrink:0}
 .tl-ev .d.i{background:#6366f1}.tl-ev .d.h{background:#ef4444}.tl-ev .d.e{background:#f59e0b}.tl-ev .d.r{background:#10b981}
 .tl-ev .n{flex:1;color:#5a6170}.tl-ev .dt{font-size:10px;color:#949bac;white-space:nowrap}
-.tl-ev .tg{font-size:9px;padding:1px 7px;border-radius:6px;font-weight:600}
+.tl-ev .tg{font-size:9px;padding:1px 8px;border-radius:7px;font-weight:600}
 .tl-ev .tg.ti{background:#eef2ff;color:#6366f1}.tl-ev .tg.th{background:#fef2f2;color:#ef4444}.tl-ev .tg.te{background:#fffbeb;color:#92400e}
 </style>
 </head>
@@ -297,8 +78,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
     <a href="#gpa" class="active">绩点计算器</a>
     <a href="#countdown">倒计时</a>
     <a href="#clock">时钟</a>
-<a href="#calendar">校历</a>
     <a href="#tools">学习导航</a>
+            <a href="#calendar">校历</a>
 </nav>
 <div class="container">
 <section class="section" id="gpa">
@@ -356,74 +137,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Micr
 </div>
 </section>
 
-
-<section class="section" id="calendar">
-<div class="card">
-<h2>校历</h2>
-<div class="tl-wrap">
-<div class="tl-tabs">
-<button class="act" onclick="switchSem('fall',this)">秋季学期 9月-1月</button>
-<button onclick="switchSem('spring',this)">春季学期 2月-7月</button>
-</div>
-<div class="tl-now" id="calNow">
-<span style="opacity:.85">今天</span> <span class="bdg" id="calNowDate">--</span>
-<span style="opacity:.85;margin-left:4px">|</span>
-<span id="calNowSem">秋季学期</span>
-<span style="opacity:.85;margin-left:4px">|</span>
-<span id="calNowEvent">--</span>
-</div>
-<div id="calFall"><div class="tl">
-<div class="tl-mo"><span class="tl-dot"></span><div class="tl-mhd"><span class="tl-mn">9月 启程</span><span class="tl-mw">第1-4周</span></div>
-<div class="tl-ev"><span class="d i"></span><span class="n">本科/研究生新生报到注册</span><span class="dt">9月1-2日</span><span class="tg ti">重要</span></div>
-<div class="tl-ev"><span class="d r"></span><span class="n">老生报到注册</span><span class="dt">9月2日</span></div>
-<div class="tl-ev"><span class="d i"></span><span class="n">正式上课</span><span class="dt">9月4日</span><span class="tg ti">重要</span></div>
-</div>
-<div class="tl-mo"><span class="tl-dot ho"></span><div class="tl-mhd"><span class="tl-mn">10月 国庆</span><span class="tl-mw">第5-8周</span></div>
-<div class="tl-ev"><span class="d h"></span><span class="n">国庆节+中秋节放假</span><span class="dt">10月1-8日</span><span class="tg th">假期</span></div>
-<div class="tl-ev"><span class="d e"></span><span class="n">英语四六级考试报名</span><span class="dt">10月中旬</span><span class="tg te">考试</span></div>
-</div>
-<div class="tl-mo"><span class="tl-dot ex"></span><div class="tl-mhd"><span class="tl-mn">11月 期中</span><span class="tl-mw">第9-12周</span></div>
-<div class="tl-ev"><span class="d e"></span><span class="n">期中教学检查 / 期中考试</span><span class="dt">第10-11周</span><span class="tg te">考试</span></div>
-</div>
-<div class="tl-mo"><span class="tl-dot ex"></span><div class="tl-mhd"><span class="tl-mn">12月 冲刺</span><span class="tl-mw">第13-16周</span></div>
-<div class="tl-ev"><span class="d e"></span><span class="n">全国大学英语四六级笔试</span><span class="dt">12月中旬</span><span class="tg te">考试</span></div>
-<div class="tl-ev"><span class="d e"></span><span class="n">全国硕士研究生招生考试</span><span class="dt">12月下旬</span><span class="tg te">考试</span></div>
-<div class="tl-ev"><span class="d h"></span><span class="n">元旦放假</span><span class="dt">1月1日</span><span class="tg th">假期</span></div>
-</div>
-<div class="tl-mo"><span class="tl-dot ho"></span><div class="tl-mhd"><span class="tl-mn">1月 收官</span><span class="tl-mw">第17-20周</span></div>
-<div class="tl-ev"><span class="d e"></span><span class="n">期末考试周</span><span class="dt">第18-19周</span><span class="tg te">考试</span></div>
-<div class="tl-ev"><span class="d h"></span><span class="n">寒假开始</span><span class="dt">1月中下旬</span><span class="tg th">假期</span></div>
-</div>
-</div></div>
-<div id="calSpring" style="display:none"><div class="tl">
-<div class="tl-mo"><span class="tl-dot"></span><div class="tl-mhd"><span class="tl-mn">2月 归来</span><span class="tl-mw">第1-2周</span></div>
-<div class="tl-ev"><span class="d i"></span><span class="n">春季学期报到注册</span><span class="dt">2月下旬</span><span class="tg ti">重要</span></div>
-<div class="tl-ev"><span class="d r"></span><span class="n">正式上课</span><span class="dt">报到后第一个工作日</span></div>
-</div>
-<div class="tl-mo"><span class="tl-dot"></span><div class="tl-mhd"><span class="tl-mn">3月 播种</span><span class="tl-mw">第3-6周</span></div>
-<div class="tl-ev"><span class="d r"></span><span class="n">正常教学</span><span class="dt">3月全月</span></div>
-</div>
-<div class="tl-mo"><span class="tl-dot ho"></span><div class="tl-mhd"><span class="tl-mn">4月 清明</span><span class="tl-mw">第7-10周</span></div>
-<div class="tl-ev"><span class="d h"></span><span class="n">清明节放假</span><span class="dt">4月4-6日</span><span class="tg th">假期</span></div>
-<div class="tl-ev"><span class="d e"></span><span class="n">期中教学检查</span><span class="dt">第9-10周</span></div>
-</div>
-<div class="tl-mo"><span class="tl-dot ho"></span><div class="tl-mhd"><span class="tl-mn">5月 劳动</span><span class="tl-mw">第11-14周</span></div>
-<div class="tl-ev"><span class="d h"></span><span class="n">劳动节放假</span><span class="dt">5月1-5日</span><span class="tg th">假期</span></div>
-<div class="tl-ev"><span class="d e"></span><span class="n">四六级口语考试</span><span class="dt">5月下旬</span></div>
-</div>
-<div class="tl-mo"><span class="tl-dot ex"></span><div class="tl-mhd"><span class="tl-mn">6月 奋战</span><span class="tl-mw">第15-18周</span></div>
-<div class="tl-ev"><span class="d e"></span><span class="n">全国大学英语四六级笔试</span><span class="dt">6月中旬</span><span class="tg te">考试</span></div>
-<div class="tl-ev"><span class="d h"></span><span class="n">端午节放假</span><span class="dt">农历五月初五</span><span class="tg th">假期</span></div>
-<div class="tl-ev"><span class="d i"></span><span class="n">毕业生离校相关事宜</span><span class="dt">6月下旬</span></div>
-</div>
-<div class="tl-mo"><span class="tl-dot ho"></span><div class="tl-mhd"><span class="tl-mn">7-8月 收获</span><span class="tl-mw">第19-20周</span></div>
-<div class="tl-ev"><span class="d e"></span><span class="n">期末考试周</span><span class="dt">第19-20周</span><span class="tg te">考试</span></div>
-<div class="tl-ev"><span class="d h"></span><span class="n">暑假</span><span class="dt">7月中旬起</span><span class="tg th">假期</span></div>
-</div>
-</div></div>
-</div>
-</div>
-</section>
+<section class="section" id="calendar"><div class="card"><h2>校历</h2><div class="tl-wrap"><div class="tl-tabs"><button class="act" onclick="switchSem('fall',this)">秋季学期 9月-1月</button><button onclick="switchSem('spring',this)">春季学期 2月-7月</button></div><div class="tl-now" id="calNow"><span style="opacity:.85">今天</span> <span class="bdg" id="calNowDate">--</span> <span style="opacity:.85;margin-left:4px">|</span> <span id="calNowSem">秋季学期</span> <span style="opacity:.85;margin-left:4px">|</span> <span id="calNowEvent">--</span></div><div id="calFall"><div class="tl"><div class="tl-mo"><span class="tl-dot"></span><div class="tl-mhd"><span class="tl-mn">9月 启程</span><span class="tl-mw">第1-4周</span></div><div class="tl-ev"><span class="d i"></span><span class="n">本科/研究生新生报到注册</span><span class="dt">9月1-2日</span><span class="tg ti">重要</span></div><div class="tl-ev"><span class="d r"></span><span class="n">老生报到注册</span><span class="dt">9月2日</span></div><div class="tl-ev"><span class="d i"></span><span class="n">正式上课</span><span class="dt">9月4日</span><span class="tg ti">重要</span></div></div><div class="tl-mo"><span class="tl-dot ho"></span><div class="tl-mhd"><span class="tl-mn">10月 国庆</span><span class="tl-mw">第5-8周</span></div><div class="tl-ev"><span class="d h"></span><span class="n">国庆节+中秋节放假</span><span class="dt">10月1-8日</span><span class="tg th">假期</span></div><div class="tl-ev"><span class="d e"></span><span class="n">英语四六级考试报名</span><span class="dt">10月中旬</span><span class="tg te">考试</span></div></div><div class="tl-mo"><span class="tl-dot ex"></span><div class="tl-mhd"><span class="tl-mn">11月 期中</span><span class="tl-mw">第9-12周</span></div><div class="tl-ev"><span class="d e"></span><span class="n">期中教学检查 / 期中考试</span><span class="dt">第10-11周</span><span class="tg te">考试</span></div></div><div class="tl-mo"><span class="tl-dot ex"></span><div class="tl-mhd"><span class="tl-mn">12月 冲刺</span><span class="tl-mw">第13-16周</span></div><div class="tl-ev"><span class="d e"></span><span class="n">全国大学英语四六级笔试</span><span class="dt">12月中旬</span><span class="tg te">考试</span></div><div class="tl-ev"><span class="d e"></span><span class="n">全国硕士研究生招生考试</span><span class="dt">12月下旬</span><span class="tg te">考试</span></div><div class="tl-ev"><span class="d h"></span><span class="n">元旦放假</span><span class="dt">1月1日</span><span class="tg th">假期</span></div></div><div class="tl-mo"><span class="tl-dot ho"></span><div class="tl-mhd"><span class="tl-mn">1月 收官</span><span class="tl-mw">第17-20周</span></div><div class="tl-ev"><span class="d e"></span><span class="n">期末考试周</span><span class="dt">第18-19周</span><span class="tg te">考试</span></div><div class="tl-ev"><span class="d h"></span><span class="n">寒假开始</span><span class="dt">1月中下旬</span><span class="tg th">假期</span></div></div></div></div><div id="calSpring" style="display:none"><div class="tl"><div class="tl-mo"><span class="tl-dot"></span><div class="tl-mhd"><span class="tl-mn">2月 归来</span><span class="tl-mw">第1-2周</span></div><div class="tl-ev"><span class="d i"></span><span class="n">春季学期报到注册</span><span class="dt">2月下旬</span><span class="tg ti">重要</span></div><div class="tl-ev"><span class="d r"></span><span class="n">正式上课</span><span class="dt">报到后第一个工作日</span></div></div><div class="tl-mo"><span class="tl-dot"></span><div class="tl-mhd"><span class="tl-mn">3月 播种</span><span class="tl-mw">第3-6周</span></div><div class="tl-ev"><span class="d r"></span><span class="n">正常教学</span><span class="dt">3月全月</span></div></div><div class="tl-mo"><span class="tl-dot ho"></span><div class="tl-mhd"><span class="tl-mn">4月 清明</span><span class="tl-mw">第7-10周</span></div><div class="tl-ev"><span class="d h"></span><span class="n">清明节放假</span><span class="dt">4月4-6日</span><span class="tg th">假期</span></div><div class="tl-ev"><span class="d e"></span><span class="n">期中教学检查</span><span class="dt">第9-10周</span></div></div><div class="tl-mo"><span class="tl-dot ho"></span><div class="tl-mhd"><span class="tl-mn">5月 劳动</span><span class="tl-mw">第11-14周</span></div><div class="tl-ev"><span class="d h"></span><span class="n">劳动节放假</span><span class="dt">5月1-5日</span><span class="tg th">假期</span></div><div class="tl-ev"><span class="d e"></span><span class="n">四六级口语考试</span><span class="dt">5月下旬</span></div></div><div class="tl-mo"><span class="tl-dot ex"></span><div class="tl-mhd"><span class="tl-mn">6月 奋战</span><span class="tl-mw">第15-18周</span></div><div class="tl-ev"><span class="d e"></span><span class="n">全国大学英语四六级笔试</span><span class="dt">6月中旬</span><span class="tg te">考试</span></div><div class="tl-ev"><span class="d h"></span><span class="n">端午节放假</span><span class="dt">农历五月初五</span><span class="tg th">假期</span></div><div class="tl-ev"><span class="d i"></span><span class="n">毕业生离校相关事宜</span><span class="dt">6月下旬</span></div></div><div class="tl-mo"><span class="tl-dot ho"></span><div class="tl-mhd"><span class="tl-mn">7-8月 收获</span><span class="tl-mw">第19-20周</span></div><div class="tl-ev"><span class="d e"></span><span class="n">期末考试周</span><span class="dt">第19-20周</span><span class="tg te">考试</span></div><div class="tl-ev"><span class="d h"></span><span class="n">暑假</span><span class="dt">7月中旬起</span><span class="tg th">假期</span></div></div></div></div></div></div></section>
 <section class="section" id="tools">
 <div class="card">
 <h2>学习导航</h2>
@@ -639,24 +353,24 @@ const toolData = [
 ]
 function renderTool()
 
-// ========= 校历模块 =========
+// ========= 校历 =========
 function switchSem(sem,btn){
-document.getElementById("calFall").style.display=sem==="fall"?"":"none";
-document.getElementById("calSpring").style.display=sem==="spring"?"":"none";
-document.querySelectorAll(".tl-tabs button").forEach(function(t){t.classList.remove("act")});
-btn.classList.add("act")
+  document.getElementById("calFall").style.display = sem==="fall" ? "" : "none";
+  document.getElementById("calSpring").style.display = sem==="spring" ? "" : "none";
+  document.querySelectorAll(".tl-tabs button").forEach(function(t){ t.classList.remove("act"); });
+  btn.classList.add("act");
 }
 function updateCalNow(){
-var d=new Date();var m=d.getMonth()+1,day=d.getDate();
-var cd=document.getElementById("calNowDate");if(cd)cd.textContent=m+"月"+day+"日";
-var sem=document.getElementById("calNowSem");var evt=document.getElementById("calNowEvent");
-if(m>=9||m<=1){if(sem)sem.textContent="秋季学期";if(evt)evt.textContent=m>=9&&m<=12?"教学进行中":"期末考试/寒假"}
-else{if(sem)sem.textContent="春季学期";if(evt)evt.textContent=m>=6?"期末考试/暑假":"教学进行中"}
-var fallDots=document.querySelectorAll("#calFall .tl-dot");fallDots.forEach(function(d){d.classList.remove("nw")});
-var springDots=document.querySelectorAll("#calSpring .tl-dot");springDots.forEach(function(d){d.classList.remove("nw")});
-var midx=m-9;if(midx<0)midx+=12;
-if(m>=2&&m<=7&&m-2<springDots.length)springDots[m-2].classList.add("nw");
-else if(midx>=0&&midx<fallDots.length)fallDots[midx].classList.add("nw")
+  var d=new Date(), m=d.getMonth()+1, day=d.getDate();
+  var cd=document.getElementById("calNowDate"); if(cd) cd.textContent=m+"月"+day+"日";
+  var sem=document.getElementById("calNowSem"), evt=document.getElementById("calNowEvent");
+  if(m>=9||m<=1){ if(sem) sem.textContent="秋季学期"; if(evt) evt.textContent=m>=9&&m<=12?"教学进行中":"期末考试/寒假"; }
+  else{ if(sem) sem.textContent="春季学期"; if(evt) evt.textContent=m>=6?"期末考试/暑假":"教学进行中"; }
+  var fallDots=document.querySelectorAll("#calFall .tl-dot"); fallDots.forEach(function(d){ d.classList.remove("nw"); });
+  var springDots=document.querySelectorAll("#calSpring .tl-dot"); springDots.forEach(function(d){ d.classList.remove("nw"); });
+  var midx=m-9; if(midx<0) midx+=12;
+  if(m>=2&&m<=7&&m-2<springDots.length) springDots[m-2].classList.add("nw");
+  else if(midx>=0&&midx<fallDots.length) fallDots[midx].classList.add("nw");
 }
 updateCalNow();
 {
@@ -674,24 +388,24 @@ updateCalNow();
 }
 renderTool()
 
-// ========= 校历模块 =========
+// ========= 校历 =========
 function switchSem(sem,btn){
-document.getElementById("calFall").style.display=sem==="fall"?"":"none";
-document.getElementById("calSpring").style.display=sem==="spring"?"":"none";
-document.querySelectorAll(".tl-tabs button").forEach(function(t){t.classList.remove("act")});
-btn.classList.add("act")
+  document.getElementById("calFall").style.display = sem==="fall" ? "" : "none";
+  document.getElementById("calSpring").style.display = sem==="spring" ? "" : "none";
+  document.querySelectorAll(".tl-tabs button").forEach(function(t){ t.classList.remove("act"); });
+  btn.classList.add("act");
 }
 function updateCalNow(){
-var d=new Date();var m=d.getMonth()+1,day=d.getDate();
-var cd=document.getElementById("calNowDate");if(cd)cd.textContent=m+"月"+day+"日";
-var sem=document.getElementById("calNowSem");var evt=document.getElementById("calNowEvent");
-if(m>=9||m<=1){if(sem)sem.textContent="秋季学期";if(evt)evt.textContent=m>=9&&m<=12?"教学进行中":"期末考试/寒假"}
-else{if(sem)sem.textContent="春季学期";if(evt)evt.textContent=m>=6?"期末考试/暑假":"教学进行中"}
-var fallDots=document.querySelectorAll("#calFall .tl-dot");fallDots.forEach(function(d){d.classList.remove("nw")});
-var springDots=document.querySelectorAll("#calSpring .tl-dot");springDots.forEach(function(d){d.classList.remove("nw")});
-var midx=m-9;if(midx<0)midx+=12;
-if(m>=2&&m<=7&&m-2<springDots.length)springDots[m-2].classList.add("nw");
-else if(midx>=0&&midx<fallDots.length)fallDots[midx].classList.add("nw")
+  var d=new Date(), m=d.getMonth()+1, day=d.getDate();
+  var cd=document.getElementById("calNowDate"); if(cd) cd.textContent=m+"月"+day+"日";
+  var sem=document.getElementById("calNowSem"), evt=document.getElementById("calNowEvent");
+  if(m>=9||m<=1){ if(sem) sem.textContent="秋季学期"; if(evt) evt.textContent=m>=9&&m<=12?"教学进行中":"期末考试/寒假"; }
+  else{ if(sem) sem.textContent="春季学期"; if(evt) evt.textContent=m>=6?"期末考试/暑假":"教学进行中"; }
+  var fallDots=document.querySelectorAll("#calFall .tl-dot"); fallDots.forEach(function(d){ d.classList.remove("nw"); });
+  var springDots=document.querySelectorAll("#calSpring .tl-dot"); springDots.forEach(function(d){ d.classList.remove("nw"); });
+  var midx=m-9; if(midx<0) midx+=12;
+  if(m>=2&&m<=7&&m-2<springDots.length) springDots[m-2].classList.add("nw");
+  else if(midx>=0&&midx<fallDots.length) fallDots[midx].classList.add("nw");
 }
 updateCalNow();
 
