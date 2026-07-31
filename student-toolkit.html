@@ -79,8 +79,8 @@
             <a href="#gpa" class="active">绩点计算器</a>
     <a href="#countdown">倒计时</a>
     <a href="#clock">时钟</a>
-    <a href="#tools">学习导航</a>
-            <a href="#calendar">校历</a>
+    <a href="#calendar">校历</a>
+            <a href="#tools">学习导航</a>
 </nav>
 <div class="container">
 <section class="section" id="gpa">
@@ -352,29 +352,7 @@ const toolData = [
     {tag:'效率',name:'Convertio',url:'https://convertio.co',desc:'任意格式文件互转'},
     {tag:'笔记',name:'Notion',url:'https://www.notion.so',desc:'搭建个人知识库、整理资料'},
 ]
-function renderTool()
-
-// ========= 校历 =========
-function switchSem(sem,btn){
-  document.getElementById("calFall").style.display = sem==="fall" ? "" : "none";
-  document.getElementById("calSpring").style.display = sem==="spring" ? "" : "none";
-  document.querySelectorAll(".tl-tabs button").forEach(function(t){ t.classList.remove("act"); });
-  btn.classList.add("act");
-}
-function updateCalNow(){
-  var d=new Date(), m=d.getMonth()+1, day=d.getDate();
-  var cd=document.getElementById("calNowDate"); if(cd) cd.textContent=m+"月"+day+"日";
-  var sem=document.getElementById("calNowSem"), evt=document.getElementById("calNowEvent");
-  if(m>=9||m<=1){ if(sem) sem.textContent="秋季学期"; if(evt) evt.textContent=m>=9&&m<=12?"教学进行中":"期末考试/寒假"; }
-  else{ if(sem) sem.textContent="春季学期"; if(evt) evt.textContent=m>=6?"期末考试/暑假":"教学进行中"; }
-  var fallDots=document.querySelectorAll("#calFall .tl-dot"); fallDots.forEach(function(d){ d.classList.remove("nw"); });
-  var springDots=document.querySelectorAll("#calSpring .tl-dot"); springDots.forEach(function(d){ d.classList.remove("nw"); });
-  var midx=m-9; if(midx<0) midx+=12;
-  if(m>=2&&m<=7&&m-2<springDots.length) springDots[m-2].classList.add("nw");
-  else if(midx>=0&&midx<fallDots.length) fallDots[midx].classList.add("nw");
-}
-updateCalNow();
-{
+function renderTool(){
     const box = document.getElementById('toolBox')
     let html = ''
     toolData.forEach(t=>{
@@ -409,7 +387,6 @@ function updateCalNow(){
   else if(midx>=0&&midx<fallDots.length) fallDots[midx].classList.add("nw");
 }
 updateCalNow();
-
 </script>
 </body>
 </html>
