@@ -2,6 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
+<meta http-equiv="x-dns-prefetch-control" content="off">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>安大学生工具箱</title>
 <style>
@@ -588,20 +589,20 @@ const toolData = [
     {tag:'效率',name:'Convertio',url:'https://convertio.co',desc:'任意格式文件互转'},
     {tag:'笔记',name:'Notion',url:'https://www.notion.so',desc:'搭建个人知识库、整理资料'},
 ]
-function renderTool(){
+function setTimeout(renderTool, 600){
     const box = document.getElementById('toolBox')
     let html = ''
     toolData.forEach(t=>{
         html += `
         <div class="tool-card">
             <span class="tool-tag">${t.tag}</span>
-            <a href="${t.url}" target="_blank" style="font-weight:600;color:#6366f1;text-decoration:none">${t.name}</a>
+            <a href="${t.url}" target="_blank" rel="noopener noreferrer" style="font-weight:600;color:#6366f1;text-decoration:none">${t.name}</a>
             <p style="font-size:13px;color:#666;margin-top:4px">${t.desc}</p>
         </div>`
     })
     box.innerHTML = html
 }
-renderTool()
+setTimeout(renderTool, 600)
 
 // ========= 校历 =========
 function switchSem(sem,btn){
