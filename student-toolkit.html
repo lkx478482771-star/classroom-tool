@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta http-equiv="x-dns-prefetch-control" content="off">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>安大学生工具箱</title>
 <style>
@@ -596,7 +597,7 @@ function renderTool(){
         html += `
         <div class="tool-card">
             <span class="tool-tag">${t.tag}</span>
-            <a href="${t.url}" target="_blank" rel="noopener noreferrer" style="font-weight:600;color:#6366f1;text-decoration:none">${t.name}</a>
+            <span onclick="window.open(this.dataset.u,'__blank','noopener,noreferrer')" data-u="${t.url}" style="font-weight:600;color:#6366f1;text-decoration:none;cursor:pointer">${t.name}</span>
             <p style="font-size:13px;color:#666;margin-top:4px">${t.desc}</p>
         </div>`
     })
