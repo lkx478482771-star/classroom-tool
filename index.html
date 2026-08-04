@@ -1,318 +1,983 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-theme="light">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="x-dns-prefetch-control" content="off">
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#4f5bff">
+<meta name="description" content="课堂整理工具：课程笔记、语音录音转写、AI 总结与待办管理。">
 <title>课堂整理工具</title>
-<style>
-
-*{margin:0;padding:0;box-sizing:border-box}
-:root{
-  --bg:#f0f2f6;
-  --surface:#ffffff;
-  --surface-hover:#f8f9fc;
-  --border:#e8ecf0;
-  --border-light:#f0f2f6;
-  --text:#1a1d26;
-  --text-secondary:#5a6170;
-  --text-muted:#949bac;
-  --primary:#6366f1;
-  --primary-dark:#4f46e5;
-  --primary-light:#eef2ff;
-  --primary-glow:rgba(99,102,241,0.3);
-  --danger:#ef4444;
-  --success:#10b981;
-  --warning:#f59e0b;
-  --shadow-sm:0 1px 2px rgba(0,0,0,0.04),0 1px 3px rgba(0,0,0,0.03);
-  --shadow:0 2px 8px rgba(0,0,0,0.05),0 1px 4px rgba(0,0,0,0.03);
-  --shadow-lg:0 8px 32px rgba(0,0,0,0.08),0 2px 8px rgba(0,0,0,0.04);
-  --shadow-xl:0 16px 48px rgba(0,0,0,0.12);
-  --radius:12px;
-  --radius-sm:8px;
-  --radius-xs:6px;
-  --radius-xl:16px;
-  --transition:all 0.2s cubic-bezier(0.4,0,0.2,1);
-}
-.dark{--bg:#0f1117;--surface:#1a1d2e;--surface-hover:#222639;--border:#2a2e42;--border-light:#1e2233;--text:#e8ecf4;--text-secondary:#9ca3b8;--text-muted:#6b7286;--primary-light:rgba(99,102,241,0.12);--shadow-sm:0 1px 2px rgba(0,0,0,0.2);--shadow:0 2px 8px rgba(0,0,0,0.25);--shadow-lg:0 8px 32px rgba(0,0,0,0.35);--shadow-xl:0 16px 48px rgba(0,0,0,0.4)}
-body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",system-ui,sans-serif;background:var(--bg);color:var(--text);height:100vh;overflow:hidden;-webkit-font-smoothing:antialiased;transition:background 0.3s,color 0.3s}
-.app{display:flex;height:100vh;position:relative}
-/* Sidebar */
-.sidebar{width:256px;min-width:256px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;position:relative;z-index:10;transition:var(--transition)}
-.sidebar-header{padding:22px 18px 14px;display:flex;align-items:center;justify-content:space-between}
-.sidebar-brand{display:flex;align-items:center;gap:10px}
-.sidebar-brand-icon{width:32px;height:32px;background:linear-gradient(135deg,var(--primary),#8b5cf6);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px;font-weight:700;flex-shrink:0}
-.sidebar-brand-text{font-size:15px;font-weight:700;color:var(--text);letter-spacing:-0.02em}
-.sidebar-actions{display:flex;gap:4px}
-.btn-icon{width:32px;height:32px;border:none;border-radius:var(--radius-xs);background:transparent;cursor:pointer;font-size:15px;color:var(--text-muted);display:flex;align-items:center;justify-content:center;transition:var(--transition)}
-.btn-icon:hover{background:var(--surface-hover);color:var(--text-secondary)}
-/* Search */
-.search-box{margin:0 12px 10px;position:relative}
-.search-box input{width:100%;padding:8px 12px 8px 32px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:12px;background:var(--surface);color:var(--text);outline:none;transition:var(--transition)}
-.search-box input:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-glow)}
-.search-box input::placeholder{color:var(--text-muted)}
-.search-icon{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--text-muted);font-size:12px;pointer-events:none}
-/* Course List */
-.course-list{flex:1;overflow-y:auto;padding:0 10px 8px}
-.course-list::-webkit-scrollbar{width:4px}
-.course-list::-webkit-scrollbar-track{background:transparent}
-.course-list::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
-.course-item{display:flex;align-items:center;justify-content:space-between;padding:9px 12px;border-radius:var(--radius-sm);cursor:pointer;margin-bottom:2px;transition:var(--transition);font-size:13px;color:var(--text-secondary)}
-.course-item:hover{background:var(--surface-hover);color:var(--text)}
-.course-item.active{background:var(--primary-light);color:var(--primary);font-weight:600}
-.course-item .course-color{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-right:8px}
-.course-item-name{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.course-item-del{opacity:0;width:24px;height:24px;border:none;border-radius:var(--radius-xs);background:transparent;cursor:pointer;font-size:13px;color:var(--text-muted);display:flex;align-items:center;justify-content:center;transition:var(--transition)}
-.course-item:hover .course-item-del{opacity:1}
-.course-item-del:hover{color:var(--danger);background:rgba(239,68,68,0.1)}
-.empty-courses{text-align:center;color:var(--text-muted);font-size:13px;padding:36px 16px;line-height:1.8}
-.empty-courses .icon{font-size:36px;display:block;margin-bottom:8px;opacity:0.5}
-/* Sidebar Footer Stats */
-.sidebar-footer{padding:10px 16px 14px;border-top:1px solid var(--border)}
-.stats-row{display:flex;gap:8px}
-.stat-item{flex:1;padding:8px 6px;background:var(--surface-hover);border-radius:var(--radius-xs);text-align:center}
-.stat-value{font-size:14px;font-weight:700;color:var(--text)}
-.stat-label{font-size:10px;color:var(--text-muted);margin-top:1px}
-/* Main Area */
-.main{flex:1;display:flex;flex-direction:column;overflow:hidden;margin:10px 10px 10px 4px;border-radius:var(--radius-xl);background:var(--surface);box-shadow:var(--shadow);transition:var(--transition)}
-.main-placeholder{flex:1;display:flex;align-items:center;justify-content:center;color:var(--text-muted);font-size:14px;flex-direction:column;gap:12px}
-.main-placeholder .icon{font-size:56px;opacity:0.3}
-.main-placeholder p{font-size:13px;opacity:0.7}
-/* Course Header */
-.course-header{padding:24px 28px 0;display:flex;align-items:baseline;gap:10px}
-.course-header h1{font-size:20px;font-weight:700;color:var(--text);letter-spacing:-0.02em}
-.course-header .teacher{font-size:12px;color:var(--text-muted);padding:3px 12px;background:var(--surface-hover);border-radius:20px;font-weight:500}
-.course-header .course-color-bar{width:4px;height:20px;border-radius:4px;background:linear-gradient(180deg,var(--primary),#8b5cf6);flex-shrink:0}
-/* Tabs */
-.tabs{display:flex;gap:0;padding:16px 28px 0;border-bottom:1px solid var(--border);position:relative}
-.tab{padding:10px 24px;font-size:13px;border:none;background:transparent;cursor:pointer;color:var(--text-muted);position:relative;transition:var(--transition);font-weight:500}
-.tab::after{content:"";position:absolute;bottom:-1px;left:50%;width:0;height:2px;background:var(--primary);border-radius:2px;transition:var(--transition);transform:translateX(-50%)}
-.tab:hover{color:var(--text-secondary)}
-.tab.active{color:var(--primary)}
-.tab.active::after{width:24px}
-.tab-content{flex:1;overflow-y:auto;padding:22px 28px;transition:var(--transition)}
-.tab-content::-webkit-scrollbar{width:5px}
-.tab-content::-webkit-scrollbar-track{background:transparent}
-.tab-content::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
-/* Section Header */
-.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
-.section-header .count{font-size:12px;color:var(--text-muted);font-weight:500;background:var(--surface-hover);padding:3px 10px;border-radius:12px}
-.section-header-btns{display:flex;gap:6px}
-/* Buttons */
-.btn-primary{padding:8px 20px;background:linear-gradient(135deg,var(--primary),#7c3aed);color:#fff;border:none;border-radius:var(--radius-sm);font-size:13px;cursor:pointer;font-weight:600;transition:var(--transition);letter-spacing:0.01em;box-shadow:0 2px 8px var(--primary-glow)}
-.btn-primary:hover{transform:translateY(-1px);box-shadow:0 4px 14px var(--primary-glow)}
-.btn-primary:active{transform:translateY(0)}
-.btn-recording-start{padding:8px 20px;border:2px solid var(--primary);background:transparent;color:var(--primary);border-radius:var(--radius-sm);font-size:13px;cursor:pointer;font-weight:600;transition:var(--transition)}
-.btn-recording-start:hover{background:var(--primary-light);transform:translateY(-1px)}
-.btn-secondary{padding:6px 14px;font-size:12px;border-radius:var(--radius-xs);border:1px solid var(--border);background:var(--surface);cursor:pointer;color:var(--text-secondary);transition:var(--transition);font-weight:500}
-.btn-secondary:hover{background:var(--surface-hover);border-color:var(--text-muted);color:var(--text)}
-.btn-secondary.danger{color:var(--danger)}
-.btn-secondary.danger:hover{background:rgba(239,68,68,0.08);border-color:rgba(239,68,68,0.3)}
-.btn-ai{background:linear-gradient(135deg,#7c3aed,#6366f1);color:#fff;border:none;border-radius:var(--radius-xs);font-size:12px;cursor:pointer;font-weight:600;padding:6px 14px;transition:var(--transition);display:inline-flex;align-items:center;gap:4px;box-shadow:0 2px 6px rgba(124,58,237,0.3)}
-.btn-ai:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(124,58,237,0.4)}
-.btn-ai:disabled{opacity:0.5;cursor:not-allowed;transform:none}
-.btn-ai.loading{position:relative;color:transparent}
-.btn-ai.loading::after{content:"";position:absolute;width:14px;height:14px;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:spin 0.6s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-/* Note Cards */
-.note-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;margin-bottom:10px;cursor:pointer;transition:var(--transition);box-shadow:var(--shadow-sm);position:relative;overflow:hidden}
-.note-card::before{content:"";position:absolute;top:0;left:0;width:3px;height:0;background:linear-gradient(180deg,var(--primary),#8b5cf6);border-radius:0 2px 2px 0;transition:var(--transition)}
-.note-card:hover{box-shadow:var(--shadow);transform:translateY(-1px)}
-.note-card:hover::before{height:100%}
-.note-card.pinned{background:var(--primary-light);border-color:rgba(99,102,241,0.2)}
-.note-card.pinned::before{height:100%}
-.note-card.expanded{border-color:rgba(99,102,241,0.25);box-shadow:0 0 0 1px rgba(99,102,241,0.08),var(--shadow);cursor:default;transform:none}
-.note-card-header{display:flex;align-items:center;justify-content:space-between;gap:8px}
-.note-card-title-wrap{display:flex;align-items:center;gap:6px;flex:1;min-width:0}
-.note-card-pin{width:20px;height:20px;border:none;background:transparent;cursor:pointer;font-size:13px;color:var(--text-muted);display:flex;align-items:center;justify-content:center;transition:var(--transition);flex-shrink:0;opacity:0}
-.note-card:hover .note-card-pin{opacity:1}
-.note-card.pinned .note-card-pin{opacity:1;color:var(--warning)}
-.note-card-title{font-size:14px;font-weight:600;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.note-card-meta{font-size:11px;color:var(--text-muted);flex-shrink:0;white-space:nowrap}
-.note-card-body{display:none;margin-top:14px;animation:fadeIn 0.2s ease}
-.note-card.expanded .note-card-body{display:block}
-@keyframes fadeIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
-.note-content{font-size:13px;line-height:1.75;color:var(--text-secondary);white-space:pre-wrap;margin-bottom:14px}
-.note-keypoints{margin-top:10px}
-.note-keypoints-label{font-size:10px;font-weight:700;color:#b45309;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:6px}
-.note-keypoint-item{font-size:13px;line-height:1.6;color:#92400e;background:#fffbeb;padding:8px 12px;border-radius:var(--radius-xs);margin-bottom:5px;border-left:3px solid #f59e0b}
-.dark .note-keypoint-item{color:#fbbf24;background:rgba(245,158,11,0.1);border-left-color:#f59e0b}
-.note-actions{display:flex;gap:6px;margin-top:14px;padding-top:10px;border-top:1px solid var(--border)}
-/* Empty State */
-.empty-state{text-align:center;color:var(--text-muted);font-size:13px;padding:60px 20px;line-height:2}
-.empty-state .icon{font-size:48px;display:block;margin-bottom:8px;opacity:0.4}
-.empty-state p{font-size:13px;opacity:0.7}
-/* Todo */
-.todo-section-label{font-size:10px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px;margin-top:20px}
-.todo-section-label:first-child{margin-top:0}
-.todo-item{display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);margin-bottom:6px;transition:var(--transition)}
-.todo-item:hover{border-color:var(--text-muted)}
-.todo-item.done{opacity:0.5}
-.todo-item.done .todo-title{text-decoration:line-through;color:var(--text-muted)}
-.todo-check{width:20px;height:20px;border:2px solid #cbd5e1;border-radius:50%;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:var(--transition)}
-.todo-check:hover{border-color:var(--primary)}
-.todo-item.done .todo-check{background:var(--success);border-color:var(--success);animation:checkPop 0.2s ease}
-@keyframes checkPop{0%{transform:scale(0.8)}50%{transform:scale(1.15)}100%{transform:scale(1)}}
-.todo-item.done .todo-check::after{content:"\2713";color:#fff;font-size:11px;font-weight:700}
-.todo-title{flex:1;font-size:13px;color:var(--text)}
-.todo-priority{font-size:10px;padding:2px 10px;border-radius:12px;font-weight:600;flex-shrink:0;letter-spacing:0.02em}
-.priority-high{background:rgba(239,68,68,0.1);color:var(--danger)}
-.priority-medium{background:rgba(245,158,11,0.1);color:#b45309}
-.dark .priority-medium{color:#fbbf24}
-.priority-low{background:rgba(16,185,129,0.1);color:#047857}
-.dark .priority-low{color:#34d399}
-.todo-date{font-size:11px;color:var(--text-muted);flex-shrink:0;min-width:50px}
-.todo-del{width:24px;height:24px;border:none;border-radius:var(--radius-xs);background:transparent;cursor:pointer;font-size:14px;color:var(--text-muted);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:var(--transition)}
-.todo-del:hover{color:var(--danger);background:rgba(239,68,68,0.1)}
-/* Recording */
-.recording-panel{display:flex;flex-direction:column;height:100%}
-.recording-status{display:flex;align-items:center;gap:10px;padding:6px 0 14px}
-.recording-dot{width:10px;height:10px;border-radius:50%;background:#ef4444;animation:recPulse 1.2s ease-in-out infinite;box-shadow:0 0 8px rgba(239,68,68,0.5)}
-@keyframes recPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.3;transform:scale(1.3)}}
-.recording-wave{display:flex;align-items:center;gap:3px;height:20px}
-.recording-wave span{width:3px;background:#ef4444;border-radius:2px;animation:waveAnim 0.8s ease-in-out infinite}
-.recording-wave span:nth-child(1){height:8px;animation-delay:0s}
-.recording-wave span:nth-child(2){height:14px;animation-delay:0.1s}
-.recording-wave span:nth-child(3){height:20px;animation-delay:0.2s}
-.recording-wave span:nth-child(4){height:12px;animation-delay:0.3s}
-.recording-wave span:nth-child(5){height:16px;animation-delay:0.15s}
-@keyframes waveAnim{0%,100%{transform:scaleY(0.5)}50%{transform:scaleY(1)}}
-.recording-label{font-size:13px;font-weight:600;color:#ef4444}
-.recording-timer{font-size:14px;color:var(--text-secondary);font-variant-numeric:tabular-nums;margin-left:auto;font-weight:600;letter-spacing:0.02em}
-.recording-text{flex:1;overflow-y:auto;background:var(--surface-hover);border:1px solid var(--border);border-radius:var(--radius);padding:18px;font-size:14px;line-height:1.9;color:var(--text);white-space:pre-wrap;min-height:140px}
-.recording-text .interim{color:var(--text-muted)}
-.recording-controls{display:flex;gap:8px;padding-top:14px;justify-content:flex-end}
-.btn-recording{padding:9px 24px;border-radius:var(--radius-sm);font-size:13px;font-weight:600;border:none;cursor:pointer;transition:var(--transition)}
-.btn-pause{background:var(--surface-hover);color:var(--text-secondary);border:1px solid var(--border)}
-.btn-pause:hover{background:var(--border);color:var(--text)}
-.btn-stop{background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;box-shadow:0 2px 8px rgba(239,68,68,0.3)}
-.btn-stop:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(239,68,68,0.4)}
-/* Modals */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.45);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;z-index:100;animation:overlayIn 0.2s ease}
-.modal-overlay.show{display:flex}
-@keyframes overlayIn{from{opacity:0}to{opacity:1}}
-.modal{background:var(--surface);border-radius:var(--radius-xl);width:480px;max-height:85vh;display:flex;flex-direction:column;box-shadow:var(--shadow-xl);animation:modalIn 0.25s cubic-bezier(0.4,0,0.2,1)}
-@keyframes modalIn{from{opacity:0;transform:translateY(-12px) scale(0.97)}to{opacity:1;transform:translateY(0) scale(1)}}
-.modal-header{padding:22px 26px 16px;display:flex;align-items:center;justify-content:space-between}
-.modal-header h3{font-size:16px;font-weight:700;color:var(--text)}
-.modal-close{width:30px;height:30px;border:none;border-radius:var(--radius-xs);background:transparent;cursor:pointer;font-size:20px;color:var(--text-muted);display:flex;align-items:center;justify-content:center;transition:var(--transition)}
-.modal-close:hover{background:var(--surface-hover);color:var(--text)}
-.modal-body{padding:0 26px 20px;overflow-y:auto;flex:1;display:flex;flex-direction:column;gap:16px}
-.modal-footer{padding:14px 26px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:8px}
-.form-group{display:flex;flex-direction:column;gap:5px}
-.form-group label{font-size:12px;font-weight:600;color:var(--text-secondary)}
-.form-group input,.form-group textarea,.form-group select{padding:10px 14px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:13px;font-family:inherit;outline:none;transition:var(--transition);color:var(--text);background:var(--surface)}
-.form-group input:focus,.form-group textarea:focus,.form-group select:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-glow)}
-.form-group textarea{resize:vertical;min-height:80px}
-.form-hint{font-size:11px;color:var(--text-muted)}
-.btn-cancel{padding:8px 18px;background:var(--surface-hover);color:var(--text-secondary);border:1px solid var(--border);border-radius:var(--radius-sm);font-size:13px;cursor:pointer;font-weight:500;transition:var(--transition)}
-.btn-cancel:hover{background:var(--border);color:var(--text)}
-/* Summary Modal */
-.summary-modal .modal{width:600px}
-.summary-content{font-size:13px;line-height:1.8;color:var(--text);white-space:pre-wrap;background:var(--surface-hover);border:1px solid var(--border);border-radius:var(--radius);padding:16px;max-height:280px;overflow-y:auto;margin-bottom:16px}
-.summary-keypoints{margin-bottom:14px}
-.summary-keypoints-label{font-size:10px;font-weight:700;color:#b45309;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:6px}
-.summary-kp-item{font-size:13px;line-height:1.6;color:#92400e;background:rgba(245,158,11,0.08);padding:8px 12px;border-radius:var(--radius-xs);margin-bottom:5px;border-left:3px solid #f59e0b}
-.dark .summary-kp-item{color:#fbbf24;background:rgba(245,158,11,0.1)}
-.ai-settings-input-group{display:flex;flex-direction:column;gap:5px}
-.ai-settings-input-group label{font-size:12px;font-weight:600;color:var(--text-secondary)}
-.ai-settings-input-group input{padding:10px 14px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:13px;font-family:inherit;outline:none;transition:var(--transition);color:var(--text);background:var(--surface)}
-.ai-settings-input-group input:focus{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-glow)}
-.ai-status{font-size:12px;color:var(--text-muted);margin-top:2px}
-.ai-status.success{color:var(--success)}
-.ai-status.error{color:var(--danger)}
-/* Toast */
-.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);padding:10px 20px;border-radius:var(--radius-sm);font-size:13px;font-weight:500;z-index:200;opacity:0;transition:all 0.3s cubic-bezier(0.4,0,0.2,1);pointer-events:none}
-.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-.toast.success{background:var(--success);color:#fff;box-shadow:0 4px 16px rgba(16,185,129,0.3)}
-.toast.error{background:var(--danger);color:#fff;box-shadow:0 4px 16px rgba(239,68,68,0.3)}
-</style>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/app.css">
 </head>
 <body>
-<div class="app"><aside class="sidebar"><div class="sidebar-header"><div class="sidebar-brand"><div class="sidebar-brand-icon">C</div><span class="sidebar-brand-text">课堂整理</span></div><div class="sidebar-actions"><button class="btn-icon" onclick="toggleDarkMode()" title="深色模式">☾</button><button class="btn-icon" onclick="openAISettings()" title="AI设置">AI</button><button class="btn-icon" onclick="openCourseModal()" title="添加课程">+</button><a href="student-toolkit.html" class="btn-icon" title="工具箱" style="text-decoration:none;font-size:13px">&#x1F9F0;</a></div></div><div class="search-box"><span class="search-icon">⌕</span><input id="searchInput" placeholder="搜索笔记..." oninput="onSearch()"></div><div class="course-list" id="courseList"></div><div class="sidebar-footer" id="sidebarFooter"></div></aside><main class="main" id="mainArea"><div class="main-placeholder"><div class="icon">📚</div><p>选择或创建一门课程开始整理</p></div></main></div>
-<div class="modal-overlay" id="courseModal"><div class="modal"><div class="modal-header"><h3 id="courseModalTitle">新建课程</h3><button class="modal-close" onclick="closeCourseModal()">×</button></div><div class="modal-body"><div class="form-group"><label>课程名称</label><input id="courseName" placeholder="高等数学"></div><div class="form-group"><label>授课教师</label><input id="courseTeacher" placeholder="王老师"></div></div><div class="modal-footer"><button class="btn-cancel" onclick="closeCourseModal()">取消</button><button class="btn-primary" onclick="saveCourse()">保存</button></div></div></div>
-<div class="modal-overlay" id="noteModal"><div class="modal"><div class="modal-header"><h3 id="noteModalTitle">新建笔记</h3><button class="modal-close" onclick="closeNoteModal()">×</button></div><div class="modal-body"><div class="form-group"><label>标题</label><input id="noteTitle" placeholder="第一章 极限与连续"></div><div class="form-group"><label>日期</label><input type="date" id="noteDate"></div><div class="form-group"><label>笔记内容</label><textarea id="noteContent" rows="4"></textarea></div><div class="form-group"><label>重点标记</label><textarea id="noteKeyPoints" rows="2"></textarea><span class="form-hint">每行一个重点</span></div></div><div class="modal-footer"><button class="btn-cancel" onclick="closeNoteModal()">取消</button><button class="btn-primary" onclick="saveNote()">保存</button></div></div></div>
-<div class="modal-overlay" id="todoModal"><div class="modal"><div class="modal-header"><h3>新建待办</h3><button class="modal-close" onclick="closeTodoModal()">×</button></div><div class="modal-body"><div class="form-group"><label>任务内容</label><input id="todoTitle" placeholder="完成第三章习题"></div><div class="form-group"><label>截止日期</label><input type="date" id="todoDueDate"></div><div class="form-group"><label>优先级</label><select id="todoPriority"><option value="medium">中</option><option value="high">高</option><option value="low">低</option></select></div></div><div class="modal-footer"><button class="btn-cancel" onclick="closeTodoModal()">取消</button><button class="btn-primary" onclick="saveTodo()">保存</button></div></div></div>
-<div class="modal-overlay" id="aiSettingsModal"><div class="modal"><div class="modal-header"><h3>AI 总结设置</h3><button class="modal-close" onclick="closeAISettings()">×</button></div><div class="modal-body"><div class="form-group"><label>API 地址</label><input id="aiEndpoint" value="https://api.deepseek.com/v1"></div><div class="form-group"><label>API Key</label><input id="aiApiKey" type="password"></div><div class="form-group"><label>模型</label><input id="aiModel" value="deepseek-chat"></div><div class="ai-status" id="aiStatus"></div></div><div class="modal-footer"><button class="btn-cancel" onclick="closeAISettings()">取消</button><button class="btn-primary" onclick="saveAISettings()">保存</button></div></div></div>
-<div class="modal-overlay" id="aiSummaryModal"><div class="modal"><div class="modal-header"><h3>AI 总结结果</h3><button class="modal-close" onclick="closeAISummary()">×</button></div><div class="modal-body"><div class="summary-content" id="summaryContent"></div><div class="summary-keypoints"><div class="summary-keypoints-label">重点提炼</div><div id="summaryKeyPoints"></div></div></div><div class="modal-footer"><button class="btn-cancel" onclick="closeAISummary()">关闭</button><button class="btn-primary" onclick="applyAISummary()">应用到笔记</button></div></div></div>
-<div class="toast" id="toast"></div>
+<div class="app-shell">
+  <aside class="sidebar" id="sidebar" aria-label="课程侧栏">
+    <div class="sidebar-head">
+      <a class="brand" href="index.html" aria-label="课堂整理工具首页">
+        <span class="brand-mark"><svg class="icon"><use href="assets/icons.svg#icon-grad"></use></svg></span>
+        <span class="brand-name">课堂整理</span>
+      </a>
+      <div class="sidebar-actions">
+        <button type="button" class="btn-icon" id="themeBtn" aria-label="切换深色模式">
+          <svg class="icon" id="themeIcon"><use href="assets/icons.svg#icon-moon"></use></svg>
+        </button>
+        <button type="button" class="btn-icon" id="aiSettingsBtn" aria-label="AI 设置">
+          <svg class="icon"><use href="assets/icons.svg#icon-sparkles"></use></svg>
+        </button>
+        <button type="button" class="btn-icon" id="addCourseBtn" aria-label="新建课程">
+          <svg class="icon"><use href="assets/icons.svg#icon-plus"></use></svg>
+        </button>
+        <a class="btn-icon" href="student-toolkit.html" aria-label="学生工具箱">
+          <svg class="icon"><use href="assets/icons.svg#icon-toolkit"></use></svg>
+        </a>
+      </div>
+    </div>
+    <div class="search-field">
+      <svg class="icon icon-sm"><use href="assets/icons.svg#icon-search"></use></svg>
+      <input id="searchInput" type="search" placeholder="搜索笔记..." autocomplete="off" aria-label="搜索笔记">
+      <button type="button" class="clear-btn" id="searchClear" aria-label="清除搜索" hidden>
+        <svg class="icon icon-sm"><use href="assets/icons.svg#icon-x"></use></svg>
+      </button>
+    </div>
+    <nav class="course-list" id="courseList" aria-label="课程列表"></nav>
+    <div class="sidebar-foot">
+      <div class="stat-row" id="sidebarFooter"></div>
+    </div>
+  </aside>
+  <div class="sidebar-backdrop" id="sidebarBackdrop" hidden></div>
+
+  <main class="main-panel">
+    <div class="mobile-topbar">
+      <button type="button" class="btn-icon" id="menuBtn" aria-label="打开课程列表">
+        <svg class="icon"><use href="assets/icons.svg#icon-menu"></use></svg>
+      </button>
+      <span class="brand-name">课堂整理</span>
+    </div>
+    <div class="main-inner" id="mainInner"></div>
+  </main>
+</div>
+
+<div class="modal-overlay" id="courseModal">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="courseModalTitle">
+    <div class="modal-head">
+      <h3 id="courseModalTitle">新建课程</h3>
+      <button type="button" class="modal-close" data-close aria-label="关闭">
+        <svg class="icon"><use href="assets/icons.svg#icon-x"></use></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="field">
+        <label class="label" for="courseName">课程名称</label>
+        <input class="input" id="courseName" placeholder="高等数学" autocomplete="off">
+      </div>
+      <div class="field">
+        <label class="label" for="courseTeacher">授课教师</label>
+        <input class="input" id="courseTeacher" placeholder="王老师（选填）" autocomplete="off">
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button type="button" class="btn btn-secondary" data-close>取消</button>
+      <button type="button" class="btn btn-primary" id="saveCourseBtn">保存</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="noteModal">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="noteModalTitle">
+    <div class="modal-head">
+      <h3 id="noteModalTitle">新建笔记</h3>
+      <button type="button" class="modal-close" data-close aria-label="关闭">
+        <svg class="icon"><use href="assets/icons.svg#icon-x"></use></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="field">
+        <label class="label" for="noteTitle">标题</label>
+        <input class="input" id="noteTitle" placeholder="第一章 极限与连续" autocomplete="off">
+      </div>
+      <div class="field">
+        <label class="label" for="noteDate">日期</label>
+        <input class="input" id="noteDate" type="date">
+      </div>
+      <div class="field">
+        <label class="label" for="noteContent">笔记内容</label>
+        <textarea class="textarea" id="noteContent" rows="6" placeholder="课堂内容、理解与疑问..."></textarea>
+      </div>
+      <div class="field">
+        <label class="label" for="noteKeyPoints">重点标记</label>
+        <textarea class="textarea" id="noteKeyPoints" rows="2" placeholder="每行一个重点"></textarea>
+        <span class="hint">每行一个重点，可在 AI 总结后自动填充</span>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button type="button" class="btn btn-secondary" data-close>取消</button>
+      <button type="button" class="btn btn-primary" id="saveNoteBtn">保存</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="todoModal">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="todoModalTitle">
+    <div class="modal-head">
+      <h3 id="todoModalTitle">新建待办</h3>
+      <button type="button" class="modal-close" data-close aria-label="关闭">
+        <svg class="icon"><use href="assets/icons.svg#icon-x"></use></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="field">
+        <label class="label" for="todoTitle">任务内容</label>
+        <input class="input" id="todoTitle" placeholder="完成第三章习题" autocomplete="off">
+      </div>
+      <div class="field">
+        <label class="label" for="todoDueDate">截止日期</label>
+        <input class="input" id="todoDueDate" type="date">
+      </div>
+      <div class="field">
+        <label class="label" for="todoPriority">优先级</label>
+        <select class="select" id="todoPriority">
+          <option value="medium">中</option>
+          <option value="high">高</option>
+          <option value="low">低</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button type="button" class="btn btn-secondary" data-close>取消</button>
+      <button type="button" class="btn btn-primary" id="saveTodoBtn">保存</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="aiSettingsModal">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="aiSettingsTitle">
+    <div class="modal-head">
+      <h3 id="aiSettingsTitle">AI 总结设置</h3>
+      <button type="button" class="modal-close" data-close aria-label="关闭">
+        <svg class="icon"><use href="assets/icons.svg#icon-x"></use></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="field">
+        <label class="label" for="aiEndpoint">API 地址</label>
+        <input class="input" id="aiEndpoint" autocomplete="off" spellcheck="false">
+      </div>
+      <div class="field">
+        <label class="label" for="aiApiKey">API Key</label>
+        <input class="input" id="aiApiKey" type="password" autocomplete="off">
+        <span class="hint">密钥仅保存在本机浏览器，不会上传到仓库</span>
+      </div>
+      <div class="field">
+        <label class="label" for="aiModel">模型</label>
+        <input class="input" id="aiModel" autocomplete="off" spellcheck="false">
+      </div>
+      <div class="ai-status" id="aiStatus"></div>
+    </div>
+    <div class="modal-foot">
+      <button type="button" class="btn btn-secondary" data-close>取消</button>
+      <button type="button" class="btn btn-primary" id="saveAiBtn">保存</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="aiSummaryModal">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="aiSummaryTitle">
+    <div class="modal-head">
+      <h3 id="aiSummaryTitle">AI 总结结果</h3>
+      <button type="button" class="modal-close" data-close aria-label="关闭">
+        <svg class="icon"><use href="assets/icons.svg#icon-x"></use></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="summary-content" id="summaryContent"></div>
+      <div>
+        <div class="keypoints-label">重点提炼</div>
+        <div id="summaryKeyPoints"></div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button type="button" class="btn btn-secondary" data-close>关闭</button>
+      <button type="button" class="btn btn-primary" id="applyAiBtn">应用到笔记</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
 <script>
-var STORAGE_KEY="classroom_organizer";
-var state={courses:[],activeCourseId:null};
-function load(){try{var r=localStorage.getItem(STORAGE_KEY);state=r?JSON.parse(r):{courses:[],activeCourseId:null}}catch(e){}}
-function save(){localStorage.setItem(STORAGE_KEY,JSON.stringify(state));renderStats()}
-function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,8)}
-function fmtDate(d){if(!d)return"";var p=d.split("-");return p[1]+"/"+p[2]}
-function today(){return new Date().toISOString().slice(0,10)}
-function $(id){return document.getElementById(id)}
-function getCourse(){return state.courses.find(function(c){return c.id===state.activeCourseId})}
-function toggleDarkMode(){document.body.classList.toggle("dark");localStorage.setItem("dark_mode",document.body.classList.contains("dark"))}
-if(localStorage.getItem("dark_mode")==="true")document.body.classList.add("dark");
-function toast(m,t){var e=$("toast");e.textContent=m;e.className="toast "+t+" show";setTimeout(function(){e.classList.remove("show")},2200)}
-var sq="";
-function onSearch(){sq=$("searchInput").value.trim().toLowerCase();renderMain()}
-function filterNotes(ns){if(!sq)return ns;return ns.filter(function(n){return n.title.toLowerCase().indexOf(sq)!==-1||n.content.toLowerCase().indexOf(sq)!==-1})}
-var colors=["#6366f1","#8b5cf6","#ec4899","#f59e0b","#10b981","#3b82f6","#ef4444"];
-function addCourse(nm,te){var c={id:uid(),name:nm,teacher:te,color:colors[state.courses.length%colors.length],notes:[],todos:[]};state.courses.push(c);state.activeCourseId=c.id;save();renderAll();toast("课程已创建","success")}
-function deleteCourse(id){if(!confirm("确定删除？"))return;state.courses=state.courses.filter(function(c){return c.id!==id});if(state.activeCourseId===id)state.activeCourseId=state.courses.length?state.courses[0].id:null;save();renderAll();toast("已删除","success")}
-function selectCourse(id){if(isRec)stopRecording(true);state.activeCourseId=id;save();renderMain()}
-function addNote(cid,t,d,ct,kp){var c=state.courses.find(function(x){return x.id===cid});if(!c)return;c.notes.push({id:uid(),title:t,date:d,content:ct,keyPoints:kp,pinned:false});save();renderAll();toast("笔记已创建","success")}
-function updateNote(cid,nid,d){var c=state.courses.find(function(x){return x.id===cid});if(!c)return;var n=c.notes.find(function(x){return x.id===nid});if(!n)return;Object.assign(n,d);save();renderAll();toast("笔记已更新","success")}
-function deleteNote(cid,nid){var c=state.courses.find(function(x){return x.id===cid});if(!c)return;c.notes=c.notes.filter(function(x){return x.id!==nid});save();renderAll();toast("笔记已删除","success")}
-function togglePinNote(cid,nid){var c=state.courses.find(function(x){return x.id===cid});if(!c)return;var n=c.notes.find(function(x){return x.id===nid});if(!n)return;n.pinned=!n.pinned;save();renderAll()}
-function addTodo(cid,t,dd,p){var c=state.courses.find(function(x){return x.id===cid});if(!c)return;c.todos.push({id:uid(),title:t,dueDate:dd,priority:p,completed:false});save();renderAll();toast("待办已创建","success")}
-function toggleTodo(cid,tid){var c=state.courses.find(function(x){return x.id===cid});if(!c)return;var t=c.todos.find(function(x){return x.id===tid});if(!t)return;t.completed=!t.completed;save();renderAll();if(t.completed)toast("已完成","success")}
-function deleteTodo(cid,tid){var c=state.courses.find(function(x){return x.id===cid});if(!c)return;c.todos=c.todos.filter(function(x){return x.id!==tid});save();renderAll();toast("已删除","success")}
-function renderStats(){var el=$("sidebarFooter");if(!el)return;var tn=0,tt=0,tc=0;state.courses.forEach(function(c){tn+=c.notes.length;tt+=c.todos.length;c.todos.forEach(function(t){if(t.completed)tc++})});var a,b,c,d;a='<div class="stats-row">';b='<div class="stat-item"><div class="stat-value">';c='</div><div class="stat-label">';d='</div></div>';el.innerHTML=a+b+tn+c+"笔记"+d+b+tt+c+"待办"+d+b+(tt?Math.round(tc/tt*100):0)+"%"+c+"完成率"+d+"</div>"}
-var rec=null,isRec=false,isPause=false,fin="",inter="",recStart=0,ti=null;
-function initRec(){var S=window.SpeechRecognition||window.webkitSpeechRecognition;if(!S)return false;rec=new S();rec.continuous=true;rec.interimResults=true;rec.lang="zh-CN";rec.onresult=function(e){var im="";for(var i=e.resultIndex;i<e.results.length;i++){if(e.results[i].isFinal)fin+=e.results[i][0].transcript;else im+=e.results[i][0].transcript}inter=im;updTxt()};rec.onerror=function(e){if(e.error==="not-allowed"){alert("麦克风权限被拒绝");stopRecording(true)}};rec.onend=function(){if(isRec&&!isPause)setTimeout(function(){try{rec.start()}catch(ex){}},150)};return true}
-function startRecording(){if(!state.activeCourseId){alert("请先选择课程");return}if(!rec&&!initRec()){alert("请使用Chrome浏览器");return}fin="";inter="";isRec=true;isPause=false;recStart=Date.now();try{rec.start()}catch(e){}startRecTimer();renderRecPanel()}
-function stopRecording(sil){isRec=false;isPause=false;stopRecTimer();try{rec.stop()}catch(e){}if(!sil){var ft=fin+inter;if(ft.trim())openNoteModalForRecording(ft)}renderTab("notes")}
-function togglePause(){isPause?resumeRecording():pauseRecording()}
-function pauseRecording(){isPause=true;try{rec.stop()}catch(e){}updPBtn()}
-function resumeRecording(){isPause=false;try{rec.start()}catch(e){}updPBtn()}
-function startRecTimer(){ti=setInterval(function(){var e=Math.floor((Date.now()-recStart)/1000);var m=Math.floor(e/60);var s=e%60;var el=$("recTimer");if(el)el.textContent=(m<10?"0":"")+m+":"+(s<10?"0":"")+s},1000)}
-function stopRecTimer(){if(ti){clearInterval(ti);ti=null}}
-function updTxt(){var el=$("recText");if(!el)return;var a="",b="";if(fin)a=esc(fin);if(inter)b='<span class="interim">'+esc(inter)+'</span>';el.innerHTML=a+b;el.scrollTop=el.scrollHeight}
-function updPBtn(){var b=$("btnPause");if(b)b.textContent=isPause?"继续":"暂停"}
-function renderRecPanel(){var c=$("tabContent");if(!c)return;c.innerHTML='<div class="recording-panel"><div class="recording-status"><div class="recording-dot"></div><div class="recording-wave"><span></span><span></span><span></span><span></span><span></span></div><span class="recording-label">正在录音</span><span class="recording-timer" id="recTimer">00:00</span></div><div class="recording-text" id="recText"></div><div class="recording-controls"><button class="btn-recording btn-pause" id="btnPause" onclick="togglePause()">暂停</button><button class="btn-recording btn-stop" onclick="stopRecording()">停止</button></div></div>'}
-var KW=["重要","重点","关键","注意","记住","总结","核心","必须","一定要","考点","考试","强调","特别","尤其","需要掌握","一定记住"];
-function extractKeyPoints(tx){var ss=tx.split(/[\u3002\uff01\uff1f\?\n]+/).filter(function(s){return s.trim().length>4});var sc=ss.map(function(s){var score=0;KW.forEach(function(k){if(s.indexOf(k)!==-1)score+=3});if(s.length>15&&s.length<80)score+=1;return{text:s.trim(),score:score}});sc.sort(function(a,b){return b.score-a.score});return sc.filter(function(s){return s.score>=1}).slice(0,5).map(function(s){return s.text})}
-function openNoteModalForRecording(ft){var cr=getCourse();var ti=(cr?cr.name:"")+" - 录音笔记 "+fmtDate(today());var kp=extractKeyPoints(ft);eid=null;$("noteModalTitle").textContent="保存录音笔记";$("noteTitle").value=ti;$("noteDate").value=today();$("noteContent").value=ft;$("noteKeyPoints").value=kp.join("\n");$("noteModal").classList.add("show");setTimeout(function(){$("noteTitle").focus()},100)}
-var aiS={};
-function loadAISettings(){try{var r=localStorage.getItem("ai_settings");aiS=r?JSON.parse(r):{endpoint:"https://api.deepseek.com/v1",key:"",model:"deepseek-chat"}}catch(e){}}
-function saveAISettings(){try{aiS.endpoint=$("aiEndpoint").value.trim().replace(/\/+$/,"");aiS.key=$("aiApiKey").value.trim();aiS.model=$("aiModel").value.trim()||"deepseek-chat";localStorage.setItem("ai_settings",JSON.stringify(aiS));$("aiStatus").textContent=aiS.key?"已保存":"请填写";$("aiStatus").className=aiS.key?"ai-status success":"ai-status error";setTimeout(closeAISettings,800);toast("AI设置已保存","success")}catch(e){alert("保存失败:"+e.message)}}
-function openAISettings(){loadAISettings();$("aiEndpoint").value=aiS.endpoint||"https://api.deepseek.com/v1";$("aiApiKey").value=aiS.key||"";$("aiModel").value=aiS.model||"deepseek-chat";$("aiStatus").textContent=aiS.key?"已配置":"请填写";$("aiStatus").className=aiS.key?"ai-status success":"ai-status";$("aiSettingsModal").classList.add("show")}
-function closeAISettings(){$("aiSettingsModal").classList.remove("show")}
-var aiR=null;
-function aiSummarizeNote(nid){loadAISettings();if(!aiS.key){alert("请先配置API Key");openAISettings();return}var cr=getCourse();if(!cr)return;var n=cr.notes.find(function(x){return x.id===nid});if(!n||!n.content.trim()){alert("笔记为空");return}var b=$("ai-btn-"+nid);if(b){b.disabled=true;b.classList.add("loading")}callAISummary(n.content,n.title,function(r){if(b){b.disabled=false;b.classList.remove("loading")}if(r){aiR={noteId:nid,summary:r.summary,keyPoints:r.keyPoints,courseId:cr.id};showAISummary(r.summary,r.keyPoints)}})}
-function callAISummary(tx,ti,cb){var p='你是一个课堂笔记整理助手。请先纠正语音转录文字（修正同音字、补充标点、理顺逻辑），使语句通顺，然后提炼核心内容：\n1.去除重复废话\n2.保留核心知识点\n3.组织成简洁语言\n4.提取3-5个重点\n\n标题：'+(ti||'')+'\n内容：\n'+tx+'\n\n用JSON返回：\n{"summary":"提炼后的笔记","keyPoints":["重点1","重点2","重点3"]}';var x=new XMLHttpRequest();x.open("POST",aiS.endpoint+"/chat/completions");x.setRequestHeader("Content-Type","application/json");x.setRequestHeader("Authorization","Bearer "+aiS.key);x.onload=function(){if(x.status===200){try{var r=JSON.parse(x.responseText);var ct=r.choices[0].message.content;var cl=ct.replace(/```json\n?/g,"").replace(/```\n?/g,"").trim();cb(JSON.parse(cl))}catch(e){alert("AI返回格式异常:"+e.message);cb(null)}}else{try{var e=JSON.parse(x.responseText);alert("API错误("+x.status+"):"+(e.error?e.error.message:JSON.stringify(e)))}catch(ex){alert("请求失败HTTP "+x.status+":"+x.responseText.substring(0,200))}cb(null)}};x.onerror=function(){alert("网络连接失败,请检查API地址");cb(null)};x.send(JSON.stringify({model:aiS.model,messages:[{role:"system",content:"你是课堂笔记助手，擅长提炼重点。"},{role:"user",content:p}],temperature:0.3,max_tokens:2048}))}
-function showAISummary(s,kp){$("summaryContent").textContent=s;$("summaryKeyPoints").innerHTML=kp.map(function(k){return'<div class="summary-kp-item">'+esc(k)+'</div>'}).join("");$("aiSummaryModal").classList.add("show")}
-function closeAISummary(){$("aiSummaryModal").classList.remove("show");aiR=null}
-function applyAISummary(){if(!aiR)return;var cr=state.courses.find(function(c){return c.id===aiR.courseId});if(!cr)return;var n=cr.notes.find(function(x){return x.id===aiR.noteId});if(!n)return;n.content=aiR.summary;n.keyPoints=aiR.keyPoints;save();renderAll();closeAISummary();toast("AI总结已应用","success")}
-loadAISettings();
-var eid=null,ecid=null;
-function openCourseModal(id){ecid=id||null;$("courseModalTitle").textContent=id?"编辑课程":"新建课程";if(id){var c=state.courses.find(function(x){return x.id===id});$("courseName").value=c.name;$("courseTeacher").value=c.teacher}else{$("courseName").value="";$("courseTeacher").value=""}$("courseModal").classList.add("show")}
-function closeCourseModal(){$("courseModal").classList.remove("show");ecid=null}
-function saveCourse(){var nm=$("courseName").value.trim();if(!nm){$("courseName").focus();return}if(ecid){var c=state.courses.find(function(x){return x.id===ecid});c.name=nm;c.teacher=$("courseTeacher").value.trim();save();renderAll();toast("课程已更新","success")}else{addCourse(nm,$("courseTeacher").value.trim())}closeCourseModal()}
-function openNoteModal(nid){eid=nid||null;$("noteModalTitle").textContent=nid?"编辑笔记":"新建笔记";if(nid){var c=getCourse();var n=c.notes.find(function(x){return x.id===nid});$("noteTitle").value=n.title;$("noteDate").value=n.date;$("noteContent").value=n.content;$("noteKeyPoints").value=n.keyPoints.join("\n")}else{$("noteTitle").value="";$("noteDate").value=today();$("noteContent").value="";$("noteKeyPoints").value=""}$("noteModal").classList.add("show")}
-function closeNoteModal(){$("noteModal").classList.remove("show");eid=null}
-function saveNote(){var ti=$("noteTitle").value.trim();if(!ti){$("noteTitle").focus();return}var d={title:ti,date:$("noteDate").value||today(),content:$("noteContent").value.trim(),keyPoints:$("noteKeyPoints").value.split("\n").map(function(s){return s.trim()}).filter(Boolean)};if(eid)updateNote(state.activeCourseId,eid,d);else addNote(state.activeCourseId,d.title,d.date,d.content,d.keyPoints);closeNoteModal()}
-function openTodoModal(){$("todoTitle").value="";$("todoDueDate").value=today();$("todoPriority").value="medium";$("todoModal").classList.add("show")}
-function closeTodoModal(){$("todoModal").classList.remove("show")}
-function saveTodo(){var ti=$("todoTitle").value.trim();if(!ti){$("todoTitle").focus();return}addTodo(state.activeCourseId,ti,$("todoDueDate").value,$("todoPriority").value);closeTodoModal()}
-function renderAll(){renderSidebar();renderMain();renderStats()}
-function renderSidebar(){var el=$("courseList");if(!state.courses.length){el.innerHTML='<div class="empty-courses"><span class="icon">📖</span>还没有课程<br>点击 + 添加第一门课</div>';return}el.innerHTML=state.courses.map(function(c){var ac=c.id===state.activeCourseId?" active":"";var dc=c.color||"#6366f1";return'<div class="course-item'+ac+'" onclick="selectCourse(\''+c.id+'\')"><span class="course-color" style="background:'+dc+'"></span><span class="course-item-name">'+esc(c.name)+'</span><button class="course-item-del" onclick="event.stopPropagation();openCourseModal(\''+c.id+'\')">✎</button><button class="course-item-del" onclick="event.stopPropagation();deleteCourse(\''+c.id+'\')">&times;</button></div>'}).join("")}
-function renderMain(){var el=$("mainArea");if(!state.activeCourseId||!getCourse()){el.innerHTML='<div class="main-placeholder"><div class="icon">📚</div><p>选择或创建一门课程开始整理</p></div>';return}var c=getCourse();el.innerHTML='<div class="course-header"><div class="course-color-bar" style="background:'+(c.color||"var(--primary)")+'"></div><h1>'+esc(c.name)+'</h1>'+(c.teacher?'<span class="teacher">'+esc(c.teacher)+'</span>':'')+'</div><div class="tabs"><button class="tab active" data-tab="notes" onclick="switchTab(\'notes\')">笔记</button><button class="tab" data-tab="todos" onclick="switchTab(\'todos\')">待办</button></div><div class="tab-content" id="tabContent"></div>';if(isRec)renderRecPanel();else renderTab("notes")}
-var ct="notes";function switchTab(t){ct=t;renderTab(t)}
-function renderTab(t){if(isRec){renderRecPanel();return}var ts=document.querySelectorAll(".tab");ts.forEach(function(x){x.classList.toggle("active",x.dataset.tab===t)});var c=$("tabContent");if(t==="notes")renderNotes(c);else renderTodos(c)}
-function renderNotes(cn){var cr=getCourse();var ns=filterNotes(cr.notes.slice());var pn=ns.filter(function(n){return n.pinned});var un=ns.filter(function(n){return!n.pinned});var srt=pn.concat(un);var h='<div class="section-header"><span class="count">共 '+srt.length+' 条笔记</span><div class="section-header-btns"><button class="btn-recording-start" onclick="startRecording()">🎤 录音</button><button class="btn-primary" onclick="openNoteModal()">+ 新建</button></div></div>';if(srt.length===0&&sq){h+='<div class="empty-state"><span class="icon">🔍</span><p>没有匹配的笔记</p></div>'}else if(srt.length===0){h+='<div class="empty-state"><span class="icon">📝</span><p>还没有笔记</p></div>'}else{srt.forEach(function(n){h+='<div class="note-card'+(n.pinned?' pinned':'')+'" id="note-'+n.id+'" onclick="toggleNoteExpand(\''+n.id+'\')"><div class="note-card-header"><div class="note-card-title-wrap"><button class="note-card-pin" onclick="event.stopPropagation();togglePinNote(\''+cr.id+'\',\''+n.id+'\')">'+(n.pinned?'★':'☆')+'</button><span class="note-card-title">'+esc(n.title)+'</span></div><span class="note-card-meta">'+fmtDate(n.date)+'</span></div><div class="note-card-body">'+(n.content?'<div class="note-content">'+esc(n.content)+'</div>':'');if(n.keyPoints&&n.keyPoints.length){h+='<div class="note-keypoints"><div class="note-keypoints-label">重点</div>'+n.keyPoints.map(function(k){return'<div class="note-keypoint-item">'+esc(k)+'</div>'}).join("")+'</div>'}h+='<div class="note-actions"><button class="btn-secondary" onclick="event.stopPropagation();openNoteModal(\''+n.id+'\')">编辑</button><button class="btn-ai" onclick="event.stopPropagation();aiSummarizeNote(\''+n.id+'\')" id="ai-btn-'+n.id+'">AI 总结</button><button class="btn-secondary danger" onclick="event.stopPropagation();deleteNote(\''+cr.id+'\',\''+n.id+'\')">删除</button></div></div></div>'})}cn.innerHTML=h}
-function renderTodos(cn){var cr=getCourse();var inc=cr.todos.filter(function(t){return!t.completed});var cmp=cr.todos.filter(function(t){return t.completed});var pl={high:"高",medium:"中",low:"低"};var pc={high:"priority-high",medium:"priority-medium",low:"priority-low"};function ri(ts){return ts.map(function(t){return'<div class="todo-item'+(t.completed?' done':'')+'"><div class="todo-check" onclick="event.stopPropagation();toggleTodo(\''+cr.id+'\',\''+t.id+'\')"></div><span class="todo-title">'+esc(t.title)+'</span><span class="todo-priority '+pc[t.priority]+'">'+pl[t.priority]+'</span><span class="todo-date">'+fmtDate(t.dueDate)+'</span><button class="todo-del" onclick="event.stopPropagation();deleteTodo(\''+cr.id+'\',\''+t.id+'\')">&times;</button></div>'}).join("")}var h='<div class="section-header"><span class="count">'+inc.length+' 项未完成</span><button class="btn-primary" onclick="openTodoModal()">+ 新建待办</button></div>';if(cr.todos.length===0){h+='<div class="empty-state"><span class="icon">✅</span><p>还没有待办</p></div>'}if(inc.length)h+='<div class="todo-section-label">未完成</div>'+ri(inc);if(cmp.length)h+='<div class="todo-section-label">已完成</div>'+ri(cmp);cn.innerHTML=h}
-function toggleNoteExpand(nid){var c=document.getElementById("note-"+nid);if(c)c.classList.toggle("expanded")}
-function esc(s){var d=document.createElement("div");d.textContent=s;return d.innerHTML}
-document.addEventListener("keydown",function(e){if(e.key==="Escape"){closeCourseModal();closeNoteModal();closeTodoModal();closeAISettings();closeAISummary()}if(e.ctrlKey&&e.key==="n"){e.preventDefault();if(state.activeCourseId)openNoteModal()}if(e.ctrlKey&&e.key==="t"){e.preventDefault();if(state.activeCourseId)openTodoModal()}if(e.ctrlKey&&e.key==="r"){e.preventDefault();if(state.activeCourseId)startRecording()}if(e.ctrlKey&&e.key==="d"){e.preventDefault();toggleDarkMode()}});
-load();renderAll();
+(function () {
+  'use strict';
+
+  const STORAGE_KEY = 'classroom_organizer';
+  const THEME_KEY = 'dark_mode';
+  const AI_KEY = 'ai_settings';
+  const colors = ['#4f5bff', '#7a5cff', '#e5484d', '#b45d0c', '#0e9f6e', '#2f6fed', '#d63384'];
+
+  const state = { courses: [], activeCourseId: null };
+  let sq = '';
+  let ct = 'notes';
+  let expandedNoteId = null;
+  let rec = null;
+  let isRec = false;
+  let isPause = false;
+  let fin = '';
+  let inter = '';
+  let recStart = 0;
+  let recTimer = null;
+  let aiS = {};
+  let aiR = null;
+  let editCourseId = null;
+  let editNoteId = null;
+
+  function $(id) { return document.getElementById(id); }
+  function pad2(n) { return String(n).padStart(2, '0'); }
+  function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 8); }
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+  function fmtDate(d) {
+    if (!d) return '';
+    const p = String(d).split('-');
+    return p[1] + '/' + p[2];
+  }
+  function today() {
+    const d = new Date();
+    return d.getFullYear() + '-' + pad2(d.getMonth() + 1) + '-' + pad2(d.getDate());
+  }
+  function getCourse() {
+    return state.courses.find(function (c) { return c.id === state.activeCourseId; }) || null;
+  }
+
+  // ---------- 存储 ----------
+  function normalizeNote(n) {
+    return {
+      id: String((n && n.id) || uid()),
+      title: String((n && n.title) || ''),
+      date: String((n && n.date) || ''),
+      content: String((n && n.content) || ''),
+      keyPoints: Array.isArray(n && n.keyPoints) ? n.keyPoints.map(String) : [],
+      pinned: !!(n && n.pinned)
+    };
+  }
+  function normalizeTodo(t) {
+    const p = ['high', 'medium', 'low'];
+    return {
+      id: String((t && t.id) || uid()),
+      title: String((t && t.title) || ''),
+      dueDate: String((t && t.dueDate) || ''),
+      priority: p.indexOf(t && t.priority) > -1 ? t.priority : 'medium',
+      completed: !!(t && t.completed)
+    };
+  }
+  function normalizeCourse(c) {
+    return {
+      id: String((c && c.id) || uid()),
+      name: String((c && c.name) || '').slice(0, 120),
+      teacher: String((c && c.teacher) || '').slice(0, 60),
+      color: (c && colors.indexOf(c.color) > -1) ? c.color : colors[state.courses.length % colors.length],
+      notes: Array.isArray(c && c.notes) ? c.notes.map(normalizeNote) : [],
+      todos: Array.isArray(c && c.todos) ? c.todos.map(normalizeTodo) : []
+    };
+  }
+  function load() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      const data = raw ? JSON.parse(raw) : null;
+      if (data && Array.isArray(data.courses)) {
+        state.courses = data.courses.map(normalizeCourse);
+        state.activeCourseId = data.activeCourseId && state.courses.some(function (c) { return c.id === data.activeCourseId; })
+          ? data.activeCourseId
+          : (state.courses[0] ? state.courses[0].id : null);
+      } else {
+        state.courses = [];
+        state.activeCourseId = null;
+      }
+    } catch (e) {
+      state.courses = [];
+      state.activeCourseId = null;
+    }
+  }
+  function save() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      renderStats();
+    } catch (e) {
+      toast('保存失败：本地存储不可用', 'error');
+    }
+  }
+
+  // ---------- Toast / 主题 ----------
+  const toastEl = $('toast');
+  let toastTimer = null;
+  function toast(message, type) {
+    toastEl.textContent = message;
+    toastEl.className = 'toast ' + (type || '') + ' show';
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { toastEl.className = 'toast'; }, 2200);
+  }
+
+  function setTheme(dark) {
+    document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+    try { localStorage.setItem(THEME_KEY, dark ? 'true' : 'false'); } catch (e) {}
+    const icon = $('themeIcon');
+    if (icon) icon.setAttribute('href', 'assets/icons.svg#' + (dark ? 'icon-sun' : 'icon-moon'));
+  }
+  function toggleDarkMode() {
+    setTheme(document.documentElement.dataset.theme !== 'dark');
+  }
+  function applySavedTheme() {
+    let dark = false;
+    try { dark = localStorage.getItem(THEME_KEY) === 'true'; } catch (e) {}
+    setTheme(dark);
+  }
+
+  // ---------- 模态框 ----------
+  function openModal(id) { $(id).classList.add('show'); }
+  function closeModal(id) { $(id).classList.remove('show'); }
+  function closeAllModals() {
+    ['courseModal', 'noteModal', 'todoModal', 'aiSettingsModal', 'aiSummaryModal'].forEach(closeModal);
+  }
+  document.querySelectorAll('[data-close]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      const overlay = btn.closest('.modal-overlay');
+      if (overlay) overlay.classList.remove('show');
+    });
+  });
+
+  // ---------- 搜索 ----------
+  const searchInput = $('searchInput');
+  searchInput.addEventListener('input', function () {
+    sq = searchInput.value.trim().toLowerCase();
+    $('searchClear').hidden = !sq;
+    renderMain();
+  });
+  $('searchClear').addEventListener('click', function () {
+    searchInput.value = '';
+    sq = '';
+    $('searchClear').hidden = true;
+    renderMain();
+    searchInput.focus();
+  });
+
+  // ---------- 课程 ----------
+  function addCourse(name, teacher) {
+    state.courses.push({
+      id: uid(), name: name, teacher: teacher,
+      color: colors[state.courses.length % colors.length],
+      notes: [], todos: []
+    });
+    state.activeCourseId = state.courses[state.courses.length - 1].id;
+    save(); renderAll();
+    toast('课程已创建');
+  }
+  function deleteCourse(id) {
+    if (!confirm('确定删除该课程及其所有笔记？')) return;
+    state.courses = state.courses.filter(function (c) { return c.id !== id; });
+    if (state.activeCourseId === id) {
+      state.activeCourseId = state.courses.length ? state.courses[0].id : null;
+    }
+    save(); renderAll(); closeSidebar();
+    toast('课程已删除');
+  }
+  function selectCourse(id) {
+    if (isRec) stopRecording(true);
+    state.activeCourseId = id;
+    expandedNoteId = null;
+    save(); renderMain(); closeSidebar();
+  }
+  function openCourseModal(id) {
+    editCourseId = id || null;
+    $('courseModalTitle').textContent = id ? '编辑课程' : '新建课程';
+    const c = id ? state.courses.find(function (x) { return x.id === id; }) : null;
+    $('courseName').value = c ? c.name : '';
+    $('courseTeacher').value = c ? c.teacher : '';
+    openModal('courseModal');
+    setTimeout(function () { $('courseName').focus(); }, 60);
+  }
+  function saveCourseModal() {
+    const name = $('courseName').value.trim();
+    if (!name) { $('courseName').focus(); return; }
+    if (editCourseId) {
+      const c = state.courses.find(function (x) { return x.id === editCourseId; });
+      if (c) { c.name = name; c.teacher = $('courseTeacher').value.trim(); save(); renderAll(); toast('课程已更新'); }
+    } else {
+      addCourse(name, $('courseTeacher').value.trim());
+    }
+    closeModal('courseModal');
+  }
+
+  // ---------- 笔记 / 待办 ----------
+  function addNote(cid, title, date, content, keyPoints) {
+    const c = state.courses.find(function (x) { return x.id === cid; });
+    if (!c) return;
+    c.notes.push({ id: uid(), title: title, date: date, content: content, keyPoints: keyPoints, pinned: false });
+    save(); renderAll(); toast('笔记已创建');
+  }
+  function updateNote(cid, nid, data) {
+    const c = state.courses.find(function (x) { return x.id === cid; });
+    if (!c) return;
+    const n = c.notes.find(function (x) { return x.id === nid; });
+    if (!n) return;
+    Object.assign(n, data);
+    save(); renderAll(); toast('笔记已更新');
+  }
+  function deleteNote(cid, nid) {
+    const c = state.courses.find(function (x) { return x.id === cid; });
+    if (!c) return;
+    c.notes = c.notes.filter(function (x) { return x.id !== nid; });
+    if (expandedNoteId === nid) expandedNoteId = null;
+    save(); renderAll(); toast('笔记已删除');
+  }
+  function togglePinNote(cid, nid) {
+    const c = state.courses.find(function (x) { return x.id === cid; });
+    if (!c) return;
+    const n = c.notes.find(function (x) { return x.id === nid; });
+    if (!n) return;
+    n.pinned = !n.pinned;
+    save(); renderAll();
+  }
+  function openNoteModal(nid) {
+    const c = getCourse();
+    if (!c) return;
+    editNoteId = nid || null;
+    $('noteModalTitle').textContent = nid ? '编辑笔记' : '新建笔记';
+    const n = nid ? c.notes.find(function (x) { return x.id === nid; }) : null;
+    $('noteTitle').value = n ? n.title : '';
+    $('noteDate').value = n ? n.date : today();
+    $('noteContent').value = n ? n.content : '';
+    $('noteKeyPoints').value = n && n.keyPoints ? n.keyPoints.join('\n') : '';
+    openModal('noteModal');
+    setTimeout(function () { $('noteTitle').focus(); }, 60);
+  }
+  function saveNoteModal() {
+    const c = getCourse();
+    if (!c) return;
+    const title = $('noteTitle').value.trim();
+    if (!title) { $('noteTitle').focus(); return; }
+    const data = {
+      title: title,
+      date: $('noteDate').value || today(),
+      content: $('noteContent').value.trim(),
+      keyPoints: $('noteKeyPoints').value.split('\n').map(function (s) { return s.trim(); }).filter(Boolean)
+    };
+    if (editNoteId) updateNote(c.id, editNoteId, data);
+    else addNote(c.id, data.title, data.date, data.content, data.keyPoints);
+    closeModal('noteModal');
+  }
+
+  function addTodo(cid, title, dueDate, priority) {
+    const c = state.courses.find(function (x) { return x.id === cid; });
+    if (!c) return;
+    c.todos.push({ id: uid(), title: title, dueDate: dueDate, priority: priority, completed: false });
+    save(); renderAll(); toast('待办已创建');
+  }
+  function toggleTodo(cid, tid) {
+    const c = state.courses.find(function (x) { return x.id === cid; });
+    if (!c) return;
+    const t = c.todos.find(function (x) { return x.id === tid; });
+    if (!t) return;
+    t.completed = !t.completed;
+    save(); renderAll();
+    if (t.completed) toast('已完成');
+  }
+  function deleteTodo(cid, tid) {
+    const c = state.courses.find(function (x) { return x.id === cid; });
+    if (!c) return;
+    c.todos = c.todos.filter(function (x) { return x.id !== tid; });
+    save(); renderAll(); toast('待办已删除');
+  }
+  function openTodoModal() {
+    $('todoTitle').value = '';
+    $('todoDueDate').value = today();
+    $('todoPriority').value = 'medium';
+    openModal('todoModal');
+    setTimeout(function () { $('todoTitle').focus(); }, 60);
+  }
+  function saveTodoModal() {
+    const c = getCourse();
+    if (!c) return;
+    const title = $('todoTitle').value.trim();
+    if (!title) { $('todoTitle').focus(); return; }
+    addTodo(c.id, title, $('todoDueDate').value, $('todoPriority').value);
+    closeModal('todoModal');
+  }
+
+  // ---------- 渲染 ----------
+  function renderStats() {
+    const el = $('sidebarFooter');
+    if (!el) return;
+    let notes = 0, todos = 0, done = 0;
+    state.courses.forEach(function (c) {
+      notes += c.notes.length;
+      todos += c.todos.length;
+      c.todos.forEach(function (t) { if (t.completed) done++; });
+    });
+    const rate = todos ? Math.round(done / todos * 100) : 0;
+    el.innerHTML =
+      '<div class="stat-item"><div class="stat-value">' + notes + '</div><div class="stat-label">笔记</div></div>' +
+      '<div class="stat-item"><div class="stat-value">' + todos + '</div><div class="stat-label">待办</div></div>' +
+      '<div class="stat-item"><div class="stat-value">' + rate + '%</div><div class="stat-label">完成率</div></div>';
+  }
+
+  function renderSidebar() {
+    const el = $('courseList');
+    if (!state.courses.length) {
+      el.innerHTML = '<div class="empty"><svg class="icon"><use href="assets/icons.svg#icon-book"></use></svg><p>还没有课程<br>点击右上角 + 新建</p></div>';
+      return;
+    }
+    el.innerHTML = state.courses.map(function (c) {
+      const active = c.id === state.activeCourseId ? ' active' : '';
+      return '<div class="course-row' + active + '">' +
+        '<button type="button" class="course-select" data-action="select" data-id="' + c.id + '">' +
+        '<span class="course-dot" style="background:' + c.color + '"></span>' +
+        '<span class="course-name">' + esc(c.name) + '</span></button>' +
+        '<div class="course-actions">' +
+        '<button type="button" class="course-action" data-action="edit" data-id="' + c.id + '" aria-label="编辑课程"><svg class="icon icon-sm"><use href="assets/icons.svg#icon-edit"></use></svg></button>' +
+        '<button type="button" class="course-action danger" data-action="delete" data-id="' + c.id + '" aria-label="删除课程"><svg class="icon icon-sm"><use href="assets/icons.svg#icon-trash"></use></svg></button>' +
+        '</div></div>';
+    }).join('');
+  }
+
+  function renderMain() {
+    const el = $('mainInner');
+    const c = getCourse();
+    if (!c) {
+      el.innerHTML = '<div class="main-placeholder">' +
+        '<svg class="icon"><use href="assets/icons.svg#icon-book"></use></svg>' +
+        '<p>选择或创建一门课程开始整理</p>' +
+        '<button type="button" class="btn btn-primary" data-action="new-course">新建课程</button></div>';
+      return;
+    }
+    const undone = c.todos.filter(function (t) { return !t.completed; }).length;
+    el.innerHTML =
+      '<div class="course-head">' +
+      '<span class="course-bar" style="background:' + c.color + '"></span>' +
+      '<h1>' + esc(c.name) + '</h1>' +
+      (c.teacher ? '<span class="teacher-badge">' + esc(c.teacher) + '</span>' : '') +
+      '</div>' +
+      '<div class="tabs" role="tablist" aria-label="课程视图">' +
+      '<button type="button" class="tab' + (ct === 'notes' ? ' active' : '') + '" data-tab="notes" role="tab" aria-selected="' + (ct === 'notes') + '">笔记 <span class="tab-count">' + c.notes.length + '</span></button>' +
+      '<button type="button" class="tab' + (ct === 'todos' ? ' active' : '') + '" data-tab="todos" role="tab" aria-selected="' + (ct === 'todos') + '">待办 <span class="tab-count">' + undone + '</span></button>' +
+      '</div>' +
+      '<div id="tabContent" style="margin-top:16px"></div>';
+    renderTab(ct);
+  }
+
+  function renderTab(tab) {
+    const c = getCourse();
+    if (!c) return;
+    const panel = $('tabContent');
+    if (isRec) { renderRecPanel(); return; }
+    if (tab === 'notes') renderNotes(panel);
+    else renderTodos(panel);
+  }
+
+  function switchTab(tab) {
+    ct = tab;
+    renderMain();
+  }
+
+  function renderNotes(container) {
+    const c = getCourse();
+    if (!c) return;
+    let notes = c.notes.slice();
+    if (sq) {
+      notes = notes.filter(function (n) {
+        return n.title.toLowerCase().indexOf(sq) !== -1 || n.content.toLowerCase().indexOf(sq) !== -1;
+      });
+    }
+    const list = notes.filter(function (n) { return n.pinned; }).concat(notes.filter(function (n) { return !n.pinned; }));
+    let html = '<div class="section-head"><span class="section-count">共 ' + list.length + ' 条笔记</span>' +
+      '<div class="section-btns">' +
+      '<button type="button" class="btn btn-soft btn-sm" data-action="record"><svg class="icon icon-sm"><use href="assets/icons.svg#icon-mic"></use></svg>录音</button>' +
+      '<button type="button" class="btn btn-primary btn-sm" data-action="new-note"><svg class="icon icon-sm"><use href="assets/icons.svg#icon-plus"></use></svg>新建</button>' +
+      '</div></div>';
+    if (!list.length) {
+      const icon = sq ? 'search' : 'notebook';
+      const text = sq ? '没有匹配的笔记' : '还没有笔记，点击“新建”开始记录';
+      html += '<div class="empty"><svg class="icon"><use href="assets/icons.svg#icon-' + icon + '"></use></svg><p>' + text + '</p></div>';
+    } else {
+      list.forEach(function (n) {
+        html += '<article class="note-card' + (n.pinned ? ' pinned' : '') + (expandedNoteId === n.id ? ' expanded' : '') + '" data-action="expand" data-id="' + n.id + '">' +
+          '<div class="note-head">' +
+          '<button type="button" class="note-pin" data-action="pin" data-id="' + n.id + '" aria-label="置顶"><svg class="icon icon-sm"><use href="assets/icons.svg#icon-pin"></use></svg></button>' +
+          '<span class="note-title">' + esc(n.title) + '</span>' +
+          '<span class="note-meta">' + fmtDate(n.date) + '</span></div>' +
+          '<div class="note-body">' +
+          (n.content ? '<div class="note-content">' + esc(n.content) + '</div>' : '') +
+          (n.keyPoints && n.keyPoints.length ? '<div class="keypoints"><div class="keypoints-label">重点</div>' + n.keyPoints.map(function (k) { return '<div class="kp-item">' + esc(k) + '</div>'; }).join('') + '</div>' : '') +
+          '<div class="note-actions">' +
+          '<button type="button" class="btn btn-secondary btn-sm" data-action="edit-note" data-id="' + n.id + '">编辑</button>' +
+          '<button type="button" class="btn btn-soft btn-sm" data-action="ai" data-id="' + n.id + '" id="ai-btn-' + n.id + '"><svg class="icon icon-sm"><use href="assets/icons.svg#icon-sparkles"></use></svg>AI 总结</button>' +
+          '<button type="button" class="btn btn-danger btn-sm" data-action="delete-note" data-id="' + n.id + '">删除</button>' +
+          '</div></div></article>';
+      });
+    }
+    container.innerHTML = html;
+  }
+
+  function renderTodos(container) {
+    const c = getCourse();
+    if (!c) return;
+    const inc = c.todos.filter(function (t) { return !t.completed; });
+    const cmp = c.todos.filter(function (t) { return t.completed; });
+    const label = { high: '高', medium: '中', low: '低' };
+    const cls = { high: 'priority-high', medium: 'priority-medium', low: 'priority-low' };
+    function row(t) {
+      return '<div class="todo-item' + (t.completed ? ' done' : '') + '">' +
+        '<button type="button" class="todo-check" data-action="toggle" data-id="' + t.id + '" aria-label="完成"><svg class="icon icon-sm"><use href="assets/icons.svg#icon-check"></use></svg></button>' +
+        '<span class="todo-title">' + esc(t.title) + '</span>' +
+        '<span class="todo-priority ' + cls[t.priority] + '">' + label[t.priority] + '</span>' +
+        '<span class="todo-date">' + fmtDate(t.dueDate) + '</span>' +
+        '<button type="button" class="todo-del" data-action="delete" data-id="' + t.id + '" aria-label="删除"><svg class="icon icon-sm"><use href="assets/icons.svg#icon-trash"></use></svg></button>' +
+        '</div>';
+    }
+    let html = '<div class="section-head"><span class="section-count">' + inc.length + ' 项未完成</span>' +
+      '<div class="section-btns"><button type="button" class="btn btn-primary btn-sm" data-action="new-todo"><svg class="icon icon-sm"><use href="assets/icons.svg#icon-plus"></use></svg>新建待办</button></div></div>';
+    if (!c.todos.length) {
+      html += '<div class="empty"><svg class="icon"><use href="assets/icons.svg#icon-list"></use></svg><p>还没有待办</p></div>';
+    } else {
+      if (inc.length) html += '<div class="todo-group"><div class="todo-group-label">未完成</div>' + inc.map(row).join('') + '</div>';
+      if (cmp.length) html += '<div class="todo-group"><div class="todo-group-label">已完成</div>' + cmp.map(row).join('') + '</div>';
+    }
+    container.innerHTML = html;
+  }
+
+  function renderAll() {
+    renderSidebar();
+    renderMain();
+    renderStats();
+  }
+
+  // ---------- 录音 ----------
+  function initRec() {
+    const S = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!S) return false;
+    rec = new S();
+    rec.continuous = true;
+    rec.interimResults = true;
+    rec.lang = 'zh-CN';
+    rec.onresult = function (e) {
+      let im = '';
+      for (let i = e.resultIndex; i < e.results.length; i++) {
+        if (e.results[i].isFinal) fin += e.results[i][0].transcript;
+        else im += e.results[i][0].transcript;
+      }
+      inter = im;
+      updTxt();
+    };
+    rec.onerror = function (e) {
+      if (e.error === 'not-allowed') {
+        toast('麦克风权限被拒绝', 'error');
+        stopRecording(true);
+      } else if (e.error === 'network') {
+        toast('语音识别网络不稳定，请重试', 'error');
+      }
+    };
+    rec.onend = function () {
+      if (isRec && !isPause) {
+        setTimeout(function () { try { rec.start(); } catch (ex) {} }, 150);
+      }
+    };
+    return true;
+  }
+  function startRecording() {
+    if (!state.activeCourseId) { toast('请先选择课程', 'error'); return; }
+    if (!rec && !initRec()) { toast('录音功能需要 Chrome / Edge 浏览器', 'error'); return; }
+    fin = ''; inter = '';
+    isRec = true; isPause = false;
+    recStart = Date.now();
+    try { rec.start(); } catch (e) {}
+    startRecTimer();
+    renderMain();
+    if (ct !== 'notes') switchTab('notes');
+  }
+  function stopRecording(silent) {
+    isRec = false; isPause = false;
+    stopRecTimer();
+    try { rec.stop(); } catch (e) {}
+    if (!silent) {
+      const text = (fin + inter).trim();
+      if (text) openNoteModalForRecording(text);
+    }
+    renderMain();
+  }
+  function togglePause() {
+    if (isPause) {
+      isPause = false;
+      try { rec.start(); } catch (e) {}
+    } else {
+      isPause = true;
+      try { rec.stop(); } catch (e) {}
+    }
+    updPBtn();
+  }
+  function startRecTimer() {
+    recTimer = setInterval(function () {
+      const total = Math.floor((Date.now() - recStart) / 1000);
+      const m = Math.floor(total / 60);
+      const s = total % 60;
+      const el = $('recTimer');
+      if (el) el.textContent = pad2(m) + ':' + pad2(s);
+    }, 1000);
+  }
+  function stopRecTimer() {
+    if (recTimer) { clearInterval(recTimer); recTimer = null; }
+  }
+  function updTxt() {
+    const el = $('recText');
+    if (!el) return;
+    let html = '';
+    if (fin) html += esc(fin);
+    if (inter) html += '<span class="interim">' + esc(inter) + '</span>';
+    el.innerHTML = html;
+    el.scrollTop = el.scrollHeight;
+  }
+  function updPBtn() {
+    const btn = $('btnPause');
+    if (btn) btn.textContent = isPause ? '继续' : '暂停';
+  }
+  function renderRecPanel() {
+    const panel = $('tabContent');
+    if (!panel) return;
+    panel.innerHTML =
+      '<div class="rec-panel">' +
+      '<div class="rec-status"><div class="rec-dot"></div>' +
+      '<div class="rec-wave"><span></span><span></span><span></span><span></span><span></span></div>' +
+      '<span class="rec-label">正在录音</span>' +
+      '<span class="rec-timer" id="recTimer">00:00</span></div>' +
+      '<div class="rec-text" id="recText"></div>' +
+      '<div class="rec-controls">' +
+      '<button type="button" class="btn btn-secondary" id="btnPause" data-action="pause">暂停</button>' +
+      '<button type="button" class="btn btn-danger" data-action="stop"><svg class="icon icon-sm"><use href="assets/icons.svg#icon-mic"></use></svg>停止</button>' +
+      '</div></div>';
+  }
+  function openNoteModalForRecording(text) {
+    const c = getCourse();
+    const title = (c ? c.name : '') + ' - 录音笔记 ' + fmtDate(today());
+    editNoteId = null;
+    $('noteModalTitle').textContent = '保存录音笔记';
+    $('noteTitle').value = title;
+    $('noteDate').value = today();
+    $('noteContent').value = text;
+    $('noteKeyPoints').value = extractKeyPoints(text).join('\n');
+    openModal('noteModal');
+    setTimeout(function () { $('noteTitle').focus(); }, 60);
+  }
+
+  const KEYWORDS = ['重要', '重点', '关键', '注意', '记住', '总结', '核心', '必须', '一定要', '考点', '考试', '强调', '特别', '尤其', '需要掌握', '一定记住'];
+  function extractKeyPoints(text) {
+    const sentences = text.split(/[\u3002\uff01\uff1f\?\n]+/).filter(function (s) { return s.trim().length > 4; });
+    const scored = sentences.map(function (s) {
+      let score = 0;
+      KEYWORDS.forEach(function (k) { if (s.indexOf(k) !== -1) score += 3; });
+      if (s.length > 15 && s.length < 80) score += 1;
+      return { text: s.trim(), score: score };
+    });
+    scored.sort(function (a, b) { return b.score - a.score; });
+    return scored.filter(function (s) { return s.score >= 1; }).slice(0, 5).map(function (s) { return s.text; });
+  }
+
+  // ---------- AI ----------
+  function loadAISettings() {
+    try {
+      const raw = localStorage.getItem(AI_KEY);
+      const data = raw ? JSON.parse(raw) : {};
+      aiS = {
+        endpoint: String(data.endpoint || 'https://api.deepseek.com/v1').replace(/\/+$/, ''),
+        key: String(data.key || ''),
+        model: String(data.model || 'deepseek-chat')
+      };
+    } catch (e) {
+      aiS = { endpoint: 'https://api.deepseek.com/v1', key: '', model: 'deepseek-chat' };
+    }
+  }
+  function saveAISettings() {
+    try {
+      aiS.endpoint = $('aiEndpoint').value.trim().replace(/\/+$/, '');
+      aiS.key = $('aiApiKey').value.trim();
+      aiS.model = $('aiModel').value.trim() || 'deepseek-chat';
+      localStorage.setItem(AI_KEY, JSON.stringify(aiS));
+      const status = $('aiStatus');
+      status.textContent = aiS.key ? '已保存' : '请填写';
+      status.className = 'ai-status' + (aiS.key ? ' success' : ' error');
+      closeModal('aiSettingsModal');
+      toast('AI 设置已保存');
+    } catch (e) {
+      toast('保存失败', 'error');
+    }
+  }
+  function openAISettings() {
+    loadAISettings();
+    $('aiEndpoint').value = aiS.endpoint;
+    $('aiApiKey').value = aiS.key;
+    $('aiModel').value = aiS.model;
+    const status = $('aiStatus');
+    status.textContent = aiS.key ? '已配置' : '请填写';
+    status.className = 'ai-status' + (aiS.key ? ' success' : '');
+    openModal('aiSettingsModal');
+  }
+  async function callAISummary(text, title) {
+    loadAISettings();
+    if (!aiS.key) throw new Error('请先配置 API Key');
+    const prompt =
+      '你是一个课堂笔记整理助手。请先纠正语音转录文字（修正同音字、补充标点、理顺逻辑），使语句通顺，然后提炼核心内容：\n' +
+      '1.去除重复废话\n2.保留核心知识点\n3.组织成简洁语言\n4.提取3-5个重点\n\n' +
+      '标题：' + (title || '') + '\n内容：\n' + text +
+      '\n\n用JSON返回：\n{"summary":"提炼后的笔记","keyPoints":["重点1","重点2","重点3"]}';
+    const res = await fetch(aiS.endpoint + '/chat/completions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + aiS.key },
+      body: JSON.stringify({
+        model: aiS.model,
+        messages: [
+          { role: 'system', content: '你是课堂笔记助手，擅长提炼重点。' },
+          { role: 'user', content: prompt }
+        ],
+        temperature: 0.3,
+        max_tokens: 2048
+      })
+    });
+    if (!res.ok) {
+      let msg = '请求失败 HTTP ' + res.status;
+      try {
+        const err = await res.json();
+        if (err && err.error && err.error.message) msg = err.error.message;
+      } catch (e) {}
+      throw new Error(msg);
+    }
+    const data = await res.json();
+    const content = (data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content) || '';
+    const clean = content.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+    const parsed = JSON.parse(clean);
+    return {
+      summary: String(parsed.summary || ''),
+      keyPoints: Array.isArray(parsed.keyPoints) ? parsed.keyPoints.map(String) : []
+    };
+  }
+  async function aiSummarizeNote(nid) {
+    const c = getCourse();
+    if (!c) return;
+    const n = c.notes.find(function (x) { return x.id === nid; });
+    if (!n || !n.content.trim()) { toast('笔记内容为空', 'error'); return; }
+    const btn = $('ai-btn-' + nid);
+    if (btn) { btn.disabled = true; btn.classList.add('loading'); }
+    try {
+      const result = await callAISummary(n.content, n.title);
+      aiR = { noteId: nid, courseId: c.id, summary: result.summary, keyPoints: result.keyPoints };
+      $('summaryContent').textContent = result.summary;
+      $('summaryKeyPoints').innerHTML = result.keyPoints.map(function (k) { return '<div class="kp-item">' + esc(k) + '</div>'; }).join('');
+      openModal('aiSummaryModal');
+    } catch (e) {
+      if (e && e.message === '请先配置 API Key') openAISettings();
+      else alert('AI 总结失败：' + (e && e.message ? e.message : '未知错误'));
+    } finally {
+      if (btn) { btn.disabled = false; btn.classList.remove('loading'); }
+    }
+  }
+  function applyAISummary() {
+    if (!aiR) return;
+    const c = state.courses.find(function (x) { return x.id === aiR.courseId; });
+    if (!c) return;
+    const n = c.notes.find(function (x) { return x.id === aiR.noteId; });
+    if (!n) return;
+    n.content = aiR.summary;
+    n.keyPoints = aiR.keyPoints;
+    save(); renderAll();
+    closeModal('aiSummaryModal');
+    aiR = null;
+    toast('AI 总结已应用');
+  }
+
+  // ---------- 事件绑定 ----------
+  $('themeBtn').addEventListener('click', toggleDarkMode);
+  $('aiSettingsBtn').addEventListener('click', openAISettings);
+  $('addCourseBtn').addEventListener('click', function () { openCourseModal(); });
+  $('menuBtn').addEventListener('click', openSidebar);
+  $('sidebarBackdrop').addEventListener('click', closeSidebar);
+  $('saveCourseBtn').addEventListener('click', saveCourseModal);
+  $('saveNoteBtn').addEventListener('click', saveNoteModal);
+  $('saveTodoBtn').addEventListener('click', saveTodoModal);
+  $('saveAiBtn').addEventListener('click', saveAISettings);
+  $('applyAiBtn').addEventListener('click', applyAISummary);
+
+  function openSidebar() {
+    document.body.classList.add('sidebar-open');
+    $('sidebarBackdrop').hidden = false;
+  }
+  function closeSidebar() {
+    document.body.classList.remove('sidebar-open');
+    $('sidebarBackdrop').hidden = true;
+  }
+
+  $('courseList').addEventListener('click', function (e) {
+    const btn = e.target.closest('[data-action]');
+    if (!btn) return;
+    const action = btn.dataset.action;
+    const id = btn.dataset.id;
+    if (action === 'select') selectCourse(id);
+    else if (action === 'edit') openCourseModal(id);
+    else if (action === 'delete') deleteCourse(id);
+  });
+
+  $('mainInner').addEventListener('click', function (e) {
+    const el = e.target.closest('[data-action]');
+    if (!el) return;
+    const action = el.dataset.action;
+    const id = el.dataset.id;
+    const c = getCourse();
+
+    if (action === 'new-course') { openCourseModal(); return; }
+    if (action === 'new-note') { openNoteModal(); return; }
+    if (action === 'new-todo') { openTodoModal(); return; }
+    if (action === 'record') { startRecording(); return; }
+    if (action === 'pause') { togglePause(); return; }
+    if (action === 'stop') { stopRecording(); return; }
+    if (!c) return;
+    if (action === 'expand') {
+      expandedNoteId = expandedNoteId === id ? null : id;
+      renderTab(ct);
+      return;
+    }
+    if (action === 'pin') { togglePinNote(c.id, id); return; }
+    if (action === 'edit-note') { openNoteModal(id); return; }
+    if (action === 'delete-note') { deleteNote(c.id, id); return; }
+    if (action === 'ai') { aiSummarizeNote(id); return; }
+    if (action === 'toggle') { toggleTodo(c.id, id); return; }
+    if (action === 'delete' && el.classList.contains('todo-del')) { deleteTodo(c.id, id); return; }
+  });
+
+  $('mainInner').addEventListener('click', function (e) {
+    const tab = e.target.closest('[data-tab]');
+    if (!tab) return;
+    switchTab(tab.dataset.tab);
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') { closeAllModals(); return; }
+    const mod = e.ctrlKey || e.metaKey;
+    if (!mod) return;
+    const key = e.key.toLowerCase();
+    if (key === 'n') { e.preventDefault(); if (getCourse()) openNoteModal(); }
+    else if (key === 't') { e.preventDefault(); if (getCourse()) openTodoModal(); }
+    else if (key === 'd') { e.preventDefault(); toggleDarkMode(); }
+  });
+
+  // ---------- 离线可用 ----------
+  if ('serviceWorker' in navigator && location.protocol.indexOf('http') === 0) {
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('assets/sw.js').catch(function () {});
+    });
+  }
+
+  // ---------- 初始化 ----------
+  load();
+  loadAISettings();
+  applySavedTheme();
+  renderAll();
+})();
 </script>
 </body>
 </html>
