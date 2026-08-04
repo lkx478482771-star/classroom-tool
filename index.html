@@ -12,33 +12,149 @@
 <link rel="stylesheet" href="assets/app.css">
 </head>
 <body>
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+  <symbol id="icon-grad" viewBox="0 0 24 24">
+    <path d="M22 10 12 5 2 10l10 5 10-5v5"/>
+    <path d="M6 12.5V17c0 1.66 2.69 3 6 3s6-1.34 6-3v-4.5"/>
+    <path d="M22 10v5"/>
+  </symbol>
+  <symbol id="icon-book" viewBox="0 0 24 24">
+    <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+    <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+  </symbol>
+  <symbol id="icon-mic" viewBox="0 0 24 24">
+    <rect x="9" y="2" width="6" height="12" rx="3"/>
+    <path d="M5 10v2a7 7 0 0 0 14 0v-2"/>
+    <line x1="12" y1="19" x2="12" y2="22"/>
+  </symbol>
+  <symbol id="icon-sparkles" viewBox="0 0 24 24">
+    <path d="M12 3l1.9 5.8a2 2 0 0 0 1.3 1.3L21 12l-5.8 1.9a2 2 0 0 0-1.3 1.3L12 21l-1.9-5.8a2 2 0 0 0-1.3-1.3L3 12l5.8-1.9a2 2 0 0 0 1.3-1.3Z"/>
+  </symbol>
+  <symbol id="icon-check" viewBox="0 0 24 24">
+    <path d="M20 6 9 17l-5-5"/>
+  </symbol>
+  <symbol id="icon-pin" viewBox="0 0 24 24">
+    <path d="M12 17v5"/>
+    <path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V6h1a2 2 0 0 0 0-4H8a2 2 0 0 0 0 4h1z"/>
+  </symbol>
+  <symbol id="icon-trash" viewBox="0 0 24 24">
+    <path d="M3 6h18"/>
+    <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/>
+    <line x1="10" y1="11" x2="10" y2="17"/>
+    <line x1="14" y1="11" x2="14" y2="17"/>
+  </symbol>
+  <symbol id="icon-search" viewBox="0 0 24 24">
+    <circle cx="11" cy="11" r="8"/>
+    <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+  </symbol>
+  <symbol id="icon-moon" viewBox="0 0 24 24">
+    <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+  </symbol>
+  <symbol id="icon-sun" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="4"/>
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+  </symbol>
+  <symbol id="icon-plus" viewBox="0 0 24 24">
+    <path d="M12 5v14M5 12h14"/>
+  </symbol>
+  <symbol id="icon-clock" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="10"/>
+    <polyline points="12 6 12 12 16 14"/>
+  </symbol>
+  <symbol id="icon-calendar" viewBox="0 0 24 24">
+    <rect x="3" y="4" width="18" height="18" rx="2"/>
+    <line x1="16" y1="2" x2="16" y2="6"/>
+    <line x1="8" y1="2" x2="8" y2="6"/>
+    <line x1="3" y1="10" x2="21" y2="10"/>
+  </symbol>
+  <symbol id="icon-chevron" viewBox="0 0 24 24">
+    <polyline points="6 9 12 15 18 9"/>
+  </symbol>
+  <symbol id="icon-x" viewBox="0 0 24 24">
+    <path d="M18 6 6 18M6 6l12 12"/>
+  </symbol>
+  <symbol id="icon-edit" viewBox="0 0 24 24">
+    <path d="M12 20h9"/>
+    <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4Z"/>
+  </symbol>
+  <symbol id="icon-arrow-up" viewBox="0 0 24 24">
+    <path d="M12 19V5"/>
+    <polyline points="5 12 12 5 19 12"/>
+  </symbol>
+  <symbol id="icon-external" viewBox="0 0 24 24">
+    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+    <polyline points="15 3 21 3 21 9"/>
+    <line x1="10" y1="14" x2="21" y2="3"/>
+  </symbol>
+  <symbol id="icon-toolkit" viewBox="0 0 24 24">
+    <rect x="3" y="3" width="7" height="7" rx="1"/>
+    <rect x="14" y="3" width="7" height="7" rx="1"/>
+    <rect x="3" y="14" width="7" height="7" rx="1"/>
+    <rect x="14" y="14" width="7" height="7" rx="1"/>
+  </symbol>
+  <symbol id="icon-menu" viewBox="0 0 24 24">
+    <line x1="4" y1="7" x2="20" y2="7"/>
+    <line x1="4" y1="12" x2="20" y2="12"/>
+    <line x1="4" y1="17" x2="20" y2="17"/>
+  </symbol>
+  <symbol id="icon-list" viewBox="0 0 24 24">
+    <line x1="8" y1="6" x2="21" y2="6"/>
+    <line x1="8" y1="12" x2="21" y2="12"/>
+    <line x1="8" y1="18" x2="21" y2="18"/>
+    <line x1="3" y1="6" x2="3.01" y2="6"/>
+    <line x1="3" y1="12" x2="3.01" y2="12"/>
+    <line x1="3" y1="18" x2="3.01" y2="18"/>
+  </symbol>
+  <symbol id="icon-zap" viewBox="0 0 24 24">
+    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+  </symbol>
+  <symbol id="icon-target" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="10"/>
+    <circle cx="12" cy="12" r="6"/>
+    <circle cx="12" cy="12" r="2"/>
+  </symbol>
+  <symbol id="icon-settings" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="3"/>
+    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/>
+  </symbol>
+  <symbol id="icon-download" viewBox="0 0 24 24">
+    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+    <polyline points="7 10 12 15 17 10"/>
+    <line x1="12" y1="15" x2="12" y2="3"/>
+  </symbol>
+  <symbol id="icon-notebook" viewBox="0 0 24 24">
+    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+  </symbol>
+</svg>
 <div class="app-shell">
   <aside class="sidebar" id="sidebar" aria-label="课程侧栏">
     <div class="sidebar-head">
       <a class="brand" href="index.html" aria-label="课堂整理工具首页">
-        <span class="brand-mark"><svg class="icon"><use href="assets/icons.svg#icon-grad"></use></svg></span>
+        <span class="brand-mark"><svg class="icon"><use href="#icon-grad"></use></svg></span>
         <span class="brand-name">课堂整理</span>
       </a>
       <div class="sidebar-actions">
         <button type="button" class="btn-icon" id="themeBtn" aria-label="切换深色模式">
-          <svg class="icon" id="themeIcon"><use href="assets/icons.svg#icon-moon"></use></svg>
+          <svg class="icon" id="themeIcon"><use href="#icon-moon"></use></svg>
         </button>
         <button type="button" class="btn-icon" id="aiSettingsBtn" aria-label="AI 设置">
-          <svg class="icon"><use href="assets/icons.svg#icon-sparkles"></use></svg>
+          <svg class="icon"><use href="#icon-sparkles"></use></svg>
         </button>
         <button type="button" class="btn-icon" id="addCourseBtn" aria-label="新建课程">
-          <svg class="icon"><use href="assets/icons.svg#icon-plus"></use></svg>
+          <svg class="icon"><use href="#icon-plus"></use></svg>
         </button>
         <a class="btn-icon" href="student-toolkit.html" aria-label="学生工具箱">
-          <svg class="icon"><use href="assets/icons.svg#icon-toolkit"></use></svg>
+          <svg class="icon"><use href="#icon-toolkit"></use></svg>
         </a>
       </div>
     </div>
     <div class="search-field">
-      <svg class="icon icon-sm"><use href="assets/icons.svg#icon-search"></use></svg>
+      <svg class="icon icon-sm"><use href="#icon-search"></use></svg>
       <input id="searchInput" type="search" placeholder="搜索笔记..." autocomplete="off" aria-label="搜索笔记">
       <button type="button" class="clear-btn" id="searchClear" aria-label="清除搜索" hidden>
-        <svg class="icon icon-sm"><use href="assets/icons.svg#icon-x"></use></svg>
+        <svg class="icon icon-sm"><use href="#icon-x"></use></svg>
       </button>
     </div>
     <nav class="course-list" id="courseList" aria-label="课程列表"></nav>
@@ -51,7 +167,7 @@
   <main class="main-panel">
     <div class="mobile-topbar">
       <button type="button" class="btn-icon" id="menuBtn" aria-label="打开课程列表">
-        <svg class="icon"><use href="assets/icons.svg#icon-menu"></use></svg>
+        <svg class="icon"><use href="#icon-menu"></use></svg>
       </button>
       <span class="brand-name">课堂整理</span>
     </div>
@@ -64,7 +180,7 @@
     <div class="modal-head">
       <h3 id="courseModalTitle">新建课程</h3>
       <button type="button" class="modal-close" data-close aria-label="关闭">
-        <svg class="icon"><use href="assets/icons.svg#icon-x"></use></svg>
+        <svg class="icon"><use href="#icon-x"></use></svg>
       </button>
     </div>
     <div class="modal-body">
@@ -89,7 +205,7 @@
     <div class="modal-head">
       <h3 id="noteModalTitle">新建笔记</h3>
       <button type="button" class="modal-close" data-close aria-label="关闭">
-        <svg class="icon"><use href="assets/icons.svg#icon-x"></use></svg>
+        <svg class="icon"><use href="#icon-x"></use></svg>
       </button>
     </div>
     <div class="modal-body">
@@ -123,7 +239,7 @@
     <div class="modal-head">
       <h3 id="todoModalTitle">新建待办</h3>
       <button type="button" class="modal-close" data-close aria-label="关闭">
-        <svg class="icon"><use href="assets/icons.svg#icon-x"></use></svg>
+        <svg class="icon"><use href="#icon-x"></use></svg>
       </button>
     </div>
     <div class="modal-body">
@@ -156,7 +272,7 @@
     <div class="modal-head">
       <h3 id="aiSettingsTitle">AI 总结设置</h3>
       <button type="button" class="modal-close" data-close aria-label="关闭">
-        <svg class="icon"><use href="assets/icons.svg#icon-x"></use></svg>
+        <svg class="icon"><use href="#icon-x"></use></svg>
       </button>
     </div>
     <div class="modal-body">
@@ -187,7 +303,7 @@
     <div class="modal-head">
       <h3 id="aiSummaryTitle">AI 总结结果</h3>
       <button type="button" class="modal-close" data-close aria-label="关闭">
-        <svg class="icon"><use href="assets/icons.svg#icon-x"></use></svg>
+        <svg class="icon"><use href="#icon-x"></use></svg>
       </button>
     </div>
     <div class="modal-body">
@@ -324,7 +440,7 @@
     document.documentElement.dataset.theme = dark ? 'dark' : 'light';
     try { localStorage.setItem(THEME_KEY, dark ? 'true' : 'false'); } catch (e) {}
     const icon = $('themeIcon');
-    if (icon) icon.setAttribute('href', 'assets/icons.svg#' + (dark ? 'icon-sun' : 'icon-moon'));
+    if (icon) icon.setAttribute('href', '#' + (dark ? 'icon-sun' : 'icon-moon'));
   }
   function toggleDarkMode() {
     setTheme(document.documentElement.dataset.theme !== 'dark');
@@ -526,7 +642,7 @@
   function renderSidebar() {
     const el = $('courseList');
     if (!state.courses.length) {
-      el.innerHTML = '<div class="empty"><svg class="icon"><use href="assets/icons.svg#icon-book"></use></svg><p>还没有课程<br>点击右上角 + 新建</p></div>';
+      el.innerHTML = '<div class="empty"><svg class="icon"><use href="#icon-book"></use></svg><p>还没有课程<br>点击右上角 + 新建</p></div>';
       return;
     }
     el.innerHTML = state.courses.map(function (c) {
@@ -536,8 +652,8 @@
         '<span class="course-dot" style="background:' + c.color + '"></span>' +
         '<span class="course-name">' + esc(c.name) + '</span></button>' +
         '<div class="course-actions">' +
-        '<button type="button" class="course-action" data-action="edit" data-id="' + c.id + '" aria-label="编辑课程"><svg class="icon icon-sm"><use href="assets/icons.svg#icon-edit"></use></svg></button>' +
-        '<button type="button" class="course-action danger" data-action="delete" data-id="' + c.id + '" aria-label="删除课程"><svg class="icon icon-sm"><use href="assets/icons.svg#icon-trash"></use></svg></button>' +
+        '<button type="button" class="course-action" data-action="edit" data-id="' + c.id + '" aria-label="编辑课程"><svg class="icon icon-sm"><use href="#icon-edit"></use></svg></button>' +
+        '<button type="button" class="course-action danger" data-action="delete" data-id="' + c.id + '" aria-label="删除课程"><svg class="icon icon-sm"><use href="#icon-trash"></use></svg></button>' +
         '</div></div>';
     }).join('');
   }
@@ -547,7 +663,7 @@
     const c = getCourse();
     if (!c) {
       el.innerHTML = '<div class="main-placeholder">' +
-        '<svg class="icon"><use href="assets/icons.svg#icon-book"></use></svg>' +
+        '<svg class="icon"><use href="#icon-book"></use></svg>' +
         '<p>选择或创建一门课程开始整理</p>' +
         '<button type="button" class="btn btn-primary" data-action="new-course">新建课程</button></div>';
       return;
@@ -593,18 +709,18 @@
     const list = notes.filter(function (n) { return n.pinned; }).concat(notes.filter(function (n) { return !n.pinned; }));
     let html = '<div class="section-head"><span class="section-count">共 ' + list.length + ' 条笔记</span>' +
       '<div class="section-btns">' +
-      '<button type="button" class="btn btn-soft btn-sm" data-action="record"><svg class="icon icon-sm"><use href="assets/icons.svg#icon-mic"></use></svg>录音</button>' +
-      '<button type="button" class="btn btn-primary btn-sm" data-action="new-note"><svg class="icon icon-sm"><use href="assets/icons.svg#icon-plus"></use></svg>新建</button>' +
+      '<button type="button" class="btn btn-soft btn-sm" data-action="record"><svg class="icon icon-sm"><use href="#icon-mic"></use></svg>录音</button>' +
+      '<button type="button" class="btn btn-primary btn-sm" data-action="new-note"><svg class="icon icon-sm"><use href="#icon-plus"></use></svg>新建</button>' +
       '</div></div>';
     if (!list.length) {
       const icon = sq ? 'search' : 'notebook';
       const text = sq ? '没有匹配的笔记' : '还没有笔记，点击“新建”开始记录';
-      html += '<div class="empty"><svg class="icon"><use href="assets/icons.svg#icon-' + icon + '"></use></svg><p>' + text + '</p></div>';
+      html += '<div class="empty"><svg class="icon"><use href="#icon-' + icon + '"></use></svg><p>' + text + '</p></div>';
     } else {
       list.forEach(function (n) {
         html += '<article class="note-card' + (n.pinned ? ' pinned' : '') + (expandedNoteId === n.id ? ' expanded' : '') + '" data-action="expand" data-id="' + n.id + '">' +
           '<div class="note-head">' +
-          '<button type="button" class="note-pin" data-action="pin" data-id="' + n.id + '" aria-label="置顶"><svg class="icon icon-sm"><use href="assets/icons.svg#icon-pin"></use></svg></button>' +
+          '<button type="button" class="note-pin" data-action="pin" data-id="' + n.id + '" aria-label="置顶"><svg class="icon icon-sm"><use href="#icon-pin"></use></svg></button>' +
           '<span class="note-title">' + esc(n.title) + '</span>' +
           '<span class="note-meta">' + fmtDate(n.date) + '</span></div>' +
           '<div class="note-body">' +
@@ -612,7 +728,7 @@
           (n.keyPoints && n.keyPoints.length ? '<div class="keypoints"><div class="keypoints-label">重点</div>' + n.keyPoints.map(function (k) { return '<div class="kp-item">' + esc(k) + '</div>'; }).join('') + '</div>' : '') +
           '<div class="note-actions">' +
           '<button type="button" class="btn btn-secondary btn-sm" data-action="edit-note" data-id="' + n.id + '">编辑</button>' +
-          '<button type="button" class="btn btn-soft btn-sm" data-action="ai" data-id="' + n.id + '" id="ai-btn-' + n.id + '"><svg class="icon icon-sm"><use href="assets/icons.svg#icon-sparkles"></use></svg>AI 总结</button>' +
+          '<button type="button" class="btn btn-soft btn-sm" data-action="ai" data-id="' + n.id + '" id="ai-btn-' + n.id + '"><svg class="icon icon-sm"><use href="#icon-sparkles"></use></svg>AI 总结</button>' +
           '<button type="button" class="btn btn-danger btn-sm" data-action="delete-note" data-id="' + n.id + '">删除</button>' +
           '</div></div></article>';
       });
@@ -629,17 +745,17 @@
     const cls = { high: 'priority-high', medium: 'priority-medium', low: 'priority-low' };
     function row(t) {
       return '<div class="todo-item' + (t.completed ? ' done' : '') + '">' +
-        '<button type="button" class="todo-check" data-action="toggle" data-id="' + t.id + '" aria-label="完成"><svg class="icon icon-sm"><use href="assets/icons.svg#icon-check"></use></svg></button>' +
+        '<button type="button" class="todo-check" data-action="toggle" data-id="' + t.id + '" aria-label="完成"><svg class="icon icon-sm"><use href="#icon-check"></use></svg></button>' +
         '<span class="todo-title">' + esc(t.title) + '</span>' +
         '<span class="todo-priority ' + cls[t.priority] + '">' + label[t.priority] + '</span>' +
         '<span class="todo-date">' + fmtDate(t.dueDate) + '</span>' +
-        '<button type="button" class="todo-del" data-action="delete" data-id="' + t.id + '" aria-label="删除"><svg class="icon icon-sm"><use href="assets/icons.svg#icon-trash"></use></svg></button>' +
+        '<button type="button" class="todo-del" data-action="delete" data-id="' + t.id + '" aria-label="删除"><svg class="icon icon-sm"><use href="#icon-trash"></use></svg></button>' +
         '</div>';
     }
     let html = '<div class="section-head"><span class="section-count">' + inc.length + ' 项未完成</span>' +
-      '<div class="section-btns"><button type="button" class="btn btn-primary btn-sm" data-action="new-todo"><svg class="icon icon-sm"><use href="assets/icons.svg#icon-plus"></use></svg>新建待办</button></div></div>';
+      '<div class="section-btns"><button type="button" class="btn btn-primary btn-sm" data-action="new-todo"><svg class="icon icon-sm"><use href="#icon-plus"></use></svg>新建待办</button></div></div>';
     if (!c.todos.length) {
-      html += '<div class="empty"><svg class="icon"><use href="assets/icons.svg#icon-list"></use></svg><p>还没有待办</p></div>';
+      html += '<div class="empty"><svg class="icon"><use href="#icon-list"></use></svg><p>还没有待办</p></div>';
     } else {
       if (inc.length) html += '<div class="todo-group"><div class="todo-group-label">未完成</div>' + inc.map(row).join('') + '</div>';
       if (cmp.length) html += '<div class="todo-group"><div class="todo-group-label">已完成</div>' + cmp.map(row).join('') + '</div>';
@@ -753,7 +869,7 @@
       '<div class="rec-text" id="recText"></div>' +
       '<div class="rec-controls">' +
       '<button type="button" class="btn btn-secondary" id="btnPause" data-action="pause">暂停</button>' +
-      '<button type="button" class="btn btn-danger" data-action="stop"><svg class="icon icon-sm"><use href="assets/icons.svg#icon-mic"></use></svg>停止</button>' +
+      '<button type="button" class="btn btn-danger" data-action="stop"><svg class="icon icon-sm"><use href="#icon-mic"></use></svg>停止</button>' +
       '</div></div>';
   }
   function openNoteModalForRecording(text) {
