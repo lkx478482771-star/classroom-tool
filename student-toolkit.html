@@ -2,9 +2,8 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="x-dns-prefetch-control" content="off">
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="安大学生工具箱：绩点计算、考试倒计时、时钟与校历。">
 <title>安大学生工具箱</title>
 <style>
 /* === Design System === */
@@ -54,6 +53,7 @@ body {
 .nav a:hover { color: var(--pri) }
 .nav a:hover::after { width: 28px }
 .nav a.active { color: var(--pri); font-weight: 620 }
+.nav a:focus-visible { outline: 2px solid var(--pri); outline-offset: -2px }
 
 /* === Layout === */
 .container { max-width: 680px; margin: 0 auto; padding: 78px 20px 40px }
@@ -97,6 +97,7 @@ body {
 }
 .btn:hover { transform: translateY(-1px) }
 .btn:active { transform: translateY(0); transition: none }
+.btn:focus-visible { outline: 2px solid var(--pri); outline-offset: 2px }
 .btn-primary {
   background: linear-gradient(135deg, var(--pri), #7c3aed);
   color: #fff; box-shadow: 0 2px 8px rgba(99,102,241,.25);
@@ -115,11 +116,12 @@ body {
 .btn-sm { padding: 6px 13px; font-size: 11.5px; border-radius: var(--rad-xs) }
 
 /* === Course Table === */
+.table-wrap { overflow-x: auto }
 .course-table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 13px }
 .course-table th {
   text-align: left; padding: 8px 10px; color: var(--tx3);
   font-weight: 600; font-size: 10.5px; text-transform: uppercase;
-  letter-spacing: .6px; border-bottom: 1.5px solid var(--brd);
+  border-bottom: 1.5px solid var(--brd);
 }
 .course-table td {
   padding: 8px 10px; border-bottom: 1px solid var(--brd2);
@@ -132,8 +134,10 @@ body {
   border-radius: 6px; outline: none; transition: all .15s;
 }
 .course-table input:focus { background: var(--pri3) }
+.course-table input:focus-visible { outline: 2px solid var(--pri); outline-offset: 1px }
 
 /* === GPA Result === */
+.result-actions { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap }
 .result-box {
   padding: 18px 22px;
   background: linear-gradient(135deg, var(--pri3), rgba(124,58,237,.04));
@@ -141,13 +145,22 @@ body {
   display: flex; align-items: center; gap: 20px;
   border: 1px solid rgba(99,102,241,.1);
 }
+.result-box[hidden] { display: none }
 .result-value { font-size: 34px; font-weight: 800; color: var(--pri); line-height: 1 }
 .result-label { font-size: 11px; color: var(--tx3); margin-top: 2px }
+
+/* === Details === */
+.details-box { margin-top: 12px }
+.details-summary { font-size: 12px; color: var(--tx3); cursor: pointer }
+.rule-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 8px }
+.rule-table td { padding: 5px 9px; border-bottom: 1px solid var(--brd2); color: var(--tx2) }
+.rule-note { font-size: 11px; color: var(--tx3); margin-top: 4px }
 
 /* === Quick Buttons === */
 .quick-btns { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px }
 
 /* === Countdown === */
+.countdown-form { margin-top: 12px }
 .countdown-item {
   display: flex; align-items: center; gap: 12px;
   padding: 13px 16px; background: #f9fafb;
@@ -156,6 +169,7 @@ body {
 }
 .countdown-item:hover { background: #fff; border-color: rgba(99,102,241,.15) }
 .countdown-item.expire { background: #fef2f2 }
+.countdown-item .btn { flex-shrink: 0 }
 .countdown-name { flex: 1; font-weight: 600; font-size: 14px; color: var(--txt) }
 .countdown-time {
   font-size: 19px; font-weight: 700; color: var(--pri);
@@ -166,25 +180,23 @@ body {
 .clock-display { text-align: center; padding: 18px 0 }
 .clock-time {
   font-size: 52px; font-weight: 800; color: var(--txt);
-  letter-spacing: 2px; font-variant-numeric: tabular-nums;
+  font-variant-numeric: tabular-nums;
 }
 .clock-date { font-size: 14px; color: var(--tx3); margin-top: 6px; font-weight: 500 }
-
-/* === Rules Table === */
-.rule-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 8px }
-.rule-table td { padding: 5px 9px; border-bottom: 1px solid var(--brd2); color: var(--tx2) }
 
 /* === Back to Top === */
 .back-top {
   position: fixed; bottom: 22px; right: 22px;
   width: 42px; height: 42px; background: var(--pri);
   color: #fff; border: none; border-radius: 50%;
-  cursor: pointer; font-size: 18px; display: none;
+  cursor: pointer; font-size: 18px; display: flex;
   align-items: center; justify-content: center;
   box-shadow: 0 2px 12px rgba(99,102,241,.3);
   transition: all .25s; z-index: 99;
 }
+.back-top[hidden] { display: none }
 .back-top:hover { transform: translateY(-3px); box-shadow: 0 4px 18px rgba(99,102,241,.4) }
+.back-top:focus-visible { outline: 2px solid var(--pri); outline-offset: 3px }
 
 /* === Toast === */
 .toast {
@@ -210,6 +222,13 @@ body {
   transition: all .15s; border: 1px solid transparent;
 }
 .tool-card:hover { border-color: rgba(99,102,241,.1); background: #fff }
+.tool-link {
+  font-weight: 600; color: var(--pri); text-decoration: none;
+  margin-left: 4px;
+}
+.tool-link:hover { text-decoration: underline }
+.tool-link:focus-visible { outline: 2px solid var(--pri); outline-offset: 2px }
+.tool-desc { font-size: 13px; color: #666; margin-top: 4px }
 
 /* === Timeline Calendar === */
 .tl-wrap { position: relative }
@@ -228,6 +247,7 @@ body {
   background: linear-gradient(135deg, var(--pri), #7c3aed);
   color: #fff; box-shadow: 0 3px 12px rgba(99,102,241,.28);
 }
+.tl-tabs button:focus-visible { outline: 2px solid var(--pri); outline-offset: 2px }
 .tl-now {
   background: linear-gradient(135deg, var(--pri), #8b5cf6);
   color: #fff; padding: 10px 16px; border-radius: var(--rad-sm);
@@ -293,6 +313,17 @@ body {
 .site-footer a { color: var(--pri); text-decoration: none; font-weight: 500 }
 .site-footer a:hover { text-decoration: underline }
 
+/* === Utility === */
+.empty-state {
+  padding: 18px 12px; color: var(--tx3);
+  font-size: 12.5px; text-align: center;
+}
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}
+
 /* === Mobile === */
 @media (max-width: 600px) {
   .container { padding: 70px 12px 28px }
@@ -312,38 +343,38 @@ body {
 </style>
 </head>
 <body>
-<nav class="nav">
-    <a href="https://lkx478482771-star.github.io/classroom-tool/">课堂笔记</a>
-            <a href="#gpa" class="active">绩点计算器</a>
-    <a href="#countdown">倒计时</a>
-    <a href="#clock">时钟</a>
-    <a href="#calendar">校历</a>
-            <a href="#tools">学习导航</a>
+<nav class="nav" aria-label="页面导航">
+  <a href="https://lkx478482771-star.github.io/classroom-tool/">课堂笔记</a>
+  <a href="#gpa" class="active">绩点计算器</a>
+  <a href="#countdown">倒计时</a>
+  <a href="#clock">时钟</a>
+  <a href="#calendar">校历</a>
+  <a href="#tools">学习导航</a>
 </nav>
 <div class="container">
 <section class="section" id="gpa">
 <div class="card">
 <h2>绩点计算器</h2>
-<div id="courseList"></div>
-<div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
-<button class="btn btn-outline btn-sm" onclick="addCourse()">+ 添加课程</button>
-<button class="btn btn-primary btn-sm" onclick="calcGPA()">计算绩点</button>
-<button class="btn btn-danger btn-sm" onclick="clearCourses()">清空</button>
-<button class="btn btn-outline btn-sm" onclick="exportCourses()">导出</button>
+<div class="table-wrap" id="courseList"></div>
+<div class="result-actions" id="gpaActions">
+<button type="button" class="btn btn-outline btn-sm" data-action="add-course">+ 添加课程</button>
+<button type="button" class="btn btn-primary btn-sm" data-action="calc-gpa">计算绩点</button>
+<button type="button" class="btn btn-danger btn-sm" data-action="clear-courses">清空</button>
+<button type="button" class="btn btn-outline btn-sm" data-action="export-courses">导出</button>
 </div>
-<div class="result-box" id="gpaResult" style="display:none">
+<div class="result-box" id="gpaResult" hidden>
 <div><div class="result-value" id="gpaValue">0.00</div><div class="result-label">加权平均绩点</div></div>
 <div><div class="result-value" id="gpaTotal">0</div><div class="result-label">总学分</div></div>
 </div>
-<details style="margin-top:12px">
-<summary style="font-size:12px;color:#949bac;cursor:pointer">安大绩点换算规则</summary>
+<details class="details-box">
+<summary class="details-summary">安大绩点换算规则</summary>
 <table class="rule-table">
 <tr><td>90-100</td><td>4.0</td><td>85-89</td><td>3.7</td><td>82-84</td><td>3.3</td></tr>
 <tr><td>78-81</td><td>3.0</td><td>75-77</td><td>2.7</td><td>72-74</td><td>2.3</td></tr>
 <tr><td>68-71</td><td>2.0</td><td>64-67</td><td>1.5</td><td>60-63</td><td>1.0</td></tr>
 <tr><td>&lt;60</td><td>0</td></tr>
 </table>
-<p style="font-size:11px;color:#949bac;margin-top:4px">当前采用安徽大学成绩-绩点换算规则，其他学校请自行核对。</p>
+<p class="rule-note">当前采用安徽大学成绩-绩点换算规则，其他学校请自行核对。</p>
 </details>
 </div>
 </section>
@@ -351,18 +382,20 @@ body {
 <section class="section" id="countdown">
 <div class="card">
 <h2>倒计时</h2>
-<div class="quick-btns">
-<button class="btn btn-outline btn-sm" onclick="quickAdd('英语四六级','2026-12-19')">四六级</button>
-<button class="btn btn-outline btn-sm" onclick="quickAdd('期末考试','2027-01-15')">期末</button>
-<button class="btn btn-outline btn-sm" onclick="quickAdd('考研','2026-12-26')">考研</button>
-<button class="btn btn-outline btn-sm" onclick="quickAdd('开学','2027-02-20')">开学</button>
+<div class="quick-btns" id="quickBtns">
+<button type="button" class="btn btn-outline btn-sm" data-action="quick-add" data-name="英语四六级" data-date="2026-12-19">四六级</button>
+<button type="button" class="btn btn-outline btn-sm" data-action="quick-add" data-name="期末考试" data-date="2027-01-15">期末</button>
+<button type="button" class="btn btn-outline btn-sm" data-action="quick-add" data-name="考研" data-date="2026-12-26">考研</button>
+<button type="button" class="btn btn-outline btn-sm" data-action="quick-add" data-name="开学" data-date="2027-02-20">开学</button>
 </div>
 <div id="countdownList"></div>
-<div class="input-row" style="margin-top:12px">
-<input id="cdName" placeholder="事件名称">
+<form class="input-row countdown-form" id="countdownForm">
+<label class="visually-hidden" for="cdName">事件名称</label>
+<input id="cdName" placeholder="事件名称" autocomplete="off">
+<label class="visually-hidden" for="cdDate">日期</label>
 <input id="cdDate" type="date">
-<button class="btn btn-primary btn-sm" onclick="addCountdown()">添加</button>
-</div>
+<button type="submit" class="btn btn-primary btn-sm">添加</button>
+</form>
 </div>
 </section>
 
@@ -376,7 +409,28 @@ body {
 </div>
 </section>
 
-<section class="section" id="calendar"><div class="card"><h2>校历</h2><div class="tl-wrap"><div class="tl-tabs"><button class="act" onclick="switchSem('fall',this)">秋季学期 9月-1月</button><button onclick="switchSem('spring',this)">春季学期 2月-7月</button></div><div class="tl-now" id="calNow"><span style="opacity:.85">今天</span> <span class="bdg" id="calNowDate">--</span> <span style="opacity:.85;margin-left:4px">|</span> <span id="calNowSem">秋季学期</span> <span style="opacity:.85;margin-left:4px">|</span> <span id="calNowEvent">--</span></div><div id="calFall"><div class="tl"><div class="tl-mo"><span class="tl-dot"></span><div class="tl-mhd"><span class="tl-mn">9月 启程</span><span class="tl-mw">第1-4周</span></div><div class="tl-ev"><span class="d i"></span><span class="n">本科/研究生新生报到注册</span><span class="dt">9月1-2日</span><span class="tg ti">重要</span></div><div class="tl-ev"><span class="d r"></span><span class="n">老生报到注册</span><span class="dt">9月2日</span></div><div class="tl-ev"><span class="d i"></span><span class="n">正式上课</span><span class="dt">9月4日</span><span class="tg ti">重要</span></div></div><div class="tl-mo"><span class="tl-dot ho"></span><div class="tl-mhd"><span class="tl-mn">10月 国庆</span><span class="tl-mw">第5-8周</span></div><div class="tl-ev"><span class="d h"></span><span class="n">国庆节+中秋节放假</span><span class="dt">10月1-8日</span><span class="tg th">假期</span></div><div class="tl-ev"><span class="d e"></span><span class="n">英语四六级考试报名</span><span class="dt">10月中旬</span><span class="tg te">考试</span></div></div><div class="tl-mo"><span class="tl-dot ex"></span><div class="tl-mhd"><span class="tl-mn">11月 期中</span><span class="tl-mw">第9-12周</span></div><div class="tl-ev"><span class="d e"></span><span class="n">期中教学检查 / 期中考试</span><span class="dt">第10-11周</span><span class="tg te">考试</span></div></div><div class="tl-mo"><span class="tl-dot ex"></span><div class="tl-mhd"><span class="tl-mn">12月 冲刺</span><span class="tl-mw">第13-16周</span></div><div class="tl-ev"><span class="d e"></span><span class="n">全国大学英语四六级笔试</span><span class="dt">12月中旬</span><span class="tg te">考试</span></div><div class="tl-ev"><span class="d e"></span><span class="n">全国硕士研究生招生考试</span><span class="dt">12月下旬</span><span class="tg te">考试</span></div><div class="tl-ev"><span class="d h"></span><span class="n">元旦放假</span><span class="dt">1月1日</span><span class="tg th">假期</span></div></div><div class="tl-mo"><span class="tl-dot ho"></span><div class="tl-mhd"><span class="tl-mn">1月 收官</span><span class="tl-mw">第17-20周</span></div><div class="tl-ev"><span class="d e"></span><span class="n">期末考试周</span><span class="dt">第18-19周</span><span class="tg te">考试</span></div><div class="tl-ev"><span class="d h"></span><span class="n">寒假开始</span><span class="dt">1月中下旬</span><span class="tg th">假期</span></div></div></div></div><div id="calSpring" style="display:none"><div class="tl"><div class="tl-mo"><span class="tl-dot"></span><div class="tl-mhd"><span class="tl-mn">2月 归来</span><span class="tl-mw">第1-2周</span></div><div class="tl-ev"><span class="d i"></span><span class="n">春季学期报到注册</span><span class="dt">2月下旬</span><span class="tg ti">重要</span></div><div class="tl-ev"><span class="d r"></span><span class="n">正式上课</span><span class="dt">报到后第一个工作日</span></div></div><div class="tl-mo"><span class="tl-dot"></span><div class="tl-mhd"><span class="tl-mn">3月 播种</span><span class="tl-mw">第3-6周</span></div><div class="tl-ev"><span class="d r"></span><span class="n">正常教学</span><span class="dt">3月全月</span></div></div><div class="tl-mo"><span class="tl-dot ho"></span><div class="tl-mhd"><span class="tl-mn">4月 清明</span><span class="tl-mw">第7-10周</span></div><div class="tl-ev"><span class="d h"></span><span class="n">清明节放假</span><span class="dt">4月4-6日</span><span class="tg th">假期</span></div><div class="tl-ev"><span class="d e"></span><span class="n">期中教学检查</span><span class="dt">第9-10周</span></div></div><div class="tl-mo"><span class="tl-dot ho"></span><div class="tl-mhd"><span class="tl-mn">5月 劳动</span><span class="tl-mw">第11-14周</span></div><div class="tl-ev"><span class="d h"></span><span class="n">劳动节放假</span><span class="dt">5月1-5日</span><span class="tg th">假期</span></div><div class="tl-ev"><span class="d e"></span><span class="n">四六级口语考试</span><span class="dt">5月下旬</span></div></div><div class="tl-mo"><span class="tl-dot ex"></span><div class="tl-mhd"><span class="tl-mn">6月 奋战</span><span class="tl-mw">第15-18周</span></div><div class="tl-ev"><span class="d e"></span><span class="n">全国大学英语四六级笔试</span><span class="dt">6月中旬</span><span class="tg te">考试</span></div><div class="tl-ev"><span class="d h"></span><span class="n">端午节放假</span><span class="dt">农历五月初五</span><span class="tg th">假期</span></div><div class="tl-ev"><span class="d i"></span><span class="n">毕业生离校相关事宜</span><span class="dt">6月下旬</span></div></div><div class="tl-mo"><span class="tl-dot ho"></span><div class="tl-mhd"><span class="tl-mn">7-8月 收获</span><span class="tl-mw">第19-20周</span></div><div class="tl-ev"><span class="d e"></span><span class="n">期末考试周</span><span class="dt">第19-20周</span><span class="tg te">考试</span></div><div class="tl-ev"><span class="d h"></span><span class="n">暑假</span><span class="dt">7月中旬起</span><span class="tg th">假期</span></div></div></div></div></div></div></section>
+<section class="section" id="calendar">
+<div class="card">
+<h2>校历</h2>
+<div class="tl-wrap">
+<div class="tl-tabs" id="calendarTabs" role="tablist" aria-label="选择学期">
+<button type="button" class="act" role="tab" aria-selected="true" data-sem="fall">秋季学期 9月-1月</button>
+<button type="button" role="tab" aria-selected="false" data-sem="spring">春季学期 2月-7月</button>
+</div>
+<div class="tl-now" id="calNow">
+<span style="opacity:.85">今天</span>
+<span class="bdg" id="calNowDate">--</span>
+<span style="opacity:.85;margin-left:4px">|</span>
+<span id="calNowSem">秋季学期</span>
+<span style="opacity:.85;margin-left:4px">|</span>
+<span id="calNowEvent">--</span>
+</div>
+<div id="calFall" role="tabpanel"></div>
+<div id="calSpring" role="tabpanel" hidden></div>
+</div>
+</div>
+</section>
+
 <section class="section" id="tools">
 <div class="card">
 <h2>学习导航</h2>
@@ -385,246 +439,654 @@ body {
 </section>
 </div>
 
-<button class="back-top" id="backTop" onclick="scrollToTop()">↑</button>
-<div class="toast" id="toast"></div>
+<button type="button" class="back-top" id="backTop" aria-label="回到顶部" hidden>↑</button>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<footer style="text-align:center;padding:30px 10px;color:#949bac;font-size:12px;">
+<footer class="site-footer">
 安大学生工具箱 · 开源学生项目
-<a style="color:#6366f1" href="https://github.com/lkx478482771-star/classroom-tool" target="_blank">Github仓库</a>
+<a href="https://github.com/lkx478482771-star/classroom-tool" target="_blank" rel="noopener noreferrer">Github仓库</a>
 欢迎提交建议
 </footer>
 
 <script>
-// ========= Toast 提示 =========
-const toast = document.getElementById('toast')
-function showToast(msg, err=false){
-    toast.textContent = msg
-    toast.classList.add('show')
-    if(err) toast.classList.add('error')
-    setTimeout(()=>{
-        toast.classList.remove('show','error')
-    }, 2200)
-}
+(function () {
+  'use strict';
 
-// ========= 导航滚动高亮 =========
-const sections = document.querySelectorAll('.section')
-const navLinks = document.querySelectorAll('.nav a')
-window.addEventListener('scroll',()=>{
-    let cur=''
-    sections.forEach(sec=>{
-        const top = sec.offsetTop
-        if(window.scrollY >= top - 120) cur = sec.getAttribute('id')
-    })
-    navLinks.forEach(link=>{
-        link.classList.remove('active')
-        if(link.getAttribute('href')==`#${cur}`) link.classList.add('active')
-    })
-    // 回到顶部按钮
-    const topBtn = document.getElementById('backTop')
-    topBtn.style.display = window.scrollY>300 ? 'flex':'none'
-})
-function scrollToTop(){
-    window.scrollTo({top:0,behavior:'smooth'})
-}
+  // ========= 工具函数 =========
+  const STORAGE = { courses: 'courseData', countdowns: 'cdData' };
 
-// ========= 绩点模块 =========
-let courses = JSON.parse(localStorage.getItem('courseData')) || []
-const gpaRule = {
-    '90':4.0,'85':3.7,'82':3.3,'78':3.0,'75':2.7,'72':2.3,'68':2.0,'64':1.5,'60':1.0
-}
-function scoreToGpa(s){
-    let score = Number(s)
-    if(score<60) return 0
-    if(score>=90) return 4.0
-    if(score>=85) return 3.7
-    if(score>=82) return 3.3
-    if(score>=78) return 3.0
-    if(score>=75) return 2.7
-    if(score>=72) return 2.3
-    if(score>=68) return 2.0
-    if(score>=64) return 1.5
-    return 1.0
-}
-function saveCourses(){
-    localStorage.setItem('courseData', JSON.stringify(courses))
-}
-function addCourse(){
-    courses.push({name:'',score:'',credit:''})
-    renderCourse()
-}
-function delCourse(i){
-    courses.splice(i,1)
-    saveCourses()
-    renderCourse()
-    showToast('已删除课程')
-}
-function renderCourse(){
-    const wrap = document.getElementById('courseList')
-    let html = '<table class="course-table"><thead><tr><th>课程名</th><th>成绩</th><th>学分</th><th>操作</th></tr></thead><tbody>'
-    courses.forEach((item,idx)=>{
-        html += `
-        <tr>
-        <td><input value="${item.name||''}" onchange="updateCourse(${idx},'name',this.value)"></td>
-        <td><input type="number" min="0" max="100" value="${item.score||''}" onchange="updateCourse(${idx},'score',this.value)"></td>
-        <td><input type="number" step="0.5" min="0" value="${item.credit||''}" onchange="updateCourse(${idx},'credit',this.value)"></td>
-        <td><button class="btn btn-danger btn-sm" onclick="delCourse(${idx})">删除</button></td>
-        </tr>`
-    })
-    html += '</tbody></table>'
-    wrap.innerHTML = html
-}
-function updateCourse(idx,key,val){
-    courses[idx][key] = val
-    saveCourses()
-}
-function calcGPA(){
-    let totalCredit = 0, totalGpa = 0
-    for(let c of courses){
-        let s = Number(c.score), cr = Number(c.credit)
-        if(isNaN(s)||isNaN(cr)||cr<=0){
-            showToast('请填写完整成绩与学分',true)
-            return
+  function $(id) {
+    return document.getElementById(id);
+  }
+
+  function el(tag, attrs, children) {
+    const node = document.createElement(tag);
+    if (attrs) {
+      Object.keys(attrs).forEach(function (key) {
+        const value = attrs[key];
+        if (key === 'className') node.className = value;
+        else if (key === 'textContent') node.textContent = value;
+        else if (key === 'dataset') Object.assign(node.dataset, value);
+        else if (key === 'hidden') node.hidden = !!value;
+        else node.setAttribute(key, String(value));
+      });
+    }
+    (children || []).forEach(function (child) {
+      if (child) node.appendChild(child);
+    });
+    return node;
+  }
+
+  function clearNode(node) {
+    while (node.firstChild) node.removeChild(node.firstChild);
+  }
+
+  function loadList(key) {
+    try {
+      const data = JSON.parse(localStorage.getItem(key));
+      return Array.isArray(data) ? data : [];
+    } catch (err) {
+      return [];
+    }
+  }
+
+  function saveList(key, list) {
+    try {
+      localStorage.setItem(key, JSON.stringify(list));
+    } catch (err) {
+      showToast('本地存储不可用', true);
+    }
+  }
+
+  // ========= Toast 提示 =========
+  const toast = $('toast');
+  let toastTimer = null;
+
+  function showToast(message, isError) {
+    toast.textContent = message;
+    toast.classList.toggle('error', !!isError);
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () {
+      toast.classList.remove('show', 'error');
+    }, 2200);
+  }
+
+  // ========= 日期处理 =========
+  function parseLocalDate(value) {
+    const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(value).trim());
+    if (!match) return null;
+    const year = Number(match[1]);
+    const month = Number(match[2]);
+    const day = Number(match[3]);
+    const date = new Date(year, month - 1, day);
+    if (date.getFullYear() !== year || date.getMonth() !== month - 1 || date.getDate() !== day) {
+      return null;
+    }
+    return date;
+  }
+
+  // ========= 导航滚动高亮 =========
+  const sections = Array.from(document.querySelectorAll('.section'));
+  const navLinks = Array.from(document.querySelectorAll('.nav a[href^="#"]'));
+  const backTop = $('backTop');
+  let scrollRaf = null;
+
+  window.addEventListener('scroll', function () {
+    if (scrollRaf) return;
+    scrollRaf = requestAnimationFrame(function () {
+      scrollRaf = null;
+      const scrollY = window.scrollY;
+      backTop.hidden = scrollY <= 300;
+      let current = '';
+      sections.forEach(function (section) {
+        if (scrollY >= section.offsetTop - 120) current = section.id;
+      });
+      navLinks.forEach(function (link) {
+        link.classList.toggle('active', link.getAttribute('href') === '#' + current);
+      });
+    });
+  }, { passive: true });
+
+  backTop.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  // ========= 绩点模块 =========
+  const gpaSteps = [90, 85, 82, 78, 75, 72, 68, 64, 60];
+  const gpaValues = [4.0, 3.7, 3.3, 3.0, 2.7, 2.3, 2.0, 1.5, 1.0];
+
+  function normalizeCourse(item) {
+    return {
+      name: String((item && item.name) || '').slice(0, 120),
+      score: String((item && item.score) || ''),
+      credit: String((item && item.credit) || '')
+    };
+  }
+
+  const courseState = loadList(STORAGE.courses).map(normalizeCourse);
+  const courseListEl = $('courseList');
+  const gpaResult = $('gpaResult');
+
+  function scoreToGpa(score) {
+    if (score < 60) return 0;
+    for (let i = 0; i < gpaSteps.length; i += 1) {
+      if (score >= gpaSteps[i]) return gpaValues[i];
+    }
+    return 1.0;
+  }
+
+  function renderCourses() {
+    clearNode(courseListEl);
+    if (courseState.length === 0) {
+      courseListEl.appendChild(el('p', { className: 'empty-state', textContent: '还没有课程，点击“添加课程”开始' }));
+      return;
+    }
+
+    const table = el('table', { className: 'course-table' });
+    const thead = el('thead');
+    const headRow = el('tr');
+    ['课程名', '成绩', '学分', '操作'].forEach(function (title) {
+      headRow.appendChild(el('th', { scope: 'col', textContent: title }));
+    });
+    thead.appendChild(headRow);
+    table.appendChild(thead);
+
+    const tbody = el('tbody');
+    courseState.forEach(function (item, index) {
+      const row = el('tr');
+      const nameCell = el('td');
+      nameCell.appendChild(el('input', {
+        type: 'text',
+        value: item.name,
+        'aria-label': '课程名称 ' + (index + 1),
+        dataset: { index: index, field: 'name' }
+      }));
+      const scoreCell = el('td');
+      scoreCell.appendChild(el('input', {
+        type: 'number', min: '0', max: '100', step: '1',
+        value: item.score,
+        'aria-label': '成绩 ' + (index + 1),
+        dataset: { index: index, field: 'score' }
+      }));
+      const creditCell = el('td');
+      creditCell.appendChild(el('input', {
+        type: 'number', min: '0', step: '0.5',
+        value: item.credit,
+        'aria-label': '学分 ' + (index + 1),
+        dataset: { index: index, field: 'credit' }
+      }));
+      const actionCell = el('td');
+      actionCell.appendChild(el('button', {
+        type: 'button',
+        className: 'btn btn-danger btn-sm',
+        textContent: '删除',
+        dataset: { action: 'delete-course', index: index }
+      }));
+      row.appendChild(nameCell);
+      row.appendChild(scoreCell);
+      row.appendChild(creditCell);
+      row.appendChild(actionCell);
+      tbody.appendChild(row);
+    });
+    table.appendChild(tbody);
+    courseListEl.appendChild(table);
+  }
+
+  function addCourse() {
+    courseState.push({ name: '', score: '', credit: '' });
+    saveList(STORAGE.courses, courseState);
+    renderCourses();
+    const nameInputs = courseListEl.querySelectorAll('input[data-field="name"]');
+    if (nameInputs.length) nameInputs[nameInputs.length - 1].focus();
+  }
+
+  function calcGPA() {
+    let totalCredit = 0;
+    let totalGpa = 0;
+    let hasValidRow = false;
+    const invalidLabels = [];
+
+    courseState.forEach(function (item, index) {
+      const scoreText = String(item.score).trim();
+      const creditText = String(item.credit).trim();
+      const isEmpty = !String(item.name).trim() && !scoreText && !creditText;
+      if (isEmpty) return;
+
+      hasValidRow = true;
+      const label = String(item.name).trim() || ('第 ' + (index + 1) + ' 行');
+      const score = Number(scoreText);
+      const credit = Number(creditText);
+
+      if (!scoreText || !creditText || !isFinite(score) || score < 0 || score > 100 || !isFinite(credit) || credit <= 0) {
+        invalidLabels.push(label);
+        return;
+      }
+      totalCredit += credit;
+      totalGpa += scoreToGpa(score) * credit;
+    });
+
+    if (invalidLabels.length) {
+      showToast('“' + invalidLabels.join('、') + '”成绩或学分无效', true);
+      return;
+    }
+    if (!hasValidRow || totalCredit === 0) {
+      showToast('暂无有效课程', true);
+      return;
+    }
+
+    $('gpaValue').textContent = (totalGpa / totalCredit).toFixed(2);
+    $('gpaTotal').textContent = totalCredit;
+    gpaResult.hidden = false;
+    gpaResult.scrollIntoView({ behavior: 'smooth' });
+    showToast('绩点计算完成');
+  }
+
+  function clearCourses() {
+    if (courseState.length === 0) {
+      showToast('暂无课程可清空', true);
+      return;
+    }
+    if (!confirm('确定清空全部课程？')) return;
+    courseState.length = 0;
+    saveList(STORAGE.courses, courseState);
+    gpaResult.hidden = true;
+    renderCourses();
+    showToast('已清空');
+  }
+
+  function copyText(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      return navigator.clipboard.writeText(text);
+    }
+    return new Promise(function (resolve, reject) {
+      const textarea = el('textarea', { value: text, 'aria-hidden': 'true' });
+      textarea.style.position = 'fixed';
+      textarea.style.opacity = '0';
+      document.body.appendChild(textarea);
+      textarea.select();
+      let ok = false;
+      try {
+        ok = document.execCommand('copy');
+      } catch (err) {
+        ok = false;
+      }
+      document.body.removeChild(textarea);
+      if (ok) resolve();
+      else reject(new Error('copy failed'));
+    });
+  }
+
+  function exportCourses() {
+    const text = courseState
+      .map(function (item) {
+        return item.name + ' ' + item.score + '分 ' + item.credit + '学分';
+      })
+      .join('\n');
+    if (!text.trim()) {
+      showToast('暂无可导出的课程', true);
+      return;
+    }
+    copyText(text).then(function () {
+      showToast('课程信息已复制剪贴板');
+    }, function () {
+      showToast('复制失败，请手动复制', true);
+    });
+  }
+
+  courseListEl.addEventListener('change', function (event) {
+    const input = event.target;
+    if (input.dataset.index === undefined || !input.dataset.field) return;
+    const index = Number(input.dataset.index);
+    if (!Number.isInteger(index) || !courseState[index]) return;
+    courseState[index][input.dataset.field] = input.value;
+    saveList(STORAGE.courses, courseState);
+  });
+
+  courseListEl.addEventListener('click', function (event) {
+    const button = event.target.closest('button[data-action="delete-course"]');
+    if (!button) return;
+    const index = Number(button.dataset.index);
+    if (!Number.isInteger(index) || !courseState[index]) return;
+    courseState.splice(index, 1);
+    saveList(STORAGE.courses, courseState);
+    renderCourses();
+    showToast('已删除课程');
+  });
+
+  $('gpaActions').addEventListener('click', function (event) {
+    const button = event.target.closest('button[data-action]');
+    if (!button) return;
+    const action = button.dataset.action;
+    if (action === 'add-course') addCourse();
+    else if (action === 'calc-gpa') calcGPA();
+    else if (action === 'clear-courses') clearCourses();
+    else if (action === 'export-courses') exportCourses();
+  });
+
+  // ========= 倒计时模块 =========
+  function normalizeCountdown(item) {
+    return {
+      name: String((item && item.name) || '').slice(0, 80),
+      date: String((item && item.date) || '')
+    };
+  }
+
+  const countdownState = loadList(STORAGE.countdowns)
+    .map(normalizeCountdown)
+    .filter(function (item) { return item.name && parseLocalDate(item.date); });
+  const countdownListEl = $('countdownList');
+
+  function renderCountdowns() {
+    clearNode(countdownListEl);
+    if (countdownState.length === 0) {
+      countdownListEl.appendChild(el('p', { className: 'empty-state', textContent: '暂无倒计时，点击快捷按钮或填写下方表单添加' }));
+      return;
+    }
+
+    const now = new Date();
+    countdownState.forEach(function (item, index) {
+      const target = parseLocalDate(item.date);
+      const diff = target ? target - now : NaN;
+      let timeText = '日期无效';
+      let isExpired = false;
+
+      if (isFinite(diff) && diff <= 0) {
+        timeText = '已到期';
+        isExpired = true;
+      } else if (isFinite(diff)) {
+        const day = Math.floor(diff / 86400000);
+        const hour = Math.floor((diff % 86400000) / 3600000);
+        const minute = Math.floor((diff % 3600000) / 60000);
+        timeText = day + '天 ' + hour + '时 ' + minute + '分';
+      }
+
+      const row = el('div', { className: 'countdown-item' + (isExpired ? ' expire' : '') });
+      row.appendChild(el('div', { className: 'countdown-name', textContent: item.name }));
+      row.appendChild(el('div', { className: 'countdown-time', textContent: timeText }));
+      row.appendChild(el('button', {
+        type: 'button',
+        className: 'btn btn-danger btn-sm',
+        textContent: '移除',
+        dataset: { action: 'delete-count', index: index }
+      }));
+      countdownListEl.appendChild(row);
+    });
+  }
+
+  function quickAdd(name, date) {
+    const cleanName = String(name || '').trim();
+    if (!cleanName || !parseLocalDate(date)) {
+      showToast('快捷事件数据无效', true);
+      return;
+    }
+    countdownState.push({ name: cleanName, date: String(date) });
+    saveList(STORAGE.countdowns, countdownState);
+    renderCountdowns();
+    showToast('已添加：' + cleanName);
+  }
+
+  function addCountdown() {
+    const nameInput = $('cdName');
+    const dateInput = $('cdDate');
+    const name = nameInput.value.trim();
+    const date = dateInput.value;
+    if (!name || !date) {
+      showToast('填写名称和日期', true);
+      return;
+    }
+    if (!parseLocalDate(date)) {
+      showToast('日期无效', true);
+      return;
+    }
+    countdownState.push({ name: name, date: date });
+    saveList(STORAGE.countdowns, countdownState);
+    renderCountdowns();
+    nameInput.value = '';
+    nameInput.focus();
+  }
+
+  $('quickBtns').addEventListener('click', function (event) {
+    const button = event.target.closest('button[data-action="quick-add"]');
+    if (!button) return;
+    quickAdd(button.dataset.name, button.dataset.date);
+  });
+
+  countdownListEl.addEventListener('click', function (event) {
+    const button = event.target.closest('button[data-action="delete-count"]');
+    if (!button) return;
+    const index = Number(button.dataset.index);
+    if (!Number.isInteger(index) || !countdownState[index]) return;
+    countdownState.splice(index, 1);
+    saveList(STORAGE.countdowns, countdownState);
+    renderCountdowns();
+  });
+
+  $('countdownForm').addEventListener('submit', function (event) {
+    event.preventDefault();
+    addCountdown();
+  });
+
+  // ========= 时钟 =========
+  function pad2(value) {
+    return String(value).padStart(2, '0');
+  }
+
+  function updateClock() {
+    const now = new Date();
+    $('clockTime').textContent = pad2(now.getHours()) + ':' + pad2(now.getMinutes()) + ':' + pad2(now.getSeconds());
+    $('clockDate').textContent = now.toLocaleDateString('zh-CN', {
+      weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+    });
+  }
+
+  // ========= 学习导航内置数据 =========
+  const toolData = [
+    { tag: '英语', name: 'LexiPath词汇旅程', url: 'https://lexipath-vocab-journey.pengyudeng92.chatgpt.site', desc: '网页SRS背单词，无需安装' },
+    { tag: '文献', name: 'SciHub', url: 'https://sci-hub.se', desc: '外文论文免费下载' },
+    { tag: '效率', name: 'Convertio', url: 'https://convertio.co', desc: '任意格式文件互转' },
+    { tag: '笔记', name: 'Notion', url: 'https://www.notion.so', desc: '搭建个人知识库、整理资料' }
+  ];
+
+  function renderTools() {
+    const box = $('toolBox');
+    clearNode(box);
+    toolData.forEach(function (tool) {
+      const card = el('div', { className: 'tool-card' });
+      card.appendChild(el('span', { className: 'tool-tag', textContent: tool.tag }));
+      card.appendChild(el('a', {
+        className: 'tool-link',
+        href: tool.url,
+        target: '_blank',
+        rel: 'noopener noreferrer',
+        textContent: tool.name
+      }));
+      card.appendChild(el('p', { className: 'tool-desc', textContent: tool.desc }));
+      box.appendChild(card);
+    });
+  }
+
+  // ========= 校历 =========
+  const calendarData = {
+    fall: [
+      {
+        title: '9月 启程', weeks: '第1-4周', dot: '',
+        events: [
+          { type: 'i', name: '本科/研究生新生报到注册', date: '9月1-2日', tag: ['重要', 'ti'] },
+          { type: 'r', name: '老生报到注册', date: '9月2日' },
+          { type: 'i', name: '正式上课', date: '9月4日', tag: ['重要', 'ti'] }
+        ]
+      },
+      {
+        title: '10月 国庆', weeks: '第5-8周', dot: 'ho',
+        events: [
+          { type: 'h', name: '国庆节+中秋节放假', date: '10月1-8日', tag: ['假期', 'th'] },
+          { type: 'e', name: '英语四六级考试报名', date: '10月中旬', tag: ['考试', 'te'] }
+        ]
+      },
+      {
+        title: '11月 期中', weeks: '第9-12周', dot: 'ex',
+        events: [
+          { type: 'e', name: '期中教学检查 / 期中考试', date: '第10-11周', tag: ['考试', 'te'] }
+        ]
+      },
+      {
+        title: '12月 冲刺', weeks: '第13-16周', dot: 'ex',
+        events: [
+          { type: 'e', name: '全国大学英语四六级笔试', date: '12月中旬', tag: ['考试', 'te'] },
+          { type: 'e', name: '全国硕士研究生招生考试', date: '12月下旬', tag: ['考试', 'te'] },
+          { type: 'h', name: '元旦放假', date: '1月1日', tag: ['假期', 'th'] }
+        ]
+      },
+      {
+        title: '1月 收官', weeks: '第17-20周', dot: 'ho',
+        events: [
+          { type: 'e', name: '期末考试周', date: '第18-19周', tag: ['考试', 'te'] },
+          { type: 'h', name: '寒假开始', date: '1月中下旬', tag: ['假期', 'th'] }
+        ]
+      }
+    ],
+    spring: [
+      {
+        title: '2月 归来', weeks: '第1-2周', dot: '',
+        events: [
+          { type: 'i', name: '春季学期报到注册', date: '2月下旬', tag: ['重要', 'ti'] },
+          { type: 'r', name: '正式上课', date: '报到后第一个工作日' }
+        ]
+      },
+      {
+        title: '3月 播种', weeks: '第3-6周', dot: '',
+        events: [
+          { type: 'r', name: '正常教学', date: '3月全月' }
+        ]
+      },
+      {
+        title: '4月 清明', weeks: '第7-10周', dot: 'ho',
+        events: [
+          { type: 'h', name: '清明节放假', date: '4月4-6日', tag: ['假期', 'th'] },
+          { type: 'e', name: '期中教学检查', date: '第9-10周' }
+        ]
+      },
+      {
+        title: '5月 劳动', weeks: '第11-14周', dot: 'ho',
+        events: [
+          { type: 'h', name: '劳动节放假', date: '5月1-5日', tag: ['假期', 'th'] },
+          { type: 'e', name: '四六级口语考试', date: '5月下旬' }
+        ]
+      },
+      {
+        title: '6月 奋战', weeks: '第15-18周', dot: 'ex',
+        events: [
+          { type: 'e', name: '全国大学英语四六级笔试', date: '6月中旬', tag: ['考试', 'te'] },
+          { type: 'h', name: '端午节放假', date: '农历五月初五', tag: ['假期', 'th'] },
+          { type: 'i', name: '毕业生离校相关事宜', date: '6月下旬' }
+        ]
+      },
+      {
+        title: '7-8月 收获', weeks: '第19-20周', dot: 'ho',
+        events: [
+          { type: 'e', name: '期末考试周', date: '第19-20周', tag: ['考试', 'te'] },
+          { type: 'h', name: '暑假', date: '7月中旬起', tag: ['假期', 'th'] }
+        ]
+      }
+    ]
+  };
+
+  function renderTimeline(container, months) {
+    clearNode(container);
+    const timeline = el('div', { className: 'tl' });
+    months.forEach(function (month) {
+      const group = el('div', { className: 'tl-mo' });
+      group.appendChild(el('span', { className: 'tl-dot' + (month.dot ? ' ' + month.dot : '') }));
+      const header = el('div', { className: 'tl-mhd' });
+      header.appendChild(el('span', { className: 'tl-mn', textContent: month.title }));
+      header.appendChild(el('span', { className: 'tl-mw', textContent: month.weeks }));
+      group.appendChild(header);
+
+      month.events.forEach(function (event) {
+        const row = el('div', { className: 'tl-ev' });
+        row.appendChild(el('span', { className: 'd ' + event.type }));
+        row.appendChild(el('span', { className: 'n', textContent: event.name }));
+        row.appendChild(el('span', { className: 'dt', textContent: event.date }));
+        if (event.tag) {
+          row.appendChild(el('span', { className: 'tg ' + event.tag[1], textContent: event.tag[0] }));
         }
-        totalCredit += cr
-        totalGpa += scoreToGpa(s)*cr
-    }
-    if(totalCredit===0){
-        showToast('暂无有效课程',true)
-        return
-    }
-    let avg = (totalGpa/totalCredit).toFixed(2)
-    document.getElementById('gpaValue').textContent = avg
-    document.getElementById('gpaTotal').textContent = totalCredit
-    document.getElementById('gpaResult').style.display = 'flex'
-    document.getElementById('gpaResult').scrollIntoView({behavior:'smooth'})
-    showToast('绩点计算完成')
-}
-function clearCourses(){
-    if(confirm('确定清空全部课程？')){
-        courses = []
-        saveCourses()
-        renderCourse()
-        document.getElementById('gpaResult').style.display = 'none'
-        showToast('已清空')
-    }
-}
-function exportCourses(){
-    let txt = courses.map(item=>`${item.name} ${item.score}分 ${item.credit}学分`).join('\n')
-    navigator.clipboard.writeText(txt)
-    showToast('课程信息已复制剪贴板')
-}
-renderCourse()
+        group.appendChild(row);
+      });
+      timeline.appendChild(group);
+    });
+    container.appendChild(timeline);
+  }
 
-// ========= 倒计时模块 =========
-let countList = JSON.parse(localStorage.getItem('cdData'))||[]
-function saveCount(){
-    localStorage.setItem('cdData', JSON.stringify(countList))
-}
-function quickAdd(name,date){
-    countList.push({name,date})
-    saveCount()
-    renderCount()
-}
-function addCountdown(){
-    const n = document.getElementById('cdName').value.trim()
-    const d = document.getElementById('cdDate').value
-    if(!n||!d){
-        showToast('填写名称和日期',true)
-        return
+  let currentSem = 'fall';
+
+  function setSemester(sem) {
+    currentSem = sem === 'spring' ? 'spring' : 'fall';
+    $('calFall').hidden = currentSem !== 'fall';
+    $('calSpring').hidden = currentSem !== 'spring';
+    document.querySelectorAll('#calendarTabs button[data-sem]').forEach(function (button) {
+      const active = button.dataset.sem === currentSem;
+      button.classList.toggle('act', active);
+      button.setAttribute('aria-selected', active ? 'true' : 'false');
+    });
+  }
+
+  function updateCalendarNow() {
+    const now = new Date();
+    const month = now.getMonth() + 1;
+    const day = now.getDate();
+    $('calNowDate').textContent = month + '月' + day + '日';
+
+    const isFall = month >= 9 || month <= 1;
+    $('calNowSem').textContent = isFall ? '秋季学期' : '春季学期';
+    let eventText = '教学进行中';
+    if (isFall) {
+      if (!(month >= 9 && month <= 12)) eventText = '期末考试/寒假';
+    } else if (month >= 6) {
+      eventText = '期末考试/暑假';
     }
-    countList.push({name:n,date:d})
-    saveCount()
-    renderCount()
-    document.getElementById('cdName').value=''
-}
-function delCount(idx){
-    countList.splice(idx,1)
-    saveCount()
-    renderCount()
-}
-function renderCount(){
-    const wrap = document.getElementById('countdownList')
-    let html = ''
-    countList.forEach((item,idx)=>{
-        const target = new Date(item.date)
-        const now = new Date()
-        const diff = target - now
-        let expireClass = ''
-        let timeStr = ''
-        if(diff<=0){
-            timeStr = '已到期'
-            expireClass = 'expire'
-        }else{
-            const day = Math.floor(diff/86400000)
-            const h = Math.floor((diff%86400000)/3600000)
-            const m = Math.floor((diff%3600000)/60000)
-            timeStr = `${day}天 ${h}时 ${m}分`
-        }
-        html += `
-        <div class="countdown-item ${expireClass}">
-        <div class="countdown-name">${item.name}</div>
-        <div class="countdown-time">${timeStr}</div>
-        <button class="btn btn-danger btn-sm" onclick="delCount(${idx})">移除</button>
-        </div>`
-    })
-    wrap.innerHTML = html
-}
-renderCount()
-setInterval(renderCount,60000)
+    $('calNowEvent').textContent = eventText;
 
-// ========= 时钟 =========
-function clock(){
-    const now = new Date()
-    const time = now.toLocaleTimeString('zh-CN',{hour12:false})
-    const date = now.toLocaleDateString('zh-CN',{weekday:'long',year:'numeric',month:'long',day:'numeric'})
-    document.getElementById('clockTime').textContent = time
-    document.getElementById('clockDate').textContent = date
-}
-clock()
-setInterval(clock,1000)
+    const fallDots = document.querySelectorAll('#calFall .tl-dot');
+    const springDots = document.querySelectorAll('#calSpring .tl-dot');
+    fallDots.forEach(function (dot) { dot.classList.remove('nw'); });
+    springDots.forEach(function (dot) { dot.classList.remove('nw'); });
 
-// ========= 学习导航内置数据 =========
-const toolData = [
-    {tag:'英语',name:'LexiPath词汇旅程',url:'https://lexipath-vocab-journey.pengyudeng92.chatgpt.site',desc:'网页SRS背单词，无需安装'},
-    {tag:'文献',name:'SciHub',url:'https://sci-hub.se',desc:'外文论文免费下载'},
-    {tag:'效率',name:'Convertio',url:'https://convertio.co',desc:'任意格式文件互转'},
-    {tag:'笔记',name:'Notion',url:'https://www.notion.so',desc:'搭建个人知识库、整理资料'},
-]
-function renderTool(){
-    const box = document.getElementById('toolBox')
-    let html = ''
-    toolData.forEach(t=>{
-        html += `
-        <div class="tool-card">
-            <span class="tool-tag">${t.tag}</span>
-            <span onclick="window.open(this.dataset.u,'__blank','noopener,noreferrer')" data-u="${t.url}" style="font-weight:600;color:#6366f1;text-decoration:none;cursor:pointer">${t.name}</span>
-            <p style="font-size:13px;color:#666;margin-top:4px">${t.desc}</p>
-        </div>`
-    })
-    box.innerHTML = html
-}
-setTimeout(renderTool, 600)
+    const fallIndex = (month - 9 + 12) % 12;
+    if (month >= 2 && month <= 7 && springDots.length) {
+      springDots[month - 2].classList.add('nw');
+    } else if (fallIndex >= 0 && fallIndex < fallDots.length) {
+      fallDots[fallIndex].classList.add('nw');
+    }
+  }
 
-// ========= 校历 =========
-function switchSem(sem,btn){
-  document.getElementById("calFall").style.display = sem==="fall" ? "" : "none";
-  document.getElementById("calSpring").style.display = sem==="spring" ? "" : "none";
-  document.querySelectorAll(".tl-tabs button").forEach(function(t){ t.classList.remove("act"); });
-  btn.classList.add("act");
-}
-function updateCalNow(){
-  var d=new Date(), m=d.getMonth()+1, day=d.getDate();
-  var cd=document.getElementById("calNowDate"); if(cd) cd.textContent=m+"月"+day+"日";
-  var sem=document.getElementById("calNowSem"), evt=document.getElementById("calNowEvent");
-  if(m>=9||m<=1){ if(sem) sem.textContent="秋季学期"; if(evt) evt.textContent=m>=9&&m<=12?"教学进行中":"期末考试/寒假"; }
-  else{ if(sem) sem.textContent="春季学期"; if(evt) evt.textContent=m>=6?"期末考试/暑假":"教学进行中"; }
-  var fallDots=document.querySelectorAll("#calFall .tl-dot"); fallDots.forEach(function(d){ d.classList.remove("nw"); });
-  var springDots=document.querySelectorAll("#calSpring .tl-dot"); springDots.forEach(function(d){ d.classList.remove("nw"); });
-  var midx=m-9; if(midx<0) midx+=12;
-  if(m>=2&&m<=7&&m-2<springDots.length) springDots[m-2].classList.add("nw");
-  else if(midx>=0&&midx<fallDots.length) fallDots[midx].classList.add("nw");
-}
-updateCalNow();
+  $('calendarTabs').addEventListener('click', function (event) {
+    const button = event.target.closest('button[data-sem]');
+    if (button) setSemester(button.dataset.sem);
+  });
+
+  // ========= 初始化 =========
+  renderCourses();
+  renderCountdowns();
+  renderTools();
+  renderTimeline($('calFall'), calendarData.fall);
+  renderTimeline($('calSpring'), calendarData.spring);
+  setSemester('fall');
+  updateCalendarNow();
+  updateClock();
+
+  setInterval(updateClock, 1000);
+  setInterval(renderCountdowns, 60000);
+  setInterval(updateCalendarNow, 60000);
+
+  document.addEventListener('visibilitychange', function () {
+    if (!document.hidden) {
+      updateClock();
+      renderCountdowns();
+      updateCalendarNow();
+    }
+  });
+})();
 </script>
 </body>
 </html>
