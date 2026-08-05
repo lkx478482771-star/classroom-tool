@@ -190,6 +190,7 @@
       <a href="#clock">时钟</a>
       <a href="#calendar">校历</a>
       <a href="#tools">学习导航</a>
+      <a href="#nav">校园导航</a>
       <a href="index.html">课堂整理</a>
     </nav>
   </div>
@@ -301,6 +302,40 @@
     <div class="card">
       <h2><svg class="icon"><use href="#icon-toolkit"></use></svg>学习导航</h2>
       <div id="toolBox"></div>
+    </div>
+  </section>
+
+  <section class="section" id="nav">
+    <div class="card">
+      <h2><svg class="icon" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" fill="none" stroke-width="1.8"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6" rx="1"/><line x1="9" y1="2" x2="9" y2="4"/><line x1="15" y1="2" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="22"/><line x1="15" y1="20" x2="15" y2="22"/><line x1="20" y1="9" x2="22" y2="9"/><line x1="20" y1="14" x2="22" y2="14"/><line x1="2" y1="9" x2="4" y2="9"/><line x1="2" y1="14" x2="4" y2="14"/></svg>校园导航</h2>
+      <div class="tool-card">
+        <span class="tool-tag">科研</span>
+        <a class="tool-link" href="http://imtic.ahu.edu.cn/" target="_blank" rel="noopener noreferrer">集成电路先进材料与技术产教研融合研究院 imtic.ahu.edu.cn <svg class="icon icon-sm"><use href="#icon-external"></use></svg></a>
+        <span class="tool-desc">集成电路先进材料与技术产学研融合研究平台</span>
+      </div>
+      <div class="tool-card">
+        <span class="tool-tag">学院</span>
+        <a class="tool-link" href="https://ic.ahu.edu.cn" target="_blank" rel="noopener noreferrer">集成电路学院 ic.ahu.edu.cn <svg class="icon icon-sm"><use href="#icon-external"></use></svg></a>
+        <span class="tool-desc">集成电路学院官方网站，学院新闻、通知公告、教学科研等信息</span>
+      </div>
+      <div class="tool-card">
+        <span class="tool-tag">校友</span>
+        <a class="tool-link" href="https://alumni.ahu.edu.cn/main.htm" target="_blank" rel="noopener noreferrer">安徽大学校友会 alumni.ahu.edu.cn <svg class="icon icon-sm"><use href="#icon-external"></use></svg></a>
+        <span class="tool-desc">校友联络、捐赠平台、校友活动与资讯</span>
+      </div>
+      <div class="tool-card">
+        <span class="tool-tag">生活</span>
+        <span class="tool-link">逛逛<span style="font-size:10px;padding:2px 8px;border-radius:999px;background:rgba(7,193,96,0.12);color:#07c160;font-weight:650;margin-left:4px">微信小程序</span></span>
+        <span class="tool-desc">校园生活服务平台，查课表、找教室、二手交易等</span>
+      </div>
+      <div style="margin:10px 0 0 0;padding:10px 14px;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius);font-size:12px;color:var(--text-2);display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+        <span style="font-weight:600">小程序打开：</span>
+        <span>微信内搜索<strong>"逛逛"</strong></span>
+        <span style="color:var(--text-3)">或</span>
+        <button type="button" id="copyWxBtn" class="btn btn-secondary btn-sm">复制链接 去微信打开</button>
+        <span id="copyWxOk" style="display:none;color:var(--ok);font-weight:600">已复制！去微信粘贴</span>
+      </div>
+      <p class="hint" style="margin-top:10px">共 4 个常用网址（3 网页 + 1 小程序）</p>
     </div>
   </section>
 </main>
@@ -558,7 +593,7 @@
       document.body.appendChild(textarea);
       textarea.select();
       let ok = false;
-      try { ok = document.execCommand('copy'); } catch (err) { ok = false; }
+      try { if (navigator.clipboard && navigator.clipboard.writeText) { navigator.clipboard.writeText(textarea.value).then(function(){resolve()},function(){ok=false}); } else { ok = document.execCommand('copy'); } } catch (err) { ok = false; }
       document.body.removeChild(textarea);
       if (ok) resolve();
       else reject(new Error('copy failed'));
@@ -1036,6 +1071,31 @@
       navigator.serviceWorker.register('assets/sw.js').catch(function () {});
     });
   }
+  document.getElementById('copyWxBtn').addEventListener('click', function () {
+    var link = '#小程序://逛逛/3Uh0mx4TbPpEyPH';
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(link).then(function () {
+        var ok = document.getElementById('copyWxOk');
+        ok.style.display = 'inline';
+        setTimeout(function () { ok.style.display = 'none'; }, 3000);
+      }).catch(function () { fallbackCopy(link); });
+    } else {
+      fallbackCopy(link);
+    }
+    function fallbackCopy(text) {
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.left = '-9999px';
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      var ok = document.getElementById('copyWxOk');
+      ok.style.display = 'inline';
+      setTimeout(function () { ok.style.display = 'none'; }, 3000);
+    }
+  });
 })();
 </script>
 </body>
