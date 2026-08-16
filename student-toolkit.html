@@ -189,6 +189,9 @@
       <a href="#countdown">倒计时</a>
       <a href="#clock">时钟</a>
       <a href="#calendar">校历</a>
+      <a href="#major">专业路线</a>
+      <a href="#circuit">电路计算</a>
+      <a href="#contest">竞赛</a>
       <a href="#tools">学习导航</a>
       <a href="#nav">校园导航</a>
       <a href="index.html">课堂整理</a>
@@ -295,6 +298,140 @@
         <div id="calSpring" role="tabpanel" hidden></div>
       </div>
       <p class="hint">二学期制：秋季20周 + 寒假31天 + 春季20周 + 暑假7.5周；法定节假日具体放假时间另行通知。</p>
+    </div>
+  </section>
+
+  <section class="section" id="major">
+    <div class="card">
+      <h2><svg class="icon"><use href="#icon-target"></use></svg>IC 四年成长路线</h2>
+      <p class="section-intro">把大一到大四拆成可勾选的阶段目标，每完成一项就点一下，进度会保存在本机。</p>
+      <div class="road-progress" id="roadProgress"></div>
+      <div class="major-grid" id="roadmapBox"></div>
+    </div>
+  </section>
+
+  <section class="section" id="circuit">
+    <div class="card">
+      <h2><svg class="icon"><use href="#icon-zap"></use></svg>电路计算器</h2>
+      <div class="calc-grid">
+        <div class="calc-box">
+          <h3>欧姆定律 U = I × R</h3>
+          <form class="calc-form" id="ohmForm">
+            <label class="calc-field">
+              <span>电压 U</span>
+              <span class="calc-input-row">
+                <input class="input" id="ohmU" type="number" step="any" placeholder="例如 5" autocomplete="off">
+                <select class="select" id="ohmUUnit" aria-label="电压单位">
+                  <option value="V">V</option>
+                  <option value="mV">mV</option>
+                </select>
+              </span>
+            </label>
+            <label class="calc-field">
+              <span>电流 I</span>
+              <span class="calc-input-row">
+                <input class="input" id="ohmI" type="number" step="any" placeholder="例如 0.02" autocomplete="off">
+                <select class="select" id="ohmIUnit" aria-label="电流单位">
+                  <option value="A">A</option>
+                  <option value="mA">mA</option>
+                </select>
+              </span>
+            </label>
+            <label class="calc-field">
+              <span>电阻 R</span>
+              <span class="calc-input-row">
+                <input class="input" id="ohmR" type="number" step="any" placeholder="例如 250" autocomplete="off">
+                <select class="select" id="ohmRUnit" aria-label="电阻单位">
+                  <option value="ohm">Ω</option>
+                  <option value="kohm">kΩ</option>
+                  <option value="Mohm">MΩ</option>
+                </select>
+              </span>
+            </label>
+            <button type="button" class="btn btn-primary btn-sm" id="ohmBtn">计算</button>
+          </form>
+          <div class="calc-result" id="ohmResult">填写任意两个量，自动计算第三个。</div>
+        </div>
+
+        <div class="calc-box">
+          <h3>电阻分压 Vout</h3>
+          <form class="calc-form" id="dividerForm">
+            <label class="calc-field">
+              <span>输入电压 Vin</span>
+              <span class="calc-input-row">
+                <input class="input" id="dividerVin" type="number" step="any" placeholder="例如 5" autocomplete="off">
+                <select class="select" id="dividerVinUnit" aria-label="电压单位">
+                  <option value="V">V</option>
+                  <option value="mV">mV</option>
+                </select>
+              </span>
+            </label>
+            <label class="calc-field">
+              <span>上电阻 R1</span>
+              <span class="calc-input-row">
+                <input class="input" id="dividerR1" type="number" step="any" placeholder="例如 10" autocomplete="off">
+                <select class="select" id="dividerR1Unit" aria-label="R1 单位">
+                  <option value="ohm">Ω</option>
+                  <option value="kohm">kΩ</option>
+                  <option value="Mohm">MΩ</option>
+                </select>
+              </span>
+            </label>
+            <label class="calc-field">
+              <span>下电阻 R2</span>
+              <span class="calc-input-row">
+                <input class="input" id="dividerR2" type="number" step="any" placeholder="例如 10" autocomplete="off">
+                <select class="select" id="dividerR2Unit" aria-label="R2 单位">
+                  <option value="ohm">Ω</option>
+                  <option value="kohm">kΩ</option>
+                  <option value="Mohm">MΩ</option>
+                </select>
+              </span>
+            </label>
+            <button type="button" class="btn btn-primary btn-sm" id="dividerBtn">计算</button>
+          </form>
+          <div class="calc-result" id="dividerResult">Vout = Vin × R2 / (R1 + R2)</div>
+        </div>
+
+        <div class="calc-box">
+          <h3>RC 时间常数 τ = R × C</h3>
+          <form class="calc-form" id="rcForm">
+            <label class="calc-field">
+              <span>电阻 R</span>
+              <span class="calc-input-row">
+                <input class="input" id="rcR" type="number" step="any" placeholder="例如 10" autocomplete="off">
+                <select class="select" id="rcRUnit" aria-label="电阻单位">
+                  <option value="kohm">kΩ</option>
+                  <option value="ohm">Ω</option>
+                  <option value="Mohm">MΩ</option>
+                </select>
+              </span>
+            </label>
+            <label class="calc-field">
+              <span>电容 C</span>
+              <span class="calc-input-row">
+                <input class="input" id="rcC" type="number" step="any" placeholder="例如 100" autocomplete="off">
+                <select class="select" id="rcCUnit" aria-label="电容单位">
+                  <option value="nF">nF</option>
+                  <option value="uF">uF</option>
+                  <option value="pF">pF</option>
+                  <option value="mF">mF</option>
+                </select>
+              </span>
+            </label>
+            <button type="button" class="btn btn-primary btn-sm" id="rcBtn">计算</button>
+          </form>
+          <div class="calc-result" id="rcResult">τ 约为充电到 63.2% 所需时间，5τ 视为基本稳定。</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="contest">
+    <div class="card">
+      <h2><svg class="icon"><use href="#icon-calendar"></use></svg>竞赛日历</h2>
+      <div class="contest-grid" id="contestBox"></div>
+      <p class="hint" style="margin-top:12px">“加入倒计时”会使用预计时间，正式安排请以官网通知为准。</p>
     </div>
   </section>
 
@@ -757,12 +894,302 @@
     });
   }
 
+  // ---------- IC 专业路线 ----------
+  const ROADMAP_KEY = 'icRoadmap';
+  const roadmapData = [
+    {
+      year: '大一',
+      title: '基础与入门',
+      goal: '把数学、物理、英语和编程底子打牢',
+      items: [
+        '掌握高数与线性代数的基本计算能力',
+        '理解欧姆定律、基尔霍夫定律与常见元件',
+        '学会 C 语言并能独立调试小程序',
+        '认识面包板、万用表与基础电子元件',
+        '读完一本专业导论书或看完一门导论课'
+      ]
+    },
+    {
+      year: '大二',
+      title: '电路与数字系统',
+      goal: '建立电路分析和数字逻辑的核心概念',
+      items: [
+        '掌握模拟电路中的放大、滤波基本思想',
+        '掌握组合逻辑与时序逻辑设计',
+        '完成至少 2 个课程设计或实验项目',
+        '学习 Verilog 基本语法',
+        '开始用 EDA 工具完成简单仿真'
+      ]
+    },
+    {
+      year: '大三',
+      title: '设计与工具链',
+      goal: '从“会用”走向“能设计”',
+      items: [
+        '独立完成一个 Verilog / FPGA 小项目',
+        '掌握时序约束与仿真调试方法',
+        '了解 IC 设计流程与常用 EDA 工具',
+        '参加集创赛、电赛等学科竞赛',
+        '整理项目文档与 GitHub 作品集'
+      ]
+    },
+    {
+      year: '大四',
+      title: '方向与作品',
+      goal: '形成可展示的成果与清晰去向',
+      items: [
+        '完成毕业设计或工程实践项目',
+        '完善简历与项目经历描述',
+        '明确考研、保研或就业方向',
+        '复盘四年学习路线并更新资源库'
+      ]
+    }
+  ];
+
+  let roadmapDone = {};
+  try {
+    roadmapDone = JSON.parse(localStorage.getItem(ROADMAP_KEY)) || {};
+  } catch (err) {
+    roadmapDone = {};
+  }
+
+  function renderRoadmap() {
+    const box = $('roadmapBox');
+    const progress = $('roadProgress');
+    clearNode(box);
+    let doneCount = 0;
+    let total = 0;
+
+    roadmapData.forEach(function (stage, si) {
+      const card = el('div', { className: 'road-stage' });
+      const head = el('div', { className: 'road-head' });
+      head.appendChild(el('span', { className: 'road-year', textContent: stage.year }));
+      head.appendChild(el('span', { className: 'road-title', textContent: stage.title }));
+      card.appendChild(head);
+      card.appendChild(el('p', { className: 'road-goal', textContent: stage.goal }));
+
+      const list = el('ul', { className: 'road-list' });
+      stage.items.forEach(function (item, ii) {
+        const key = si + '_' + ii;
+        const done = !!roadmapDone[key];
+        if (done) doneCount += 1;
+        total += 1;
+        const label = el('label', { className: done ? 'done' : '' });
+        const cb = el('input', { type: 'checkbox', dataset: { key: key } });
+        cb.checked = done;
+        label.appendChild(cb);
+        label.appendChild(el('span', { textContent: item }));
+        list.appendChild(label);
+      });
+      card.appendChild(list);
+      box.appendChild(card);
+    });
+
+    const pct = total ? Math.round(doneCount / total * 100) : 0;
+    clearNode(progress);
+    progress.appendChild(el('span', { textContent: '已勾选 ' + doneCount + ' / ' + total + ' 项 · 进度 ' + pct + '%' }));
+    const bar = el('span', { className: 'road-progress-bar' });
+    const fill = el('i');
+    fill.style.width = pct + '%';
+    bar.appendChild(fill);
+    progress.appendChild(bar);
+  }
+
+  $('roadmapBox').addEventListener('change', function (event) {
+    const cb = event.target.closest('input[type="checkbox"]');
+    if (!cb || !cb.dataset.key) return;
+    roadmapDone[cb.dataset.key] = cb.checked;
+    try {
+      localStorage.setItem(ROADMAP_KEY, JSON.stringify(roadmapDone));
+    } catch (err) {
+      showToast('本地存储不可用', true);
+    }
+    renderRoadmap();
+  });
+
+  // ---------- 电路计算器 ----------
+  const unitFactor = {
+    V: 1, mV: 1e-3,
+    A: 1, mA: 1e-3,
+    ohm: 1, kohm: 1e3, Mohm: 1e6,
+    F: 1, mF: 1e-3, uF: 1e-6, nF: 1e-9, pF: 1e-12
+  };
+
+  const unitLabel = {
+    V: 'V', mV: 'mV', A: 'A', mA: 'mA',
+    ohm: 'Ω', kohm: 'kΩ', Mohm: 'MΩ'
+  };
+
+  function readNum(id) {
+    const value = $(id).value.trim();
+    if (!value) return NaN;
+    const n = Number(value);
+    return isFinite(n) ? n : NaN;
+  }
+
+  function fmtNum(v) {
+    if (!isFinite(v)) return '--';
+    if (v !== 0 && (Math.abs(v) >= 10000 || Math.abs(v) < 0.0001)) {
+      return parseFloat(v.toExponential(4)).toString();
+    }
+    return parseFloat(v.toPrecision(4)).toString();
+  }
+
+  function fmtTime(seconds) {
+    if (!isFinite(seconds)) return '--';
+    if (seconds >= 1) return fmtNum(seconds) + ' s';
+    if (seconds >= 0.001) return fmtNum(seconds * 1000) + ' ms';
+    if (seconds >= 0.000001) return fmtNum(seconds * 1e6) + ' us';
+    return fmtNum(seconds * 1e9) + ' ns';
+  }
+
+  function calcOhm() {
+    const result = $('ohmResult');
+    const u = readNum('ohmU');
+    const i = readNum('ohmI');
+    const r = readNum('ohmR');
+    const uV = u * unitFactor[$('ohmUUnit').value];
+    const iA = i * unitFactor[$('ohmIUnit').value];
+    const rOhm = r * unitFactor[$('ohmRUnit').value];
+    const filled = [isFinite(u), isFinite(i), isFinite(r)].filter(Boolean).length;
+
+    if (filled < 2) {
+      result.textContent = '请至少填写两个量。';
+      return;
+    }
+    if (filled > 2) {
+      result.textContent = '三个量都填了，请保留两个来计算。';
+      return;
+    }
+    if (isFinite(uV) && isFinite(iA)) {
+      if (iA === 0) {
+        result.textContent = '电流不能为 0。';
+        return;
+      }
+      const unit = $('ohmRUnit').value;
+      const resistance = uV / iA;
+      result.textContent = 'R = ' + fmtNum(resistance / unitFactor[unit]) + ' ' + unitLabel[unit];
+      return;
+    }
+    if (isFinite(uV) && isFinite(rOhm)) {
+      if (rOhm === 0) {
+        result.textContent = '电阻不能为 0。';
+        return;
+      }
+      const unit = $('ohmIUnit').value;
+      result.textContent = 'I = ' + fmtNum(uV / rOhm / unitFactor[unit]) + ' ' + unitLabel[unit];
+      return;
+    }
+    if (isFinite(iA) && isFinite(rOhm)) {
+      const unit = $('ohmUUnit').value;
+      result.textContent = 'U = ' + fmtNum(iA * rOhm / unitFactor[unit]) + ' ' + unitLabel[unit];
+    }
+  }
+
+  function calcDivider() {
+    const result = $('dividerResult');
+    const vin = readNum('dividerVin') * unitFactor[$('dividerVinUnit').value];
+    const r1 = readNum('dividerR1') * unitFactor[$('dividerR1Unit').value];
+    const r2 = readNum('dividerR2') * unitFactor[$('dividerR2Unit').value];
+    if (!isFinite(vin) || !isFinite(r1) || !isFinite(r2)) {
+      result.textContent = '请完整填写 Vin、R1、R2。';
+      return;
+    }
+    if (r1 + r2 === 0) {
+      result.textContent = 'R1 + R2 不能为 0。';
+      return;
+    }
+    const vout = vin * r2 / (r1 + r2);
+    result.textContent = 'Vout ≈ ' + fmtNum(vout) + ' V · 分压比 ' + (r2 / (r1 + r2)).toFixed(3);
+  }
+
+  function calcRC() {
+    const result = $('rcResult');
+    const r = readNum('rcR') * unitFactor[$('rcRUnit').value];
+    const c = readNum('rcC') * unitFactor[$('rcCUnit').value];
+    if (!isFinite(r) || !isFinite(c)) {
+      result.textContent = '请完整填写 R 和 C。';
+      return;
+    }
+    const tau = r * c;
+    result.textContent = 'τ ≈ ' + fmtTime(tau) + '，5τ ≈ ' + fmtTime(tau * 5);
+  }
+
+  $('ohmBtn').addEventListener('click', calcOhm);
+  $('dividerBtn').addEventListener('click', calcDivider);
+  $('rcBtn').addEventListener('click', calcRC);
+  ['ohmForm', 'dividerForm', 'rcForm'].forEach(function (id) {
+    $(id).addEventListener('submit', function (event) {
+      event.preventDefault();
+    });
+  });
+
+  // ---------- 竞赛日历 ----------
+  const contestData = [
+    {
+      name: '集创赛',
+      full: '全国大学生集成电路创新创业大赛',
+      url: 'https://univ.ciciec.com/',
+      date: '2027-04-01',
+      note: '春季报名、暑期总决赛，适合组队做芯片 / FPGA 方向项目'
+    },
+    {
+      name: '电赛',
+      full: '全国大学生电子设计竞赛',
+      url: 'https://www.nuedc-training.com.cn/',
+      date: '2027-08-01',
+      note: '偶数年全国赛、奇数年省赛或邀请赛，是锻炼动手能力的经典赛事'
+    },
+    {
+      name: '蓝桥杯',
+      full: '蓝桥杯电子类个人赛',
+      url: 'https://dasai.lanqiao.cn/',
+      date: '2027-04-01',
+      note: '嵌入式、单片机等赛道，适合用大一 C 语言基础起步'
+    }
+  ];
+
+  function renderContests() {
+    const box = $('contestBox');
+    clearNode(box);
+    contestData.forEach(function (item) {
+      const card = el('div', { className: 'contest-card' });
+      const head = el('div', { className: 'contest-head' });
+      head.appendChild(el('span', { className: 'contest-name', textContent: item.name }));
+      const site = el('a', { className: 'contest-site', href: item.url, target: '_blank', rel: 'noopener noreferrer' });
+      site.appendChild(el('svg', { className: 'icon icon-sm' }, [el('use', { href: '#icon-external' })]));
+      head.appendChild(site);
+      card.appendChild(head);
+      card.appendChild(el('div', { className: 'contest-full', textContent: item.full }));
+      card.appendChild(el('p', { className: 'contest-note', textContent: item.note }));
+      const btn = el('button', {
+        type: 'button', className: 'btn btn-soft btn-sm', textContent: '加入倒计时',
+        dataset: { action: 'add-contest', name: item.name + ' · ' + item.full, date: item.date }
+      });
+      card.appendChild(btn);
+      box.appendChild(card);
+    });
+  }
+
+  $('contestBox').addEventListener('click', function (event) {
+    const btn = event.target.closest('button[data-action="add-contest"]');
+    if (!btn) return;
+    quickAdd(btn.dataset.name, btn.dataset.date);
+  });
+
   // ---------- 学习导航 ----------
   const toolData = [
     { tag: '英语', name: 'LexiPath词汇旅程', url: 'https://lexipath-vocab-journey.pengyudeng92.chatgpt.site', desc: '网页 SRS 背单词，无需安装' },
     { tag: '文献', name: 'SciHub', url: 'https://sci-hub.se', desc: '外文论文免费下载' },
     { tag: '效率', name: 'Convertio', url: 'https://convertio.co', desc: '任意格式文件互转' },
-    { tag: '笔记', name: 'Notion', url: 'https://www.notion.so', desc: '搭建个人知识库、整理资料' }
+    { tag: '笔记', name: 'Notion', url: 'https://www.notion.so', desc: '搭建个人知识库、整理资料' },
+    { tag: '学院', name: '安徽大学集成电路学院', url: 'https://ic.ahu.edu.cn', desc: '学院官网：通知公告、教学科研与实验室信息' },
+    { tag: '课程', name: '中国大学MOOC', url: 'https://www.icourse163.org/', desc: '数字电路、模拟电路、单片机等公开课' },
+    { tag: '数字', name: 'HDLBits', url: 'https://hdlbits.01xz.net/wiki/Main_Page', desc: 'Verilog 在线练习平台，边学边写边验证' },
+    { tag: '社区', name: '与非网 EEFOCUS', url: 'https://www.eefocus.com/', desc: '电子与集成电路行业资讯、教程与社区讨论' },
+    { tag: '竞赛', name: '集创赛官网', url: 'https://univ.ciciec.com/', desc: '全国大学生集成电路创新创业大赛' },
+    { tag: '竞赛', name: '电子设计竞赛官网', url: 'https://www.nuedc-training.com.cn/', desc: '全国大学生电子设计竞赛' },
+    { tag: '视频', name: 'B站学习区', url: 'https://www.bilibili.com/', desc: '搜索“数字电路”“Verilog”“芯片设计入门”等课程' }
   ];
 
   function renderTools() {
@@ -1045,6 +1472,8 @@
   renderCourses();
   renderCountdowns();
   renderTools();
+  renderRoadmap();
+  renderContests();
   $('levelSelect').value = profileState.level;
   $('statusSelect').value = profileState.status;
   renderCalendars();

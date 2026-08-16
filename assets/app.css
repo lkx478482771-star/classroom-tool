@@ -1703,6 +1703,230 @@ a:hover {
   border: 0;
 }
 
+/* ---------- IC 专业路线、电路计算与竞赛 ---------- */
+.section-intro {
+  margin: -8px 0 14px;
+  font-size: 12.5px;
+  color: var(--text-3);
+  line-height: 1.6;
+}
+
+.road-progress {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+  padding: 10px 12px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 12px;
+  color: var(--text-2);
+  flex-wrap: wrap;
+}
+
+.road-progress-bar {
+  flex: 1;
+  min-width: 140px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--surface-3);
+  overflow: hidden;
+  display: block;
+}
+
+.road-progress-bar i {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--accent);
+  transition: width 0.3s;
+}
+
+.major-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 14px;
+}
+
+.road-stage {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px;
+}
+
+.road-head {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.road-year {
+  color: var(--accent);
+  font-weight: 750;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.road-title {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.road-goal {
+  margin: 8px 0 10px;
+  font-size: 12px;
+  color: var(--text-3);
+  line-height: 1.5;
+}
+
+.road-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.road-list label {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  font-size: 12.5px;
+  line-height: 1.45;
+  cursor: pointer;
+  color: var(--text-2);
+}
+
+.road-list input {
+  width: 15px;
+  height: 15px;
+  accent-color: var(--accent);
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.road-list label.done span {
+  text-decoration: line-through;
+  color: var(--text-3);
+}
+
+.calc-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 14px;
+}
+
+.calc-box {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px;
+}
+
+.calc-box h3 {
+  font-size: 13.5px;
+  margin: 0 0 12px;
+  font-weight: 700;
+}
+
+.calc-form {
+  display: grid;
+  gap: 11px;
+}
+
+.calc-field {
+  display: grid;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text-2);
+}
+
+.calc-input-row {
+  display: flex;
+  gap: 6px;
+}
+
+.calc-input-row .input {
+  flex: 1;
+  min-width: 0;
+}
+
+.calc-input-row .select {
+  width: 82px;
+  flex-shrink: 0;
+}
+
+.calc-result {
+  margin-top: 12px;
+  min-height: 20px;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.contest-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 14px;
+}
+
+.contest-card {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.contest-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.contest-name {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--accent);
+}
+
+.contest-site {
+  color: var(--text-3);
+  display: inline-flex;
+}
+
+.contest-site:hover {
+  color: var(--accent);
+}
+
+.contest-full {
+  font-size: 12.5px;
+  font-weight: 650;
+  color: var(--text);
+  line-height: 1.4;
+}
+
+.contest-note {
+  margin: 0;
+  font-size: 12px;
+  color: var(--text-3);
+  line-height: 1.5;
+}
+
+.contest-card .btn {
+  align-self: flex-start;
+  margin-top: auto;
+}
+
 /* ---------- Responsive ---------- */
 @media (max-width: 900px) {
   .sidebar {
