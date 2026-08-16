@@ -322,6 +322,11 @@
         <div id="calFall" role="tabpanel"></div>
         <div id="calSpring" role="tabpanel" hidden></div>
       </div>
+      <div class="official-source" id="calSource"></div>
+      <details class="details-box" id="officialNotesBox" hidden>
+        <summary class="details-summary">官方校历原文摘录</summary>
+        <ul class="official-notes" id="officialNotes"></ul>
+      </details>
       <p class="hint">二学期制：秋季20周 + 寒假31天 + 春季20周 + 暑假7.5周；法定节假日具体放假时间另行通知。</p>
     </div>
   </section>
@@ -1843,7 +1848,8 @@
   }
 
   // ---------- 校历 ----------
-  const calendarData = {
+  let officialData = null;
+  let calendarData = {
     fall: [
       { title: '9月 启程', weeks: '第1-4周', dot: '', events: [
         { type: 'i', name: '本科生报到', date: '9月4日', who: ['ug-old'], tag: ['我的', 'ti'] },
@@ -1898,6 +1904,53 @@
       ] }
     ]
   };
+
+  function renderOfficialSource() {
+    const source = $('calSource');
+    const box = $('officialNotesBox');
+    const list = $('officialNotes');
+    clearNode(source);
+    clearNode(list);
+    if (!officialData) {
+      source.appendChild(el('span', { className: 'official-source-tag', textContent: '使用内置校历数据' }));
+      return;
+    }
+    const meta = officialData.source || {};
+    source.appendChild(el('span', {
+      className: 'official-source-tag',
+      textContent: '官方数据来源：' + (meta.name || '安徽大学教务处')
+    }));
+    if (meta.lastChecked) {
+      source.appendChild(el('span', { className: 'official-source-time', textContent: '更新于 ' + meta.lastChecked }));
+    }
+    if (Array.isArray(officialData.notes) && officialData.notes.length) {
+      box.hidden = false;
+      officialData.notes.forEach(function (note) {
+        list.appendChild(el('li', { textContent: note }));
+      });
+    }
+  }
+
+  function loadOfficialData() {
+    fetch('data/official.json', { cache: 'no-store' })
+      .then(function (res) {
+        if (!res.ok) throw new Error('official data unavailable');
+        return res.json();
+      })
+      .then(function (data) {
+        officialData = data || null;
+        if (data && data.calendar && Array.isArray(data.calendar.fall) && Array.isArray(data.calendar.spring)) {
+          calendarData = data.calendar;
+        }
+        renderOfficialSource();
+        renderCalendars();
+        updateCalendarNow();
+      })
+      .catch(function () {
+        officialData = null;
+        renderOfficialSource();
+      });
+  }
 
   function renderTimeline(container, months) {
     clearNode(container);
@@ -2062,6 +2115,7 @@
   setSemester('fall');
   updateCalendarNow();
   updateClock();
+  loadOfficialData();
 
   setInterval(updateClock, 1000);
   setInterval(renderCountdowns, 60000);
