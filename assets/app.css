@@ -1927,6 +1927,132 @@ a:hover {
   margin-top: auto;
 }
 
+/* ---------- 专业模板管理 ---------- */
+.major-manage-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+
+.major-manage-head h2 {
+  margin-bottom: 0;
+}
+
+.major-manage-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.major-manage-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.major-select-field {
+  min-width: min(320px, 100%);
+}
+
+.major-manage-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 14px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  flex: 1;
+  min-width: 220px;
+}
+
+.major-manage-name {
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.major-manage-meta {
+  font-size: 11px;
+  color: var(--text-3);
+}
+
+.check-row {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  font-size: 12.5px;
+  color: var(--text-2);
+  cursor: pointer;
+  line-height: 1.5;
+}
+
+.check-row input {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--accent);
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.modal-wide {
+  width: min(760px, 100%);
+}
+
+.editor-section {
+  display: grid;
+  gap: 10px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+}
+
+.editor-section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.editor-section-head h4 {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.editor-row {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px;
+}
+
+.editor-row-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.editor-row-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-3);
+}
+
+.editor-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px;
+}
+
+.editor-field {
+  min-width: 0;
+}
+
 /* ---------- Responsive ---------- */
 @media (max-width: 900px) {
   .sidebar {
