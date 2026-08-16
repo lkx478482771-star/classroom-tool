@@ -255,13 +255,6 @@
   <section class="section" id="countdown">
     <div class="card">
       <h2><svg class="icon"><use href="#icon-clock"></use></svg>倒计时</h2>
-      <div class="quick-btns" id="quickBtns">
-        <button type="button" class="btn btn-secondary btn-sm" data-action="quick-add" data-name="英语四六级" data-date="2026-12-19">四六级</button>
-        <button type="button" class="btn btn-secondary btn-sm" data-action="quick-add" data-name="期末考试" data-date="2027-01-11">期末</button>
-        <button type="button" class="btn btn-secondary btn-sm" data-action="quick-add" data-name="考研" data-date="2026-12-26">考研</button>
-        <button type="button" class="btn btn-secondary btn-sm" data-action="quick-add" data-name="春季报到" data-date="2027-02-21">报到</button>
-        <button type="button" class="btn btn-secondary btn-sm" data-action="quick-add" data-name="正式上课" data-date="2027-02-22">上课</button>
-      </div>
       <div id="countdownList"></div>
       <form class="countdown-form" id="countdownForm">
         <label class="visually-hidden" for="cdName">事件名称</label>
@@ -949,12 +942,6 @@
     nameInput.value = '';
     nameInput.focus();
   }
-
-  $('quickBtns').addEventListener('click', function (event) {
-    const button = event.target.closest('button[data-action="quick-add"]');
-    if (!button) return;
-    quickAdd(button.dataset.name, button.dataset.date);
-  });
 
   countdownListEl.addEventListener('click', function (event) {
     const button = event.target.closest('button[data-action="delete-count"]');
