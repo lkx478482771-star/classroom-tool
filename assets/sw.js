@@ -1,56 +1,27 @@
-/* 课堂工具离线缓存：让两个页面在弱网/断网时依然可用 */
-const VERSION = "classroom-tool-v2";
-const CORE = [
-  "./",
-  "./index.html",
-  "./student-toolkit.html",
-  "./assets/app.css",
-  "./assets/icons.svg",
-  "./assets/favicon.svg"
-];
+const CACHE = 'ahutk-v2';
+const URLS = ['/', '/student-toolkit.html', '/assets/app.css', '/assets/icons.svg', '/assets/favicon.svg'];
 
-self.addEventListener("install", (event) => {
-  event.waitUntil(
-    caches.open(VERSION).then((cache) => cache.addAll(CORE)).then(() => self.skipWaiting())
-  );
+self.addEventListener('install', function (e) {
+  e.waitUntil(caches.open(CACHE).then(function (c) { return c.addAll(URLS); }).then(function () { return self.skipWaiting(); }));
 });
 
-self.addEventListener("activate", (event) => {
-  event.waitUntil(
-    caches.keys()
-      .then((keys) => Promise.all(keys.filter((k) => k !== VERSION).map((k) => caches.delete(k))))
-      .then(() => self.clients.claim())
-  );
+self.addEventListener('activate', function (e) {
+  e.waitUntil(caches.keys().then(function (keys) {
+    return Promise.all(keys.filter(function (k) { return k !== CACHE; }).map(function (k) { return caches.delete(k); }));
+  }).then(function () { return self.clients.claim(); }));
 });
 
-self.addEventListener("fetch", (event) => {
-  const url = new URL(event.request.url);
-  if (event.request.method !== "GET" || url.origin !== self.location.origin) return;
-
-  if (event.request.mode === "navigate") {
-    event.respondWith(
-      fetch(event.request)
-        .then((response) => {
-          const copy = response.clone();
-          caches.open(VERSION).then((cache) => cache.put(event.request, copy));
-          return response;
-        })
-        .catch(() => caches.match(event.request).then((cached) => cached || caches.match("./index.html")))
-    );
-    return;
-  }
-
-  event.respondWith(
-    caches.match(event.request).then(
-      (cached) =>
-        cached ||
-        fetch(event.request).then((response) => {
-          if (response && response.status === 200) {
-            const copy = response.clone();
-            caches.open(VERSION).then((cache) => cache.put(event.request, copy));
-          }
-          return response;
-        })
-    )
-  );
+self.addEventListener('fetch', function (e) {
+  if (e.request.method !== 'GET') return;
+  e.respondWith(caches.match(e.request).then(function (cached) {
+    return cached || fetch(e.request).then(function (res) {
+      if (!res || res.status !== 200 || res.type !== 'basic') return res;
+      var clone = res.clone();
+      caches.open(CACHE).then(function (c) { c.put(e.request, clone); });
+      return res;
+    }).catch(function () {
+      if (e.request.mode === 'navigate') return caches.match('/student-toolkit.html');
+      return new Response('', { status: 503 });
+    });
+  }));
 });
