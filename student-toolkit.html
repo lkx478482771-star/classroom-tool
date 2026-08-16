@@ -190,7 +190,7 @@
       <a href="#clock">时钟</a>
       <a href="#calendar">校历</a>
       <a href="#major">专业路线</a>
-      <a href="#circuit">电路计算</a>
+      <a href="#circuit" id="navCircuit">电路计算</a>
       <a href="#contest">竞赛</a>
       <a href="#tools">学习导航</a>
       <a href="#nav">校园导航</a>
@@ -200,6 +200,31 @@
 </header>
 
 <main class="page">
+  <section class="section" id="majorManager">
+    <div class="card">
+      <div class="major-manage-head">
+        <h2><svg class="icon"><use href="#icon-target"></use></svg>我的专业</h2>
+        <div class="major-manage-actions">
+          <button type="button" class="btn btn-primary btn-sm" id="newMajorBtn">新建专业</button>
+          <button type="button" class="btn btn-secondary btn-sm" id="editMajorBtn">编辑</button>
+          <button type="button" class="btn btn-secondary btn-sm" id="copyMajorLinkBtn">复制专业链接</button>
+          <button type="button" class="btn btn-secondary btn-sm" id="exportMajorBtn">导出 JSON</button>
+          <button type="button" class="btn btn-secondary btn-sm" id="importMajorBtn">导入 JSON</button>
+          <button type="button" class="btn btn-danger btn-sm" id="deleteMajorBtn">删除</button>
+        </div>
+      </div>
+      <div class="major-manage-row">
+        <label class="field major-select-field">
+          <span class="label">当前专业</span>
+          <select class="select" id="majorSelect"></select>
+        </label>
+        <div class="major-manage-info" id="majorManageInfo"></div>
+      </div>
+      <input type="file" id="importMajorFile" accept=".json,application/json" hidden>
+      <p class="hint" id="majorHint">选择专业后，路线、资源、竞赛和计算器会自动切换。</p>
+    </div>
+  </section>
+
   <section class="section" id="gpa">
     <div class="card">
       <h2><svg class="icon"><use href="#icon-target"></use></svg>绩点计算器</h2>
@@ -303,8 +328,8 @@
 
   <section class="section" id="major">
     <div class="card">
-      <h2><svg class="icon"><use href="#icon-target"></use></svg>IC 四年成长路线</h2>
-      <p class="section-intro">把大一到大四拆成可勾选的阶段目标，每完成一项就点一下，进度会保存在本机。</p>
+      <h2><svg class="icon"><use href="#icon-target"></use></svg><span id="majorTitle">IC 四年成长路线</span></h2>
+      <p class="section-intro" id="majorIntro">把大一到大四拆成可勾选的阶段目标，每完成一项就点一下，进度会保存在本机。</p>
       <div class="road-progress" id="roadProgress"></div>
       <div class="major-grid" id="roadmapBox"></div>
     </div>
@@ -476,6 +501,58 @@
     </div>
   </section>
 </main>
+
+<div class="modal-overlay" id="majorEditorModal">
+  <div class="modal modal-wide" role="dialog" aria-modal="true" aria-labelledby="majorEditorTitle">
+    <div class="modal-head">
+      <h3 id="majorEditorTitle">新建专业</h3>
+      <button type="button" class="modal-close" data-close-major aria-label="关闭">
+        <svg class="icon"><use href="#icon-x"></use></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form id="majorEditorForm">
+        <div class="field">
+          <label class="label" for="majorName">专业名称</label>
+          <input class="input" id="majorName" placeholder="例如：计算机科学与技术" autocomplete="off">
+        </div>
+        <div class="field">
+          <label class="label" for="majorIntroInput">专业简介</label>
+          <textarea class="textarea" id="majorIntroInput" rows="2" placeholder="一句话介绍这个专业的学习重点"></textarea>
+        </div>
+        <label class="check-row">
+          <input type="checkbox" id="majorShowCircuit">
+          <span>显示电路计算器（适合集成电路、电子、自动化等专业）</span>
+        </label>
+        <div class="editor-section">
+          <div class="editor-section-head">
+            <h4>四年成长路线</h4>
+            <button type="button" class="btn btn-secondary btn-sm" id="addRoadStageBtn">添加阶段</button>
+          </div>
+          <div id="roadStageRows"></div>
+        </div>
+        <div class="editor-section">
+          <div class="editor-section-head">
+            <h4>资源卡片</h4>
+            <button type="button" class="btn btn-secondary btn-sm" id="addToolRowBtn">添加资源</button>
+          </div>
+          <div id="toolRows"></div>
+        </div>
+        <div class="editor-section">
+          <div class="editor-section-head">
+            <h4>竞赛卡片</h4>
+            <button type="button" class="btn btn-secondary btn-sm" id="addContestRowBtn">添加竞赛</button>
+          </div>
+          <div id="contestRows"></div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-foot">
+      <button type="button" class="btn btn-secondary" data-close-major>取消</button>
+      <button type="button" class="btn btn-primary" id="saveMajorBtn">保存专业</button>
+    </div>
+  </div>
+</div>
 
 <button type="button" class="back-top" id="backTop" aria-label="回到顶部" hidden>
   <svg class="icon"><use href="#icon-arrow-up"></use></svg>
@@ -894,57 +971,227 @@
     });
   }
 
-  // ---------- IC 专业路线 ----------
-  const ROADMAP_KEY = 'icRoadmap';
-  const roadmapData = [
-    {
-      year: '大一',
-      title: '基础与入门',
-      goal: '把数学、物理、英语和编程底子打牢',
-      items: [
-        '掌握高数与线性代数的基本计算能力',
-        '理解欧姆定律、基尔霍夫定律与常见元件',
-        '学会 C 语言并能独立调试小程序',
-        '认识面包板、万用表与基础电子元件',
-        '读完一本专业导论书或看完一门导论课'
-      ]
-    },
-    {
-      year: '大二',
-      title: '电路与数字系统',
-      goal: '建立电路分析和数字逻辑的核心概念',
-      items: [
-        '掌握模拟电路中的放大、滤波基本思想',
-        '掌握组合逻辑与时序逻辑设计',
-        '完成至少 2 个课程设计或实验项目',
-        '学习 Verilog 基本语法',
-        '开始用 EDA 工具完成简单仿真'
-      ]
-    },
-    {
-      year: '大三',
-      title: '设计与工具链',
-      goal: '从“会用”走向“能设计”',
-      items: [
-        '独立完成一个 Verilog / FPGA 小项目',
-        '掌握时序约束与仿真调试方法',
-        '了解 IC 设计流程与常用 EDA 工具',
-        '参加集创赛、电赛等学科竞赛',
-        '整理项目文档与 GitHub 作品集'
-      ]
-    },
-    {
-      year: '大四',
-      title: '方向与作品',
-      goal: '形成可展示的成果与清晰去向',
-      items: [
-        '完成毕业设计或工程实践项目',
-        '完善简历与项目经历描述',
-        '明确考研、保研或就业方向',
-        '复盘四年学习路线并更新资源库'
-      ]
+  // ---------- 专业模板系统 ----------
+  const PROFILE_STORE_KEY = 'ahutMajorProfiles_v1';
+  const ROADMAP_KEY = 'majorRoadmap';
+
+  const BUILTIN_IC = {
+    id: 'ic',
+    name: '集成电路设计与集成系统',
+    intro: '面向芯片设计、制造与系统集成方向，先打牢电路与编程基础，再逐步进入 Verilog、EDA 与 FPGA。',
+    showCircuit: true,
+    roadmap: [
+      {
+        year: '大一',
+        title: '基础与入门',
+        goal: '把数学、物理、英语和编程底子打牢',
+        items: [
+          '掌握高数与线性代数的基本计算能力',
+          '理解欧姆定律、基尔霍夫定律与常见元件',
+          '学会 C 语言并能独立调试小程序',
+          '认识面包板、万用表与基础电子元件',
+          '读完一本专业导论书或看完一门导论课'
+        ]
+      },
+      {
+        year: '大二',
+        title: '电路与数字系统',
+        goal: '建立电路分析和数字逻辑的核心概念',
+        items: [
+          '掌握模拟电路中的放大、滤波基本思想',
+          '掌握组合逻辑与时序逻辑设计',
+          '完成至少 2 个课程设计或实验项目',
+          '学习 Verilog 基本语法',
+          '开始用 EDA 工具完成简单仿真'
+        ]
+      },
+      {
+        year: '大三',
+        title: '设计与工具链',
+        goal: '从“会用”走向“能设计”',
+        items: [
+          '独立完成一个 Verilog / FPGA 小项目',
+          '掌握时序约束与仿真调试方法',
+          '了解 IC 设计流程与常用 EDA 工具',
+          '参加集创赛、电赛等学科竞赛',
+          '整理项目文档与 GitHub 作品集'
+        ]
+      },
+      {
+        year: '大四',
+        title: '方向与作品',
+        goal: '形成可展示的成果与清晰去向',
+        items: [
+          '完成毕业设计或工程实践项目',
+          '完善简历与项目经历描述',
+          '明确考研、保研或就业方向',
+          '复盘四年学习路线并更新资源库'
+        ]
+      }
+    ],
+    tools: [
+      { tag: '英语', name: 'LexiPath词汇旅程', url: 'https://lexipath-vocab-journey.pengyudeng92.chatgpt.site', desc: '网页 SRS 背单词，无需安装' },
+      { tag: '文献', name: 'SciHub', url: 'https://sci-hub.se', desc: '外文论文免费下载' },
+      { tag: '效率', name: 'Convertio', url: 'https://convertio.co', desc: '任意格式文件互转' },
+      { tag: '笔记', name: 'Notion', url: 'https://www.notion.so', desc: '搭建个人知识库、整理资料' },
+      { tag: '学院', name: '安徽大学集成电路学院', url: 'https://ic.ahu.edu.cn', desc: '学院官网：通知公告、教学科研与实验室信息' },
+      { tag: '课程', name: '中国大学MOOC', url: 'https://www.icourse163.org/', desc: '数字电路、模拟电路、单片机等公开课' },
+      { tag: '数字', name: 'HDLBits', url: 'https://hdlbits.01xz.net/wiki/Main_Page', desc: 'Verilog 在线练习平台，边学边写边验证' },
+      { tag: '社区', name: '与非网 EEFOCUS', url: 'https://www.eefocus.com/', desc: '电子与集成电路行业资讯、教程与社区讨论' },
+      { tag: '竞赛', name: '集创赛官网', url: 'https://univ.ciciec.com/', desc: '全国大学生集成电路创新创业大赛' },
+      { tag: '竞赛', name: '电子设计竞赛官网', url: 'https://www.nuedc-training.com.cn/', desc: '全国大学生电子设计竞赛' },
+      { tag: '视频', name: 'B站学习区', url: 'https://www.bilibili.com/', desc: '搜索“数字电路”“Verilog”“芯片设计入门”等课程' }
+    ],
+    contests: [
+      {
+        name: '集创赛',
+        full: '全国大学生集成电路创新创业大赛',
+        url: 'https://univ.ciciec.com/',
+        date: '2027-04-01',
+        note: '春季报名、暑期总决赛，适合组队做芯片 / FPGA 方向项目'
+      },
+      {
+        name: '电赛',
+        full: '全国大学生电子设计竞赛',
+        url: 'https://www.nuedc-training.com.cn/',
+        date: '2027-08-01',
+        note: '偶数年全国赛、奇数年省赛或邀请赛，是锻炼动手能力的经典赛事'
+      },
+      {
+        name: '蓝桥杯',
+        full: '蓝桥杯电子类个人赛',
+        url: 'https://dasai.lanqiao.cn/',
+        date: '2027-04-01',
+        note: '嵌入式、单片机等赛道，适合用大一 C 语言基础起步'
+      }
+    ],
+    updatedAt: 0
+  };
+
+  function normalizeProfile(p) {
+    if (!p || typeof p !== 'object') return null;
+    const roadmap = Array.isArray(p.roadmap) ? p.roadmap.map(function (s) {
+      return {
+        year: String((s && s.year) || ''),
+        title: String((s && s.title) || ''),
+        goal: String((s && s.goal) || ''),
+        items: Array.isArray(s && s.items) ? s.items.map(function (x) { return String(x == null ? '' : x); }) : []
+      };
+    }) : [];
+    const tools = Array.isArray(p.tools) ? p.tools.map(function (t) {
+      return {
+        tag: String((t && t.tag) || ''),
+        name: String((t && t.name) || ''),
+        url: String((t && t.url) || ''),
+        desc: String((t && t.desc) || '')
+      };
+    }) : [];
+    const contests = Array.isArray(p.contests) ? p.contests.map(function (c) {
+      return {
+        name: String((c && c.name) || ''),
+        full: String((c && c.full) || ''),
+        url: String((c && c.url) || ''),
+        date: String((c && c.date) || ''),
+        note: String((c && c.note) || '')
+      };
+    }) : [];
+    return {
+      id: String(p.id || ('m' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6))),
+      name: String((p.name || '').slice(0, 60)),
+      intro: String((p.intro || '').slice(0, 300)),
+      showCircuit: !!p.showCircuit,
+      roadmap: roadmap,
+      tools: tools,
+      contests: contests,
+      updatedAt: Number(p.updatedAt) || Date.now()
+    };
+  }
+
+  function cloneProfile(p) {
+    return normalizeProfile(JSON.parse(JSON.stringify(p)));
+  }
+
+  let customProfiles = [];
+  let activeMajorId = 'ic';
+
+  function loadCustomStore() {
+    try {
+      const raw = localStorage.getItem(PROFILE_STORE_KEY);
+      if (!raw) return;
+      const data = JSON.parse(raw);
+      if (Array.isArray(data.profiles)) {
+        customProfiles = data.profiles.map(normalizeProfile).filter(Boolean);
+      }
+      if (typeof data.activeId === 'string' && data.activeId !== 'ic') {
+        activeMajorId = data.activeId;
+      }
+    } catch (err) {
+      customProfiles = [];
     }
-  ];
+  }
+
+  function saveCustomStore() {
+    try {
+      localStorage.setItem(PROFILE_STORE_KEY, JSON.stringify({ activeId: activeMajorId, profiles: customProfiles }));
+    } catch (err) {
+      showToast('本地存储不可用', true);
+    }
+  }
+
+  function allProfiles() {
+    return [BUILTIN_IC].concat(customProfiles);
+  }
+
+  function getProfile(id) {
+    return allProfiles().find(function (p) { return p.id === id; }) || BUILTIN_IC;
+  }
+
+  function isBuiltin(id) {
+    return id === 'ic';
+  }
+
+  function encodeBase64Url(str) {
+    return btoa(unescape(encodeURIComponent(str))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  }
+
+  function decodeBase64Url(s) {
+    const b64 = String(s).replace(/-/g, '+').replace(/_/g, '/');
+    return decodeURIComponent(escape(atob(b64)));
+  }
+
+  loadCustomStore();
+
+  const urlParams = new URLSearchParams(location.search);
+  const sharedEncoded = urlParams.get('t');
+  let sharedProfile = null;
+  if (sharedEncoded) {
+    try {
+      const parsed = normalizeProfile(JSON.parse(decodeBase64Url(sharedEncoded)));
+      if (parsed && parsed.name) sharedProfile = parsed;
+    } catch (err) {
+      sharedProfile = null;
+    }
+  }
+
+  if (sharedProfile) {
+    if (sharedProfile.id === 'ic' || customProfiles.some(function (p) { return p.id === sharedProfile.id; })) {
+      sharedProfile.id = 'm' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+    }
+    customProfiles.push(sharedProfile);
+    activeMajorId = sharedProfile.id;
+    saveCustomStore();
+  } else {
+    const urlMajor = urlParams.get('m');
+    if (urlMajor && getProfile(urlMajor)) {
+      activeMajorId = urlMajor;
+    } else if (!getProfile(activeMajorId)) {
+      activeMajorId = 'ic';
+    }
+  }
+
+  let roadmapData = getProfile(activeMajorId).roadmap;
+  let toolData = getProfile(activeMajorId).tools;
+  let contestData = getProfile(activeMajorId).contests;
 
   let roadmapDone = {};
   try {
@@ -970,7 +1217,7 @@
 
       const list = el('ul', { className: 'road-list' });
       stage.items.forEach(function (item, ii) {
-        const key = si + '_' + ii;
+        const key = activeMajorId + '_' + si + '_' + ii;
         const done = !!roadmapDone[key];
         if (done) doneCount += 1;
         total += 1;
@@ -1005,6 +1252,418 @@
       showToast('本地存储不可用', true);
     }
     renderRoadmap();
+  });
+
+  function renderTools() {
+    const box = $('toolBox');
+    clearNode(box);
+    toolData.forEach(function (tool) {
+      const card = el('div', { className: 'tool-card' });
+      card.appendChild(el('span', { className: 'tool-tag', textContent: tool.tag }));
+      const link = el('a', {
+        className: 'tool-link', href: tool.url, target: '_blank',
+        rel: 'noopener noreferrer', textContent: tool.name
+      });
+      link.appendChild(el('svg', { className: 'icon icon-sm' },
+        [el('use', { href: '#icon-external' })]));
+      card.appendChild(link);
+      card.appendChild(el('span', { className: 'tool-desc', textContent: tool.desc }));
+      box.appendChild(card);
+    });
+  }
+
+  function renderContests() {
+    const box = $('contestBox');
+    clearNode(box);
+    contestData.forEach(function (item) {
+      const card = el('div', { className: 'contest-card' });
+      const head = el('div', { className: 'contest-head' });
+      head.appendChild(el('span', { className: 'contest-name', textContent: item.name }));
+      const site = el('a', { className: 'contest-site', href: item.url, target: '_blank', rel: 'noopener noreferrer' });
+      site.appendChild(el('svg', { className: 'icon icon-sm' }, [el('use', { href: '#icon-external' })]));
+      head.appendChild(site);
+      card.appendChild(head);
+      card.appendChild(el('div', { className: 'contest-full', textContent: item.full }));
+      card.appendChild(el('p', { className: 'contest-note', textContent: item.note }));
+      const btn = el('button', {
+        type: 'button', className: 'btn btn-soft btn-sm', textContent: '加入倒计时',
+        dataset: { action: 'add-contest', name: item.name + ' · ' + item.full, date: item.date }
+      });
+      card.appendChild(btn);
+      box.appendChild(card);
+    });
+  }
+
+  function renderMajorSelect() {
+    const select = $('majorSelect');
+    clearNode(select);
+    allProfiles().forEach(function (p) {
+      const opt = el('option', { value: p.id, textContent: p.name + (p.id === 'ic' ? '（内置示例）' : '') });
+      opt.selected = p.id === activeMajorId;
+      select.appendChild(opt);
+    });
+  }
+
+  function renderMajorManageInfo() {
+    const info = $('majorManageInfo');
+    const p = getProfile(activeMajorId);
+    clearNode(info);
+    info.appendChild(el('span', { className: 'major-manage-name', textContent: p.name }));
+    info.appendChild(el('span', {
+      className: 'major-manage-meta',
+      textContent: (isBuiltin(p.id) ? '内置示例 · ' : '自定义专业 · ') + p.roadmap.length + ' 个阶段 · ' + p.tools.length + ' 个资源 · ' + p.contests.length + ' 个竞赛'
+    }));
+  }
+
+  function applyMajor(id) {
+    const profile = getProfile(id);
+    activeMajorId = profile.id;
+    saveCustomStore();
+    roadmapData = profile.roadmap;
+    toolData = profile.tools;
+    contestData = profile.contests;
+    $('majorTitle').textContent = profile.name + ' 四年成长路线';
+    $('majorIntro').textContent = profile.intro || '把大一到大四拆成可勾选的阶段目标，每完成一项就点一下。';
+    $('majorHint').textContent = '当前模板：' + profile.name + '，路线、资源、竞赛和计算器已自动切换。';
+    renderMajorSelect();
+    renderMajorManageInfo();
+    const show = !!profile.showCircuit;
+    $('circuit').hidden = !show;
+    $('navCircuit').hidden = !show;
+    renderRoadmap();
+    renderTools();
+    renderContests();
+  }
+
+  $('majorSelect').addEventListener('change', function () {
+    applyMajor($('majorSelect').value);
+    showToast('已切换到 ' + getProfile(activeMajorId).name);
+  });
+
+  // ---------- 专业模板编辑器 ----------
+  let editingMajorId = null;
+
+  function blankProfile() {
+    return normalizeProfile({
+      id: '',
+      name: '',
+      intro: '',
+      showCircuit: false,
+      roadmap: [
+        { year: '大一', title: '基础与入门', goal: '', items: [''] },
+        { year: '大二', title: '', goal: '', items: [''] },
+        { year: '大三', title: '', goal: '', items: [''] },
+        { year: '大四', title: '', goal: '', items: [''] }
+      ],
+      tools: [{ tag: '', name: '', url: '', desc: '' }],
+      contests: [{ name: '', full: '', url: '', date: '', note: '' }]
+    });
+  }
+
+  function editorField(name, labelText, value, type) {
+    const wrap = el('label', { className: 'field editor-field' });
+    wrap.appendChild(el('span', { className: 'label', textContent: labelText }));
+    if (type === 'textarea') {
+      const ta = el('textarea', { className: 'textarea', name: name, rows: type === 'items' ? 4 : 2 });
+      ta.value = value || '';
+      wrap.appendChild(ta);
+    } else {
+      const inp = el('input', { className: 'input', name: name, type: 'text', autocomplete: 'off' });
+      inp.value = value || '';
+      wrap.appendChild(inp);
+    }
+    return wrap;
+  }
+
+  function buildRoadStageRow(stage, index) {
+    const row = el('div', { className: 'editor-row road-stage-row' });
+    const head = el('div', { className: 'editor-row-head' });
+    head.appendChild(el('span', { className: 'editor-row-label', textContent: '阶段 ' + (index + 1) }));
+    head.appendChild(el('button', {
+      type: 'button', className: 'btn btn-danger btn-sm', textContent: '删除阶段',
+      dataset: { action: 'remove-road' }
+    }));
+    row.appendChild(head);
+    const grid = el('div', { className: 'editor-grid' });
+    grid.appendChild(editorField('year', '阶段（如 大一）', stage.year));
+    grid.appendChild(editorField('title', '阶段标题', stage.title));
+    grid.appendChild(editorField('goal', '阶段目标', stage.goal, 'textarea'));
+    grid.appendChild(editorField('items', '阶段条目（每行一条）', (stage.items || []).join('\n'), 'items'));
+    row.appendChild(grid);
+    return row;
+  }
+
+  function buildToolRow(tool) {
+    const row = el('div', { className: 'editor-row tool-row' });
+    const head = el('div', { className: 'editor-row-head' });
+    head.appendChild(el('span', { className: 'editor-row-label', textContent: '资源' }));
+    head.appendChild(el('button', {
+      type: 'button', className: 'btn btn-danger btn-sm', textContent: '删除资源',
+      dataset: { action: 'remove-tool' }
+    }));
+    row.appendChild(head);
+    const grid = el('div', { className: 'editor-grid' });
+    grid.appendChild(editorField('tag', '标签', tool.tag));
+    grid.appendChild(editorField('name', '名称', tool.name));
+    grid.appendChild(editorField('url', '网址', tool.url));
+    grid.appendChild(editorField('desc', '说明', tool.desc));
+    row.appendChild(grid);
+    return row;
+  }
+
+  function buildContestRow(contest) {
+    const row = el('div', { className: 'editor-row contest-row' });
+    const head = el('div', { className: 'editor-row-head' });
+    head.appendChild(el('span', { className: 'editor-row-label', textContent: '竞赛' }));
+    head.appendChild(el('button', {
+      type: 'button', className: 'btn btn-danger btn-sm', textContent: '删除竞赛',
+      dataset: { action: 'remove-contest' }
+    }));
+    row.appendChild(head);
+    const grid = el('div', { className: 'editor-grid' });
+    grid.appendChild(editorField('name', '简称', contest.name));
+    grid.appendChild(editorField('full', '全称', contest.full));
+    grid.appendChild(editorField('url', '官网', contest.url));
+    grid.appendChild(editorField('date', '预计日期', contest.date));
+    grid.appendChild(editorField('note', '说明', contest.note));
+    row.appendChild(grid);
+    return row;
+  }
+
+  function renderRoadStageRows(stages) {
+    const box = $('roadStageRows');
+    clearNode(box);
+    stages.forEach(function (stage, index) {
+      box.appendChild(buildRoadStageRow(stage, index));
+    });
+  }
+
+  function renderToolRows(tools) {
+    const box = $('toolRows');
+    clearNode(box);
+    tools.forEach(function (tool) {
+      box.appendChild(buildToolRow(tool));
+    });
+  }
+
+  function renderContestRows(contests) {
+    const box = $('contestRows');
+    clearNode(box);
+    contests.forEach(function (contest) {
+      box.appendChild(buildContestRow(contest));
+    });
+  }
+
+  $('roadStageRows').addEventListener('click', function (event) {
+    const btn = event.target.closest('button[data-action="remove-road"]');
+    if (btn) btn.closest('.road-stage-row').remove();
+  });
+
+  $('toolRows').addEventListener('click', function (event) {
+    const btn = event.target.closest('button[data-action="remove-tool"]');
+    if (btn) btn.closest('.tool-row').remove();
+  });
+
+  $('contestRows').addEventListener('click', function (event) {
+    const btn = event.target.closest('button[data-action="remove-contest"]');
+    if (btn) btn.closest('.contest-row').remove();
+  });
+
+  $('addRoadStageBtn').addEventListener('click', function () {
+    $('roadStageRows').appendChild(buildRoadStageRow({ year: '', title: '', goal: '', items: [''] }, document.querySelectorAll('#roadStageRows .road-stage-row').length));
+  });
+
+  $('addToolRowBtn').addEventListener('click', function () {
+    $('toolRows').appendChild(buildToolRow({ tag: '', name: '', url: '', desc: '' }));
+  });
+
+  $('addContestRowBtn').addEventListener('click', function () {
+    $('contestRows').appendChild(buildContestRow({ name: '', full: '', url: '', date: '', note: '' }));
+  });
+
+  function readEditorProfile() {
+    const roadmap = Array.from(document.querySelectorAll('#roadStageRows .road-stage-row')).map(function (row) {
+      return {
+        year: row.querySelector('[name="year"]').value.trim(),
+        title: row.querySelector('[name="title"]').value.trim(),
+        goal: row.querySelector('[name="goal"]').value.trim(),
+        items: row.querySelector('[name="items"]').value.split('\n').map(function (s) { return s.trim(); }).filter(Boolean)
+      };
+    }).filter(function (s) { return s.title || s.goal || s.items.length; });
+
+    const tools = Array.from(document.querySelectorAll('#toolRows .tool-row')).map(function (row) {
+      return {
+        tag: row.querySelector('[name="tag"]').value.trim(),
+        name: row.querySelector('[name="name"]').value.trim(),
+        url: row.querySelector('[name="url"]').value.trim(),
+        desc: row.querySelector('[name="desc"]').value.trim()
+      };
+    }).filter(function (t) { return t.name || t.url; });
+
+    const contests = Array.from(document.querySelectorAll('#contestRows .contest-row')).map(function (row) {
+      return {
+        name: row.querySelector('[name="name"]').value.trim(),
+        full: row.querySelector('[name="full"]').value.trim(),
+        url: row.querySelector('[name="url"]').value.trim(),
+        date: row.querySelector('[name="date"]').value.trim(),
+        note: row.querySelector('[name="note"]').value.trim()
+      };
+    }).filter(function (c) { return c.name || c.full || c.url; });
+
+    return normalizeProfile({
+      id: editingMajorId || '',
+      name: $('majorName').value.trim(),
+      intro: $('majorIntroInput').value.trim(),
+      showCircuit: $('majorShowCircuit').checked,
+      roadmap: roadmap,
+      tools: tools,
+      contests: contests,
+      updatedAt: Date.now()
+    });
+  }
+
+  function openMajorEditor(id) {
+    const profile = id ? cloneProfile(getProfile(id)) : blankProfile();
+    editingMajorId = id || null;
+    $('majorEditorTitle').textContent = id ? '编辑专业：' + profile.name : '新建专业';
+    $('majorName').value = profile.name;
+    $('majorIntroInput').value = profile.intro;
+    $('majorShowCircuit').checked = !!profile.showCircuit;
+    renderRoadStageRows(profile.roadmap);
+    renderToolRows(profile.tools);
+    renderContestRows(profile.contests);
+    $('majorEditorModal').classList.add('show');
+  }
+
+  function closeMajorEditor() {
+    $('majorEditorModal').classList.remove('show');
+  }
+
+  function saveMajorFromEditor() {
+    const profile = readEditorProfile();
+    if (!profile.name) {
+      showToast('请填写专业名称', true);
+      return;
+    }
+    if (profile.id === 'ic') {
+      showToast('内置示例不能直接覆盖，可复制后修改', true);
+      return;
+    }
+    const index = customProfiles.findIndex(function (p) { return p.id === profile.id; });
+    if (index >= 0) customProfiles[index] = profile;
+    else customProfiles.push(profile);
+    activeMajorId = profile.id;
+    saveCustomStore();
+    closeMajorEditor();
+    applyMajor(profile.id);
+    showToast('专业模板已保存');
+  }
+
+  $('newMajorBtn').addEventListener('click', function () {
+    openMajorEditor(null);
+  });
+
+  $('editMajorBtn').addEventListener('click', function () {
+    if (isBuiltin(activeMajorId)) {
+      const copy = cloneProfile(getProfile(activeMajorId));
+      copy.id = '';
+      copy.name = copy.name + '（副本）';
+      editingMajorId = null;
+      $('majorEditorTitle').textContent = '复制示例并编辑';
+      $('majorName').value = copy.name;
+      $('majorIntroInput').value = copy.intro;
+      $('majorShowCircuit').checked = !!copy.showCircuit;
+      renderRoadStageRows(copy.roadmap);
+      renderToolRows(copy.tools);
+      renderContestRows(copy.contests);
+      $('majorEditorModal').classList.add('show');
+      return;
+    }
+    openMajorEditor(activeMajorId);
+  });
+
+  $('deleteMajorBtn').addEventListener('click', function () {
+    if (isBuiltin(activeMajorId)) {
+      showToast('内置示例不能删除', true);
+      return;
+    }
+    const profile = getProfile(activeMajorId);
+    if (!confirm('确定删除「' + profile.name + '」？')) return;
+    customProfiles = customProfiles.filter(function (p) { return p.id !== activeMajorId; });
+    activeMajorId = customProfiles.length ? customProfiles[customProfiles.length - 1].id : 'ic';
+    saveCustomStore();
+    applyMajor(activeMajorId);
+    showToast('已删除专业模板');
+  });
+
+  $('copyMajorLinkBtn').addEventListener('click', function () {
+    const profile = getProfile(activeMajorId);
+    const url = location.origin + location.pathname + '?t=' + encodeBase64Url(JSON.stringify(profile));
+    copyText(url).then(function () {
+      showToast('专业链接已复制');
+    }, function () {
+      showToast('复制失败', true);
+    });
+  });
+
+  $('exportMajorBtn').addEventListener('click', function () {
+    const profile = getProfile(activeMajorId);
+    const blob = new Blob([JSON.stringify(profile, null, 2)], { type: 'application/json' });
+    const objectUrl = URL.createObjectURL(blob);
+    const a = el('a', { href: objectUrl, download: '安大学生工具箱-' + profile.name + '.json' });
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(objectUrl);
+  });
+
+  $('importMajorBtn').addEventListener('click', function () {
+    $('importMajorFile').click();
+  });
+
+  $('importMajorFile').addEventListener('change', function (event) {
+    const file = event.target.files && event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function () {
+      try {
+        const data = JSON.parse(reader.result);
+        const list = Array.isArray(data) ? data : [data];
+        const imported = list.map(normalizeProfile).filter(function (p) { return p && p.name; });
+        if (!imported.length) {
+          showToast('没有找到有效的专业模板', true);
+          return;
+        }
+        imported.forEach(function (p) {
+          if (p.id === 'ic' || customProfiles.some(function (x) { return x.id === p.id; })) {
+            p.id = 'm' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+          }
+          customProfiles.push(p);
+        });
+        activeMajorId = imported[imported.length - 1].id;
+        saveCustomStore();
+        applyMajor(activeMajorId);
+        showToast('已导入 ' + imported.length + ' 个专业模板');
+      } catch (err) {
+        showToast('JSON 文件格式不正确', true);
+      }
+      event.target.value = '';
+    };
+    reader.readAsText(file);
+  });
+
+  $('saveMajorBtn').addEventListener('click', saveMajorFromEditor);
+  $('majorEditorForm').addEventListener('submit', function (event) {
+    event.preventDefault();
+  });
+  document.querySelectorAll('[data-close-major]').forEach(function (btn) {
+    btn.addEventListener('click', closeMajorEditor);
+  });
+
+  $('contestBox').addEventListener('click', function (event) {
+    const btn = event.target.closest('button[data-action="add-contest"]');
+    if (!btn) return;
+    quickAdd(btn.dataset.name, btn.dataset.date);
   });
 
   // ---------- 电路计算器 ----------
@@ -1123,92 +1782,6 @@
       event.preventDefault();
     });
   });
-
-  // ---------- 竞赛日历 ----------
-  const contestData = [
-    {
-      name: '集创赛',
-      full: '全国大学生集成电路创新创业大赛',
-      url: 'https://univ.ciciec.com/',
-      date: '2027-04-01',
-      note: '春季报名、暑期总决赛，适合组队做芯片 / FPGA 方向项目'
-    },
-    {
-      name: '电赛',
-      full: '全国大学生电子设计竞赛',
-      url: 'https://www.nuedc-training.com.cn/',
-      date: '2027-08-01',
-      note: '偶数年全国赛、奇数年省赛或邀请赛，是锻炼动手能力的经典赛事'
-    },
-    {
-      name: '蓝桥杯',
-      full: '蓝桥杯电子类个人赛',
-      url: 'https://dasai.lanqiao.cn/',
-      date: '2027-04-01',
-      note: '嵌入式、单片机等赛道，适合用大一 C 语言基础起步'
-    }
-  ];
-
-  function renderContests() {
-    const box = $('contestBox');
-    clearNode(box);
-    contestData.forEach(function (item) {
-      const card = el('div', { className: 'contest-card' });
-      const head = el('div', { className: 'contest-head' });
-      head.appendChild(el('span', { className: 'contest-name', textContent: item.name }));
-      const site = el('a', { className: 'contest-site', href: item.url, target: '_blank', rel: 'noopener noreferrer' });
-      site.appendChild(el('svg', { className: 'icon icon-sm' }, [el('use', { href: '#icon-external' })]));
-      head.appendChild(site);
-      card.appendChild(head);
-      card.appendChild(el('div', { className: 'contest-full', textContent: item.full }));
-      card.appendChild(el('p', { className: 'contest-note', textContent: item.note }));
-      const btn = el('button', {
-        type: 'button', className: 'btn btn-soft btn-sm', textContent: '加入倒计时',
-        dataset: { action: 'add-contest', name: item.name + ' · ' + item.full, date: item.date }
-      });
-      card.appendChild(btn);
-      box.appendChild(card);
-    });
-  }
-
-  $('contestBox').addEventListener('click', function (event) {
-    const btn = event.target.closest('button[data-action="add-contest"]');
-    if (!btn) return;
-    quickAdd(btn.dataset.name, btn.dataset.date);
-  });
-
-  // ---------- 学习导航 ----------
-  const toolData = [
-    { tag: '英语', name: 'LexiPath词汇旅程', url: 'https://lexipath-vocab-journey.pengyudeng92.chatgpt.site', desc: '网页 SRS 背单词，无需安装' },
-    { tag: '文献', name: 'SciHub', url: 'https://sci-hub.se', desc: '外文论文免费下载' },
-    { tag: '效率', name: 'Convertio', url: 'https://convertio.co', desc: '任意格式文件互转' },
-    { tag: '笔记', name: 'Notion', url: 'https://www.notion.so', desc: '搭建个人知识库、整理资料' },
-    { tag: '学院', name: '安徽大学集成电路学院', url: 'https://ic.ahu.edu.cn', desc: '学院官网：通知公告、教学科研与实验室信息' },
-    { tag: '课程', name: '中国大学MOOC', url: 'https://www.icourse163.org/', desc: '数字电路、模拟电路、单片机等公开课' },
-    { tag: '数字', name: 'HDLBits', url: 'https://hdlbits.01xz.net/wiki/Main_Page', desc: 'Verilog 在线练习平台，边学边写边验证' },
-    { tag: '社区', name: '与非网 EEFOCUS', url: 'https://www.eefocus.com/', desc: '电子与集成电路行业资讯、教程与社区讨论' },
-    { tag: '竞赛', name: '集创赛官网', url: 'https://univ.ciciec.com/', desc: '全国大学生集成电路创新创业大赛' },
-    { tag: '竞赛', name: '电子设计竞赛官网', url: 'https://www.nuedc-training.com.cn/', desc: '全国大学生电子设计竞赛' },
-    { tag: '视频', name: 'B站学习区', url: 'https://www.bilibili.com/', desc: '搜索“数字电路”“Verilog”“芯片设计入门”等课程' }
-  ];
-
-  function renderTools() {
-    const box = $('toolBox');
-    clearNode(box);
-    toolData.forEach(function (tool) {
-      const card = el('div', { className: 'tool-card' });
-      card.appendChild(el('span', { className: 'tool-tag', textContent: tool.tag }));
-      const link = el('a', {
-        className: 'tool-link', href: tool.url, target: '_blank',
-        rel: 'noopener noreferrer', textContent: tool.name
-      });
-      link.appendChild(el('svg', { className: 'icon icon-sm' },
-        [el('use', { href: '#icon-external' })]));
-      card.appendChild(link);
-      card.appendChild(el('span', { className: 'tool-desc', textContent: tool.desc }));
-      box.appendChild(card);
-    });
-  }
 
   // ---------- 身份与关键日期 ----------
   const PROFILE_KEY = 'gradeData';
@@ -1471,9 +2044,11 @@
   // ---------- 初始化 ----------
   renderCourses();
   renderCountdowns();
-  renderTools();
-  renderRoadmap();
-  renderContests();
+  renderMajorSelect();
+  applyMajor(activeMajorId);
+  if (sharedProfile) {
+    showToast('已载入分享的专业模板，可点击“编辑”继续修改');
+  }
   $('levelSelect').value = profileState.level;
   $('statusSelect').value = profileState.status;
   renderCalendars();
