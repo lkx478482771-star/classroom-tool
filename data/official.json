@@ -3,11 +3,11 @@
   "source": {
     "name": "安徽大学教务处",
     "calendarPdf": "https://jwc.ahu.edu.cn/_upload/article/files/46/fa/c68d6dee421e8fab148064285cff/8a5c195f-3e24-4e2f-a56c-981f8d78eb10.pdf",
-    "lastChecked": "2026-08-16",
+    "lastChecked": "2026-08-17",
     "status": "ok",
     "pdfSha": "2b356e9d47f75d19c9a3ff8b3a1bc8b9fd5a8ea3f91438d6f105d552ae3cc083",
     "extractedLineCount": 7,
-    "changed": true
+    "changed": false
   },
   "notes": [
     "2026年9月4日本科生报到；9月6日研究生老生报到；9月7日本科、研究生老生上课",
