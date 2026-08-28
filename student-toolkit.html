@@ -60,8 +60,164 @@
     }
   }
 </style>
+<style>
+  body.toolkit-tabs .section {
+    display: none;
+  }
+  body.toolkit-tabs .section.view-active {
+    display: block;
+  }
+
+  .home-hero {
+    background: linear-gradient(135deg, #101b2d 0%, #173a4f 58%, #1f5f66 100%);
+    color: #f8fafc;
+    border-radius: 18px;
+    padding: 34px 34px 30px;
+    position: relative;
+    overflow: hidden;
+  }
+  .home-hero::after {
+    content: "";
+    position: absolute;
+    right: -70px;
+    top: -70px;
+    width: 240px;
+    height: 240px;
+    border-radius: 50%;
+    border: 34px solid rgba(255, 255, 255, 0.07);
+  }
+  .home-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 11px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.12);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: #d8f3f0;
+    margin-bottom: 16px;
+  }
+  .home-hero h2 {
+    margin: 0 0 10px;
+    font-size: 26px;
+    font-weight: 800;
+    color: #ffffff;
+  }
+  .home-hero p {
+    max-width: 640px;
+    margin: 0 0 22px;
+    font-size: 14px;
+    line-height: 1.8;
+    color: rgba(248, 250, 252, 0.82);
+  }
+  .home-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .home-actions .btn-primary {
+    background: #2dd4bf;
+    color: #0b1e2a;
+  }
+  .home-actions .btn-secondary {
+    background: rgba(255, 255, 255, 0.1);
+    color: #f8fafc;
+    border-color: rgba(255, 255, 255, 0.28);
+  }
+  .home-stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+    margin-top: 24px;
+  }
+  .home-stat {
+    padding: 14px 16px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.09);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+  }
+  .home-stat strong {
+    display: block;
+    font-size: 24px;
+    font-weight: 800;
+    color: #5eead4;
+  }
+  .home-stat span {
+    display: block;
+    margin-top: 4px;
+    font-size: 12px;
+    color: rgba(248, 250, 252, 0.72);
+  }
+
+  .home-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+    gap: 14px;
+  }
+  .home-card {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 18px;
+    border-radius: 14px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-1);
+    color: var(--text);
+    transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+  }
+  .home-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-2);
+    border-color: rgba(20, 184, 166, 0.45);
+    text-decoration: none;
+  }
+  .home-card .home-card-icon {
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 11px;
+    background: rgba(20, 184, 166, 0.12);
+    color: #0f766e;
+  }
+  .home-card h3 {
+    margin: 4px 0 0;
+    font-size: 15px;
+    font-weight: 750;
+  }
+  .home-card p {
+    margin: 0;
+    font-size: 12px;
+    line-height: 1.55;
+    color: var(--text-3);
+  }
+
+  @media (max-width: 600px) {
+    .home-hero {
+      padding: 26px 22px 24px;
+      border-radius: 16px;
+    }
+    .home-hero h2 {
+      font-size: 22px;
+    }
+    .home-stats {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+    }
+    .home-stat {
+      padding: 11px 10px;
+    }
+    .home-stat strong {
+      font-size: 19px;
+    }
+  }
+</style>
 </head>
-<body>
+<body class="toolkit-tabs">
 <svg xmlns="http://www.w3.org/2000/svg" style="display:none">
   <symbol id="icon-grad" viewBox="0 0 24 24">
     <path d="M22 10 12 5 2 10l10 5 10-5v5"/>
@@ -185,7 +341,9 @@
       <span class="brand-name">安大学生工具箱</span>
     </a>
     <nav class="nav-links" aria-label="页面导航">
-      <a href="#gpa" class="active">绩点计算器</a>
+      <a href="#home" class="active">总览</a>
+      <a href="#majorManager">我的专业</a>
+      <a href="#gpa">绩点计算器</a>
       <a href="#countdown">倒计时</a>
       <a href="#clock">时钟</a>
       <a href="#calendar">校历</a>
@@ -194,12 +352,81 @@
       <a href="#contest">竞赛</a>
       <a href="#tools">学习导航</a>
       <a href="#nav">校园导航</a>
-      <a href="index.html">课堂整理</a>
+      <a href="classroom.html">课堂整理</a>
     </nav>
   </div>
 </header>
 
 <main class="page">
+  <section class="section view-active" id="home">
+    <div class="home-hero">
+      <span class="home-kicker">AHU STUDENT TOOLKIT</span>
+      <h2>安大学生工具箱</h2>
+      <p>绩点、倒计时、校历、专业路线、电路计算、竞赛日历和学习导航全部集中在一个工作台。选择下面的模块直接进入，功能数据保存在本机浏览器中。</p>
+      <div class="home-actions">
+        <a class="btn btn-primary" href="#major">查看 16 阶段成长路线</a>
+        <a class="btn btn-secondary" href="#calendar">打开校历</a>
+      </div>
+      <div class="home-stats">
+        <div class="home-stat"><strong>9</strong><span>常用模块</span></div>
+        <div class="home-stat"><strong>16</strong><span>成长阶段</span></div>
+        <div class="home-stat"><strong>96</strong><span>可勾选任务</span></div>
+      </div>
+    </div>
+    <div class="home-grid" style="margin-top:18px" id="homeGrid">
+      <a class="home-card" href="#majorManager">
+        <span class="home-card-icon"><svg class="icon icon-xl"><use href="#icon-settings"></use></svg></span>
+        <h3>我的专业</h3>
+        <p>切换、新建、复制或导出专业模板</p>
+      </a>
+      <a class="home-card" href="#gpa">
+        <span class="home-card-icon"><svg class="icon icon-xl"><use href="#icon-target"></use></svg></span>
+        <h3>绩点计算器</h3>
+        <p>按安大规则计算加权平均绩点</p>
+      </a>
+      <a class="home-card" href="#countdown">
+        <span class="home-card-icon"><svg class="icon icon-xl"><use href="#icon-clock"></use></svg></span>
+        <h3>考试倒计时</h3>
+        <p>添加考试和重要日期，自动倒计时</p>
+      </a>
+      <a class="home-card" href="#clock">
+        <span class="home-card-icon"><svg class="icon icon-xl"><use href="#icon-zap"></use></svg></span>
+        <h3>时钟</h3>
+        <p>实时时间与日期显示</p>
+      </a>
+      <a class="home-card" href="#calendar">
+        <span class="home-card-icon"><svg class="icon icon-xl"><use href="#icon-calendar"></use></svg></span>
+        <h3>校历</h3>
+        <p>秋季春季学期、节假日与重要节点</p>
+      </a>
+      <a class="home-card" href="#major">
+        <span class="home-card-icon"><svg class="icon icon-xl"><use href="#icon-book"></use></svg></span>
+        <h3>四年成长路线</h3>
+        <p>16 个阶段、96 项任务，可勾选进度</p>
+      </a>
+      <a class="home-card" href="#circuit">
+        <span class="home-card-icon"><svg class="icon icon-xl"><use href="#icon-zap"></use></svg></span>
+        <h3>电路计算器</h3>
+        <p>欧姆定律、分压与 RC 时间常数</p>
+      </a>
+      <a class="home-card" href="#contest">
+        <span class="home-card-icon"><svg class="icon icon-xl"><use href="#icon-calendar"></use></svg></span>
+        <h3>竞赛日历</h3>
+        <p>集创赛、电赛、蓝桥杯等赛事信息</p>
+      </a>
+      <a class="home-card" href="#tools">
+        <span class="home-card-icon"><svg class="icon icon-xl"><use href="#icon-toolkit"></use></svg></span>
+        <h3>学习导航</h3>
+        <p>课程、文献、社区与常用学习资源</p>
+      </a>
+      <a class="home-card" href="#nav">
+        <span class="home-card-icon"><svg class="icon icon-xl"><use href="#icon-external"></use></svg></span>
+        <h3>校园导航</h3>
+        <p>学院官网、智慧安大与校园服务入口</p>
+      </a>
+    </div>
+  </section>
+
   <section class="section" id="majorManager">
     <div class="card">
       <div class="major-manage-head">
@@ -633,30 +860,53 @@
     return date;
   }
 
-  // ---------- 导航滚动高亮 ----------
+  // ---------- 分区视图切换 ----------
   const sections = Array.from(document.querySelectorAll('.section'));
   const navLinks = Array.from(document.querySelectorAll('.nav-links a[href^="#"]'));
   const backTop = $('backTop');
-  let scrollRaf = null;
 
-  window.addEventListener('scroll', function () {
-    if (scrollRaf) return;
-    scrollRaf = requestAnimationFrame(function () {
-      scrollRaf = null;
-      backTop.hidden = window.scrollY <= 300;
-      let current = '';
-      sections.forEach(function (section) {
-        if (window.scrollY >= section.offsetTop - 140) current = section.id;
-      });
-      navLinks.forEach(function (link) {
-        link.classList.toggle('active', link.getAttribute('href') === '#' + current);
-      });
+  function switchView(id) {
+    if (!id) id = 'home';
+    const section = $(id);
+    if (!section || !sections.includes(section)) return;
+    if (section.hidden) {
+      showToast('当前专业未启用该模块');
+      return;
+    }
+    sections.forEach(function (item) {
+      item.classList.toggle('view-active', item === section);
     });
-  }, { passive: true });
+    navLinks.forEach(function (link) {
+      link.classList.toggle('active', link.getAttribute('href') === '#' + id);
+    });
+    try {
+      history.replaceState(null, '', '#' + id);
+    } catch (err) {}
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function handleHashLink(event) {
+    const link = event.target.closest('a[href^="#"]');
+    if (!link) return;
+    if (link.closest('.nav-links') || link.closest('#homeGrid')) {
+      event.preventDefault();
+      switchView(link.getAttribute('href').slice(1));
+    }
+  }
+
+  document.addEventListener('click', handleHashLink);
+
+  window.addEventListener('hashchange', function () {
+    const id = location.hash ? location.hash.slice(1) : 'home';
+    if (sections.some(function (s) { return s.id === id; })) switchView(id);
+  });
 
   backTop.addEventListener('click', function () {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
+
+  const initialView = location.hash ? location.hash.slice(1) : 'home';
+  switchView(sections.some(function (s) { return s.id === initialView; }) ? initialView : 'home');
 
   // ---------- 绩点模块 ----------
   const gpaSteps = [90, 85, 82, 78, 75, 72, 68, 64, 60];
