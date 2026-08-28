@@ -196,6 +196,29 @@
     color: var(--text-3);
   }
 
+  .top-clock {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
+    padding: 5px 10px;
+    border-radius: 10px;
+    background: rgba(15, 118, 110, 0.08);
+    border: 1px solid rgba(15, 118, 110, 0.16);
+    white-space: nowrap;
+  }
+  .top-clock #clockTime {
+    font-size: 14px;
+    font-weight: 800;
+    color: #0f766e;
+    line-height: 1.1;
+  }
+  .top-clock #clockDate {
+    font-size: 10px;
+    color: var(--text-3);
+    line-height: 1.2;
+  }
+
   @media (max-width: 600px) {
     .home-hero {
       padding: 26px 22px 24px;
@@ -213,6 +236,9 @@
     }
     .home-stat strong {
       font-size: 19px;
+    }
+    .top-clock {
+      display: none;
     }
   }
 </style>
@@ -345,7 +371,6 @@
       <a href="#majorManager">我的专业</a>
       <a href="#gpa">绩点计算器</a>
       <a href="#countdown">倒计时</a>
-      <a href="#clock">时钟</a>
       <a href="#calendar">校历</a>
       <a href="#major">专业路线</a>
       <a href="#circuit" id="navCircuit">电路计算</a>
@@ -354,6 +379,10 @@
       <a href="#nav">校园导航</a>
       <a href="classroom.html">课堂整理</a>
     </nav>
+    <div class="top-clock" aria-label="当前时间">
+      <span id="clockTime">00:00:00</span>
+      <span id="clockDate">--</span>
+    </div>
   </div>
 </header>
 
@@ -388,11 +417,6 @@
         <span class="home-card-icon"><svg class="icon icon-xl"><use href="#icon-clock"></use></svg></span>
         <h3>考试倒计时</h3>
         <p>添加考试和重要日期，自动倒计时</p>
-      </a>
-      <a class="home-card" href="#clock">
-        <span class="home-card-icon"><svg class="icon icon-xl"><use href="#icon-zap"></use></svg></span>
-        <h3>时钟</h3>
-        <p>实时时间与日期显示</p>
       </a>
       <a class="home-card" href="#calendar">
         <span class="home-card-icon"><svg class="icon icon-xl"><use href="#icon-calendar"></use></svg></span>
@@ -490,16 +514,6 @@
         <input class="input" id="cdDate" type="date">
         <button type="submit" class="btn btn-primary">添加</button>
       </form>
-    </div>
-  </section>
-
-  <section class="section" id="clock">
-    <div class="card">
-      <h2><svg class="icon"><use href="#icon-zap"></use></svg>时钟</h2>
-      <div class="clock-display">
-        <div class="clock-time" id="clockTime">00:00:00</div>
-        <div class="clock-date" id="clockDate"></div>
-      </div>
     </div>
   </section>
 
