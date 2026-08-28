@@ -89,6 +89,29 @@
     text-decoration: none;
   }
 
+  .home-clock {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
+    padding: 5px 10px;
+    border-radius: 10px;
+    background: var(--home-soft);
+    border: 1px solid rgba(15, 118, 110, 0.16);
+    white-space: nowrap;
+  }
+  .home-clock #homeClockTime {
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--home-teal);
+    line-height: 1.1;
+  }
+  .home-clock #homeClockDate {
+    font-size: 10px;
+    color: #6b7a77;
+    line-height: 1.2;
+  }
+
   .hero {
     max-width: 1120px;
     margin: 0 auto;
@@ -358,6 +381,10 @@
       <a href="student-toolkit.html#major">专业路线</a>
       <a href="classroom.html">课堂整理</a>
     </nav>
+    <div class="home-clock" aria-label="当前时间">
+      <span id="homeClockTime">00:00:00</span>
+      <span id="homeClockDate">--</span>
+    </div>
   </div>
 </header>
 
@@ -455,6 +482,17 @@
     var term = (month >= 9 || month <= 1) ? '秋季学期' : '春季学期';
     var el = document.getElementById('termText');
     if (el) el.textContent = term;
+
+    function pad2(value) { return String(value).padStart(2, '0'); }
+    function updateHomeClock() {
+      var current = new Date();
+      var timeEl = document.getElementById('homeClockTime');
+      var dateEl = document.getElementById('homeClockDate');
+      if (timeEl) timeEl.textContent = pad2(current.getHours()) + ':' + pad2(current.getMinutes()) + ':' + pad2(current.getSeconds());
+      if (dateEl) dateEl.textContent = current.toLocaleDateString('zh-CN', { weekday: 'short', year: 'numeric', month: 'long', day: 'numeric' });
+    }
+    updateHomeClock();
+    setInterval(updateHomeClock, 1000);
   })();
 </script>
 </body>
