@@ -1,5 +1,13 @@
-const CACHE = 'ahutk-v2';
-const URLS = ['/', '/student-toolkit.html', '/assets/app.css', '/assets/icons.svg', '/assets/favicon.svg'];
+const CACHE = 'ahutk-v3';
+const URLS = [
+  '/',
+  '/index.html',
+  '/classroom.html',
+  '/student-toolkit.html',
+  '/assets/app.css',
+  '/assets/icons.svg',
+  '/assets/favicon.svg'
+];
 
 self.addEventListener('install', function (e) {
   e.waitUntil(caches.open(CACHE).then(function (c) { return c.addAll(URLS); }).then(function () { return self.skipWaiting(); }));

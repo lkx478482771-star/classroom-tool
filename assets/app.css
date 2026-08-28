@@ -13,15 +13,15 @@
   --border-strong: #d5dae3;
   --text: #16181d;
   --text-2: #4d5462;
-  --text-3: #8b93a3;
-  --accent: #4f5bff;
+  --text-3: #697080;
+  --accent: #4652ee;
   --accent-deep: #3f49e0;
   --accent-soft: rgba(79, 91, 255, 0.1);
-  --ok: #0e9f6e;
+  --ok: #0a7f56;
   --ok-soft: rgba(14, 159, 110, 0.12);
-  --warn: #b45d0c;
+  --warn: #a6530b;
   --warn-soft: rgba(245, 158, 11, 0.14);
-  --danger: #e5484d;
+  --danger: #cf3640;
   --danger-soft: rgba(229, 72, 77, 0.1);
   --shadow-1: 0 1px 2px rgba(18, 22, 33, 0.05);
   --shadow-2: 0 8px 24px rgba(18, 22, 33, 0.08);
@@ -42,7 +42,7 @@ html[data-theme="dark"] {
   --border-strong: #353a49;
   --text: #eef0f6;
   --text-2: #a7adbd;
-  --text-3: #6e7585;
+  --text-3: #82899a;
   --accent: #7c86ff;
   --accent-deep: #97a0ff;
   --accent-soft: rgba(124, 134, 255, 0.16);
@@ -72,6 +72,7 @@ body {
   background: var(--bg);
   color: var(--text);
   line-height: 1.55;
+  overflow-wrap: break-word;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
@@ -82,6 +83,7 @@ textarea,
 select {
   font: inherit;
   color: inherit;
+  touch-action: manipulation;
 }
 
 button {
@@ -107,7 +109,7 @@ a:hover {
 }
 
 :focus-visible {
-  outline: 2px solid var(--accent);
+  outline: 3px solid var(--accent);
   outline-offset: 2px;
 }
 
@@ -984,12 +986,13 @@ a:hover {
 }
 
 .todo-item.done {
-  opacity: 0.55;
+  opacity: 0.6;
 }
 
 .todo-item.done .todo-title {
   text-decoration: line-through;
   color: var(--text-3);
+  opacity: 1;
 }
 
 .todo-check {
@@ -1014,6 +1017,7 @@ a:hover {
   background: var(--ok);
   border-color: var(--ok);
   color: #fff;
+  opacity: 1;
 }
 
 .todo-title {
@@ -2103,6 +2107,45 @@ a:hover {
   background: var(--accent);
 }
 
+/* ---------- Overflow safeguards ---------- */
+img,
+video {
+  max-width: 100%;
+  height: auto;
+}
+
+.card,
+.result-box,
+.countdown-item,
+.tool-card,
+.road-stage,
+.calc-box,
+.contest-card,
+.editor-row {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.card h2,
+.modal-head h3,
+.editor-section-head h4,
+.tl-mn,
+.tl-ev .n {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.course-table th,
+.course-table td,
+.rule-table td {
+  overflow-wrap: anywhere;
+}
+
+.modal-foot,
+.rec-controls {
+  flex-wrap: wrap;
+}
+
 /* ---------- Responsive ---------- */
 @media (max-width: 900px) {
   .sidebar {
@@ -2140,6 +2183,45 @@ a:hover {
 @media (max-width: 600px) {
   .card {
     padding: 16px;
+  }
+
+  .btn,
+  .tab,
+  .tl-tabs button,
+  .course-select,
+  .input,
+  .select {
+    min-height: 40px;
+  }
+
+  .btn-icon,
+  .modal-close,
+  .course-action,
+  .note-pin,
+  .todo-del,
+  .back-top {
+    min-width: 40px;
+    min-height: 40px;
+  }
+
+  .search-field input {
+    min-height: 40px;
+    padding-right: 48px;
+  }
+
+  .search-field .clear-btn {
+    min-width: 40px;
+    min-height: 40px;
+    right: 2px;
+  }
+
+  .section-btns,
+  .result-actions,
+  .quick-btns,
+  .note-actions,
+  .modal-foot,
+  .rec-controls {
+    gap: 10px;
   }
 
   .clock-time {

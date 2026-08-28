@@ -242,6 +242,75 @@
     }
   }
 </style>
+<style>
+  html {
+    scroll-padding-top: 74px;
+  }
+  .section {
+    scroll-margin-top: 74px;
+  }
+  .nav-inner {
+    min-width: 0;
+  }
+  .brand {
+    min-width: 0;
+  }
+  .brand-name {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .nav-links {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+  .nav-links a {
+    flex-shrink: 0;
+  }
+  .course-table {
+    min-width: 560px;
+  }
+  .course-table input:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: -2px;
+  }
+  .tl-ev .n {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+  .calc-input-row {
+    min-width: 0;
+  }
+  .countdown-form .input {
+    min-width: 0;
+  }
+  .btn {
+    max-width: 100%;
+  }
+  @media (max-width: 700px) {
+    .top-clock {
+      padding: 4px 8px;
+    }
+    .top-clock #clockDate {
+      display: none;
+    }
+  }
+  @media (max-width: 600px) {
+    .btn {
+      white-space: normal;
+      line-height: 1.25;
+    }
+    .home-actions .btn,
+    .countdown-form .btn {
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+    .tl-tabs button {
+      padding: 8px 8px;
+      font-size: 12px;
+    }
+  }
+</style>
 </head>
 <body class="toolkit-tabs">
 <svg xmlns="http://www.w3.org/2000/svg" style="display:none">
@@ -367,7 +436,7 @@
       <span class="brand-name">安大学生工具箱</span>
     </a>
     <nav class="nav-links" aria-label="页面导航">
-      <a href="#home" class="active">总览</a>
+      <a href="#home" class="active" aria-current="page">总览</a>
       <a href="#majorManager">我的专业</a>
       <a href="#gpa">绩点计算器</a>
       <a href="#countdown">倒计时</a>
@@ -379,8 +448,8 @@
       <a href="#nav">校园导航</a>
       <a href="classroom.html">课堂整理</a>
     </nav>
-    <div class="top-clock" aria-label="当前时间">
-      <span id="clockTime">00:00:00</span>
+    <div class="top-clock" aria-label="当前时间" role="timer">
+      <span id="clockTime">00:00</span>
       <span id="clockDate">--</span>
     </div>
   </div>
@@ -542,8 +611,8 @@
       </div>
       <div class="tl-wrap">
         <div class="tl-tabs" id="calendarTabs" role="tablist" aria-label="选择学期">
-          <button type="button" class="act" role="tab" aria-selected="true" data-sem="fall">秋季学期 9月-1月</button>
-          <button type="button" role="tab" aria-selected="false" data-sem="spring">春季学期 2月-7月</button>
+          <button type="button" class="act" role="tab" id="calTabFall" aria-controls="calFall" aria-selected="true" tabindex="0" data-sem="fall">秋季学期 9月-1月</button>
+          <button type="button" role="tab" id="calTabSpring" aria-controls="calSpring" aria-selected="false" tabindex="-1" data-sem="spring">春季学期 2月-7月</button>
         </div>
         <div class="tl-now" id="calNow">
           <span>今天</span>
@@ -553,8 +622,8 @@
           <span>|</span>
           <span id="calNowEvent">--</span>
         </div>
-        <div id="calFall" role="tabpanel"></div>
-        <div id="calSpring" role="tabpanel" hidden></div>
+        <div id="calFall" role="tabpanel" aria-labelledby="calTabFall"></div>
+        <div id="calSpring" role="tabpanel" aria-labelledby="calTabSpring" hidden></div>
       </div>
       <div class="official-source" id="calSource"></div>
       <details class="details-box" id="officialNotesBox" hidden>
@@ -891,7 +960,10 @@
       item.classList.toggle('view-active', item === section);
     });
     navLinks.forEach(function (link) {
-      link.classList.toggle('active', link.getAttribute('href') === '#' + id);
+      const active = link.getAttribute('href') === '#' + id;
+      link.classList.toggle('active', active);
+      if (active) link.setAttribute('aria-current', 'page');
+      else link.removeAttribute('aria-current');
     });
     try {
       history.replaceState(null, '', '#' + id);
@@ -1226,7 +1298,7 @@
   function pad2(value) { return String(value).padStart(2, '0'); }
   function updateClock() {
     const now = new Date();
-    $('clockTime').textContent = pad2(now.getHours()) + ':' + pad2(now.getMinutes()) + ':' + pad2(now.getSeconds());
+    $('clockTime').textContent = pad2(now.getHours()) + ':' + pad2(now.getMinutes());
     $('clockDate').textContent = now.toLocaleDateString('zh-CN', {
       weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
     });
@@ -2459,6 +2531,7 @@
       const active = button.dataset.sem === currentSem;
       button.classList.toggle('act', active);
       button.setAttribute('aria-selected', active ? 'true' : 'false');
+      button.setAttribute('tabindex', active ? '0' : '-1');
     });
   }
 
@@ -2524,21 +2597,20 @@
   renderCalendars();
   renderMyDates();
   renderMyDateActions();
-  setSemester('fall');
   updateCalendarNow();
   updateClock();
   loadOfficialData();
 
-  setInterval(updateClock, 1000);
-  setInterval(renderCountdowns, 60000);
-  setInterval(updateCalendarNow, 60000);
+  function refreshLiveData() {
+    updateClock();
+    renderCountdowns();
+    updateCalendarNow();
+  }
+
+  setInterval(refreshLiveData, 60000);
 
   document.addEventListener('visibilitychange', function () {
-    if (!document.hidden) {
-      updateClock();
-      renderCountdowns();
-      updateCalendarNow();
-    }
+    if (!document.hidden) refreshLiveData();
   });
 
   if ('serviceWorker' in navigator && location.protocol.indexOf('http') === 0) {

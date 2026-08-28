@@ -10,6 +10,144 @@
 <title>课堂整理工具</title>
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="assets/app.css">
+<style>
+/* ---------- 本页局部优化：触控、移动端与无障碍 ---------- */
+.modal-overlay {
+  overscroll-behavior: contain;
+}
+
+.modal-body {
+  min-height: 0;
+  overscroll-behavior: contain;
+}
+
+.course-head h1 {
+  flex: 1;
+  min-width: 0;
+}
+
+.teacher-badge {
+  max-width: 38%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.note-content,
+.summary-content,
+.rec-text {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.toast {
+  max-width: min(440px, calc(100vw - 24px));
+  white-space: normal;
+  word-break: break-word;
+}
+
+.empty .btn {
+  margin-top: 12px;
+}
+
+.sidebar-tools {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.sidebar-tools .btn {
+  flex: 1;
+  min-width: 0;
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+body.modal-open {
+  overflow: hidden;
+}
+
+@media (max-width: 900px) {
+  .sidebar-head .brand-name {
+    display: none;
+  }
+
+  .sidebar-head {
+    padding: 14px 10px 10px;
+  }
+
+  .btn-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .course-action,
+  .note-pin,
+  .todo-del,
+  .modal-close {
+    width: 36px;
+    height: 36px;
+  }
+
+  .search-field .clear-btn {
+    width: 28px;
+    height: 28px;
+  }
+}
+
+@media (max-width: 600px) {
+  .modal-overlay {
+    padding: 12px;
+  }
+
+  .modal {
+    width: min(480px, calc(100vw - 24px));
+    max-height: calc(100dvh - 24px);
+  }
+
+  .modal-head {
+    padding: 14px 16px 10px;
+  }
+
+  .modal-body {
+    padding: 4px 16px 16px;
+  }
+
+  .modal-foot {
+    padding: 10px 16px;
+    flex-wrap: wrap;
+  }
+
+  .modal-foot .btn {
+    flex: 1;
+    min-height: 40px;
+  }
+
+  .main-inner {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .section-btns .btn {
+    flex: 1;
+  }
+
+  .todo-item {
+    gap: 8px;
+    padding: 10px;
+  }
+
+  .toast {
+    bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+@media (hover: none), (max-width: 900px) {
+  .course-actions,
+  .note-card .note-pin {
+    opacity: 1;
+  }
+}
+</style>
 </head>
 <body>
 <svg xmlns="http://www.w3.org/2000/svg" style="display:none">
@@ -159,14 +297,19 @@
     </div>
     <nav class="course-list" id="courseList" aria-label="课程列表"></nav>
     <div class="sidebar-foot">
+      <div class="sidebar-tools">
+        <button type="button" class="btn btn-ghost btn-sm" id="exportBtn"><svg class="icon icon-sm"><use href="#icon-download"></use></svg>导出备份</button>
+        <button type="button" class="btn btn-ghost btn-sm" id="importBtn"><svg class="icon icon-sm"><use href="#icon-arrow-up"></use></svg>导入备份</button>
+      </div>
       <div class="stat-row" id="sidebarFooter"></div>
     </div>
   </aside>
+  <input type="file" id="backupFile" accept="application/json,.json" hidden>
   <div class="sidebar-backdrop" id="sidebarBackdrop" hidden></div>
 
   <main class="main-panel">
     <div class="mobile-topbar">
-      <button type="button" class="btn-icon" id="menuBtn" aria-label="打开课程列表">
+      <button type="button" class="btn-icon" id="menuBtn" aria-label="打开课程列表" aria-expanded="false">
         <svg class="icon"><use href="#icon-menu"></use></svg>
       </button>
       <span class="brand-name">课堂整理</span>
@@ -320,7 +463,7 @@
   </div>
 </div>
 
-<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
 
 <script>
 (function () {
@@ -346,6 +489,7 @@
   let aiR = null;
   let editCourseId = null;
   let editNoteId = null;
+  let lastFocused = null;
 
   function $(id) { return document.getElementById(id); }
   function pad2(n) { return String(n).padStart(2, '0'); }
@@ -452,15 +596,75 @@
   }
 
   // ---------- 模态框 ----------
-  function openModal(id) { $(id).classList.add('show'); }
-  function closeModal(id) { $(id).classList.remove('show'); }
+  function getFocusable(container) {
+    const sel = 'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+    return Array.prototype.filter.call(container.querySelectorAll(sel), function (el) {
+      return el.offsetParent !== null || el === document.activeElement;
+    });
+  }
+  function openModal(id) {
+    const overlay = $(id);
+    if (!overlay || overlay.classList.contains('show')) return;
+    overlay.classList.add('show');
+    lastFocused = document.activeElement;
+    document.body.classList.add('modal-open');
+    const shell = document.querySelector('.app-shell');
+    if (shell) shell.setAttribute('aria-hidden', 'true');
+    const focusables = getFocusable(overlay);
+    if (focusables.length) focusables[0].focus();
+    else {
+      overlay.setAttribute('tabindex', '-1');
+      overlay.focus();
+    }
+  }
+  function closeModal(id) {
+    const overlay = $(id);
+    if (!overlay || !overlay.classList.contains('show')) return;
+    overlay.classList.remove('show');
+    if (!document.querySelector('.modal-overlay.show')) {
+      document.body.classList.remove('modal-open');
+      const shell = document.querySelector('.app-shell');
+      if (shell) shell.removeAttribute('aria-hidden');
+    }
+    if (lastFocused && lastFocused.focus && document.contains(lastFocused)) {
+      const target = lastFocused;
+      lastFocused = null;
+      target.focus();
+    } else {
+      lastFocused = null;
+    }
+  }
   function closeAllModals() {
     ['courseModal', 'noteModal', 'todoModal', 'aiSettingsModal', 'aiSummaryModal'].forEach(closeModal);
+  }
+  function trapFocus(e) {
+    const overlay = document.querySelector('.modal-overlay.show');
+    if (!overlay || e.key !== 'Tab') return;
+    const focusables = getFocusable(overlay);
+    if (!focusables.length) {
+      e.preventDefault();
+      return;
+    }
+    const first = focusables[0];
+    const last = focusables[focusables.length - 1];
+    const inside = overlay.contains(document.activeElement);
+    if (e.shiftKey && (!inside || document.activeElement === first)) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && (!inside || document.activeElement === last)) {
+      e.preventDefault();
+      first.focus();
+    }
   }
   document.querySelectorAll('[data-close]').forEach(function (btn) {
     btn.addEventListener('click', function () {
       const overlay = btn.closest('.modal-overlay');
-      if (overlay) overlay.classList.remove('show');
+      if (overlay) closeModal(overlay.id);
+    });
+  });
+  document.querySelectorAll('.modal-overlay').forEach(function (overlay) {
+    overlay.addEventListener('click', function (e) {
+      if (e.target === overlay) closeModal(overlay.id);
     });
   });
 
@@ -642,7 +846,8 @@
   function renderSidebar() {
     const el = $('courseList');
     if (!state.courses.length) {
-      el.innerHTML = '<div class="empty"><svg class="icon"><use href="#icon-book"></use></svg><p>还没有课程<br>点击右上角 + 新建</p></div>';
+      el.innerHTML = '<div class="empty"><svg class="icon"><use href="#icon-book"></use></svg><p>还没有课程</p>' +
+        '<button type="button" class="btn btn-primary btn-sm" data-action="new-course">新建课程</button></div>';
       return;
     }
     el.innerHTML = state.courses.map(function (c) {
@@ -676,10 +881,10 @@
       (c.teacher ? '<span class="teacher-badge">' + esc(c.teacher) + '</span>' : '') +
       '</div>' +
       '<div class="tabs" role="tablist" aria-label="课程视图">' +
-      '<button type="button" class="tab' + (ct === 'notes' ? ' active' : '') + '" data-tab="notes" role="tab" aria-selected="' + (ct === 'notes') + '">笔记 <span class="tab-count">' + c.notes.length + '</span></button>' +
-      '<button type="button" class="tab' + (ct === 'todos' ? ' active' : '') + '" data-tab="todos" role="tab" aria-selected="' + (ct === 'todos') + '">待办 <span class="tab-count">' + undone + '</span></button>' +
+      '<button type="button" class="tab' + (ct === 'notes' ? ' active' : '') + '" id="tab-notes" data-tab="notes" role="tab" aria-selected="' + (ct === 'notes') + '" aria-controls="tabContent">笔记 <span class="tab-count">' + c.notes.length + '</span></button>' +
+      '<button type="button" class="tab' + (ct === 'todos' ? ' active' : '') + '" id="tab-todos" data-tab="todos" role="tab" aria-selected="' + (ct === 'todos') + '" aria-controls="tabContent">待办 <span class="tab-count">' + undone + '</span></button>' +
       '</div>' +
-      '<div id="tabContent" style="margin-top:16px"></div>';
+      '<div id="tabContent" role="tabpanel" aria-labelledby="tab-' + ct + '" style="margin-top:16px"></div>';
     renderTab(ct);
   }
 
@@ -715,12 +920,13 @@
     if (!list.length) {
       const icon = sq ? 'search' : 'notebook';
       const text = sq ? '没有匹配的笔记' : '还没有笔记，点击“新建”开始记录';
-      html += '<div class="empty"><svg class="icon"><use href="#icon-' + icon + '"></use></svg><p>' + text + '</p></div>';
+      html += '<div class="empty"><svg class="icon"><use href="#icon-' + icon + '"></use></svg><p>' + text + '</p>' +
+        (sq ? '' : '<button type="button" class="btn btn-soft btn-sm" data-action="new-note">新建笔记</button>') + '</div>';
     } else {
       list.forEach(function (n) {
         html += '<article class="note-card' + (n.pinned ? ' pinned' : '') + (expandedNoteId === n.id ? ' expanded' : '') + '" data-action="expand" data-id="' + n.id + '">' +
           '<div class="note-head">' +
-          '<button type="button" class="note-pin" data-action="pin" data-id="' + n.id + '" aria-label="置顶"><svg class="icon icon-sm"><use href="#icon-pin"></use></svg></button>' +
+          '<button type="button" class="note-pin" data-action="pin" data-id="' + n.id + '" aria-label="' + (n.pinned ? '取消置顶' : '置顶') + '" aria-pressed="' + (n.pinned ? 'true' : 'false') + '"><svg class="icon icon-sm"><use href="#icon-pin"></use></svg></button>' +
           '<span class="note-title">' + esc(n.title) + '</span>' +
           '<span class="note-meta">' + fmtDate(n.date) + '</span></div>' +
           '<div class="note-body">' +
@@ -745,17 +951,18 @@
     const cls = { high: 'priority-high', medium: 'priority-medium', low: 'priority-low' };
     function row(t) {
       return '<div class="todo-item' + (t.completed ? ' done' : '') + '">' +
-        '<button type="button" class="todo-check" data-action="toggle" data-id="' + t.id + '" aria-label="完成"><svg class="icon icon-sm"><use href="#icon-check"></use></svg></button>' +
+        '<button type="button" class="todo-check" data-action="toggle" data-id="' + t.id + '" aria-label="标记为' + (t.completed ? '未完成' : '已完成') + '" aria-pressed="' + (t.completed ? 'true' : 'false') + '"><svg class="icon icon-sm"><use href="#icon-check"></use></svg></button>' +
         '<span class="todo-title">' + esc(t.title) + '</span>' +
         '<span class="todo-priority ' + cls[t.priority] + '">' + label[t.priority] + '</span>' +
         '<span class="todo-date">' + fmtDate(t.dueDate) + '</span>' +
-        '<button type="button" class="todo-del" data-action="delete" data-id="' + t.id + '" aria-label="删除"><svg class="icon icon-sm"><use href="#icon-trash"></use></svg></button>' +
+        '<button type="button" class="todo-del" data-action="delete" data-id="' + t.id + '" aria-label="删除待办"><svg class="icon icon-sm"><use href="#icon-trash"></use></svg></button>' +
         '</div>';
     }
     let html = '<div class="section-head"><span class="section-count">' + inc.length + ' 项未完成</span>' +
       '<div class="section-btns"><button type="button" class="btn btn-primary btn-sm" data-action="new-todo"><svg class="icon icon-sm"><use href="#icon-plus"></use></svg>新建待办</button></div></div>';
     if (!c.todos.length) {
-      html += '<div class="empty"><svg class="icon"><use href="#icon-list"></use></svg><p>还没有待办</p></div>';
+      html += '<div class="empty"><svg class="icon"><use href="#icon-list"></use></svg><p>还没有待办</p>' +
+        '<button type="button" class="btn btn-primary btn-sm" data-action="new-todo">新建待办</button></div>';
     } else {
       if (inc.length) html += '<div class="todo-group"><div class="todo-group-label">未完成</div>' + inc.map(row).join('') + '</div>';
       if (cmp.length) html += '<div class="todo-group"><div class="todo-group-label">已完成</div>' + cmp.map(row).join('') + '</div>';
@@ -1009,12 +1216,62 @@
     toast('AI 总结已应用');
   }
 
+  // ---------- 备份 ----------
+  function exportBackup() {
+    try {
+      const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'classroom-backup-' + today() + '.json';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(function () { URL.revokeObjectURL(url); }, 0);
+      toast('备份已导出');
+    } catch (e) {
+      toast('导出失败', 'error');
+    }
+  }
+  function importBackup(file) {
+    const reader = new FileReader();
+    reader.onload = function () {
+      try {
+        const data = JSON.parse(String(reader.result || ''));
+        if (!data || !Array.isArray(data.courses)) throw new Error('bad');
+        if (isRec) stopRecording(true);
+        const courses = data.courses.map(normalizeCourse);
+        state.courses = courses;
+        state.activeCourseId = data.activeCourseId && courses.some(function (c) { return c.id === data.activeCourseId; })
+          ? data.activeCourseId
+          : (courses[0] ? courses[0].id : null);
+        expandedNoteId = null;
+        save(); renderAll();
+        toast('备份已导入');
+      } catch (err) {
+        toast('导入失败：文件格式不正确', 'error');
+      } finally {
+        $('backupFile').value = '';
+      }
+    };
+    reader.onerror = function () {
+      toast('读取文件失败', 'error');
+      $('backupFile').value = '';
+    };
+    reader.readAsText(file);
+  }
+
   // ---------- 事件绑定 ----------
   $('themeBtn').addEventListener('click', toggleDarkMode);
   $('aiSettingsBtn').addEventListener('click', openAISettings);
   $('addCourseBtn').addEventListener('click', function () { openCourseModal(); });
   $('menuBtn').addEventListener('click', openSidebar);
   $('sidebarBackdrop').addEventListener('click', closeSidebar);
+  $('exportBtn').addEventListener('click', exportBackup);
+  $('importBtn').addEventListener('click', function () { $('backupFile').click(); });
+  $('backupFile').addEventListener('change', function () {
+    if (this.files && this.files[0]) importBackup(this.files[0]);
+  });
   $('saveCourseBtn').addEventListener('click', saveCourseModal);
   $('saveNoteBtn').addEventListener('click', saveNoteModal);
   $('saveTodoBtn').addEventListener('click', saveTodoModal);
@@ -1024,10 +1281,12 @@
   function openSidebar() {
     document.body.classList.add('sidebar-open');
     $('sidebarBackdrop').hidden = false;
+    $('menuBtn').setAttribute('aria-expanded', 'true');
   }
   function closeSidebar() {
     document.body.classList.remove('sidebar-open');
     $('sidebarBackdrop').hidden = true;
+    $('menuBtn').setAttribute('aria-expanded', 'false');
   }
 
   $('courseList').addEventListener('click', function (e) {
@@ -1038,6 +1297,7 @@
     if (action === 'select') selectCourse(id);
     else if (action === 'edit') openCourseModal(id);
     else if (action === 'delete') deleteCourse(id);
+    else if (action === 'new-course') openCourseModal();
   });
 
   $('mainInner').addEventListener('click', function (e) {
@@ -1074,7 +1334,12 @@
   });
 
   document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape') { closeAllModals(); return; }
+    if (e.key === 'Escape') {
+      if (document.querySelector('.modal-overlay.show')) { closeAllModals(); return; }
+      if (document.body.classList.contains('sidebar-open')) { closeSidebar(); return; }
+      return;
+    }
+    trapFocus(e);
     const mod = e.ctrlKey || e.metaKey;
     if (!mod) return;
     const key = e.key.toLowerCase();
