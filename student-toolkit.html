@@ -6,6 +6,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#4f5bff">
+<script>(function(){try{var d=localStorage.getItem('dark_mode')==='true';document.documentElement.dataset.theme=d?'dark':'light';var m=document.querySelector('meta[name="theme-color"]');if(m)m.content=d?'#0d0e13':'#4f5bff';}catch(e){}})();</script>
 <meta name="description" content="安大学生工具箱：绩点计算、考试倒计时、时钟与校历。">
 <title>安大学生工具箱</title>
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
@@ -987,9 +988,16 @@
     if (sections.some(function (s) { return s.id === id; })) switchView(id);
   });
 
+  function updateBackTop() {
+    backTop.hidden = window.scrollY <= 300;
+  }
+
   backTop.addEventListener('click', function () {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    window.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' });
   });
+  window.addEventListener('scroll', updateBackTop, { passive: true });
+  updateBackTop();
 
   const initialView = location.hash ? location.hash.slice(1) : 'home';
   switchView(sections.some(function (s) { return s.id === initialView; }) ? initialView : 'home');
@@ -1822,11 +1830,14 @@
     renderMajorSelect();
     renderMajorManageInfo();
     const show = !!profile.showCircuit;
-    $('circuit').hidden = !show;
+    const circuit = $('circuit');
+    const circuitWasActive = circuit.classList.contains('view-active');
+    circuit.hidden = !show;
     $('navCircuit').hidden = !show;
     renderRoadmap();
     renderTools();
     renderContests();
+    if (!show && circuitWasActive) switchView('major');
   }
 
   $('majorSelect').addEventListener('change', function () {
@@ -2108,7 +2119,7 @@
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
-    URL.revokeObjectURL(objectUrl);
+    setTimeout(function () { URL.revokeObjectURL(objectUrl); }, 1000);
   });
 
   $('importMajorBtn').addEventListener('click', function () {
@@ -2615,7 +2626,7 @@
 
   if ('serviceWorker' in navigator && location.protocol.indexOf('http') === 0) {
     window.addEventListener('load', function () {
-      navigator.serviceWorker.register('assets/sw.js').catch(function () {});
+      navigator.serviceWorker.register('./sw.js', { scope: './' }).catch(function () {});
     });
   }
   document.getElementById('copyWxBtn').addEventListener('click', function () {

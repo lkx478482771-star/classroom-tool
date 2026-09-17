@@ -1,35 +1,12 @@
-const CACHE = 'ahutk-v3';
-const URLS = [
-  '/',
-  '/index.html',
-  '/classroom.html',
-  '/student-toolkit.html',
-  '/assets/app.css',
-  '/assets/icons.svg',
-  '/assets/favicon.svg'
-];
-
-self.addEventListener('install', function (e) {
-  e.waitUntil(caches.open(CACHE).then(function (c) { return c.addAll(URLS); }).then(function () { return self.skipWaiting(); }));
+/* Legacy worker: unregister so the root sw.js can control the whole site. */
+self.addEventListener('install', function () {
+  self.skipWaiting();
 });
 
-self.addEventListener('activate', function (e) {
-  e.waitUntil(caches.keys().then(function (keys) {
-    return Promise.all(keys.filter(function (k) { return k !== CACHE; }).map(function (k) { return caches.delete(k); }));
-  }).then(function () { return self.clients.claim(); }));
-});
-
-self.addEventListener('fetch', function (e) {
-  if (e.request.method !== 'GET') return;
-  e.respondWith(caches.match(e.request).then(function (cached) {
-    return cached || fetch(e.request).then(function (res) {
-      if (!res || res.status !== 200 || res.type !== 'basic') return res;
-      var clone = res.clone();
-      caches.open(CACHE).then(function (c) { c.put(e.request, clone); });
-      return res;
-    }).catch(function () {
-      if (e.request.mode === 'navigate') return caches.match('/student-toolkit.html');
-      return new Response('', { status: 503 });
-    });
-  }));
+self.addEventListener('activate', function (event) {
+  event.waitUntil(
+    self.registration.unregister().then(function () {
+      return self.clients.claim();
+    }).catch(function () {})
+  );
 });

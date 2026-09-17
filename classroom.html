@@ -494,15 +494,42 @@ body.modal-open {
   function $(id) { return document.getElementById(id); }
   function pad2(n) { return String(n).padStart(2, '0'); }
   function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 8); }
+  function isRecord(value) {
+    return !!value && typeof value === 'object' && !Array.isArray(value);
+  }
+  function records(value) {
+    return Array.isArray(value) ? value.filter(isRecord) : [];
+  }
+  function nextId(usedIds) {
+    let id;
+    do { id = uid(); } while (usedIds.has(id));
+    usedIds.add(id);
+    return id;
+  }
+  function normalizeId(value, usedIds) {
+    const id = value == null ? '' : String(value);
+    if (/^[A-Za-z0-9_-]+$/.test(id) && !usedIds.has(id)) {
+      usedIds.add(id);
+      return id;
+    }
+    return nextId(usedIds);
+  }
   function esc(s) {
     return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
       return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
     });
   }
   function fmtDate(d) {
-    if (!d) return '';
-    const p = String(d).split('-');
-    return p[1] + '/' + p[2];
+    const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(d == null ? '' : d));
+    if (!match) return '';
+    const year = Number(match[1]);
+    const month = Number(match[2]);
+    const day = Number(match[3]);
+    const date = new Date(0);
+    date.setUTCHours(0, 0, 0, 0);
+    date.setUTCFullYear(year, month - 1, day);
+    if (date.getUTCFullYear() !== year || date.getUTCMonth() !== month - 1 || date.getUTCDate() !== day) return '';
+    return match[2] + '/' + match[3];
   }
   function today() {
     const d = new Date();
@@ -511,11 +538,20 @@ body.modal-open {
   function getCourse() {
     return state.courses.find(function (c) { return c.id === state.activeCourseId; }) || null;
   }
+  function collectStateIds() {
+    const ids = new Set();
+    state.courses.forEach(function (c) {
+      ids.add(c.id);
+      c.notes.forEach(function (n) { ids.add(n.id); });
+      c.todos.forEach(function (t) { ids.add(t.id); });
+    });
+    return ids;
+  }
 
   // ---------- 存储 ----------
-  function normalizeNote(n) {
+  function normalizeNote(n, usedIds) {
     return {
-      id: String((n && n.id) || uid()),
+      id: normalizeId(n && n.id, usedIds),
       title: String((n && n.title) || ''),
       date: String((n && n.date) || ''),
       content: String((n && n.content) || ''),
@@ -523,40 +559,71 @@ body.modal-open {
       pinned: !!(n && n.pinned)
     };
   }
-  function normalizeTodo(t) {
+  function normalizeTodo(t, usedIds) {
     const p = ['high', 'medium', 'low'];
     return {
-      id: String((t && t.id) || uid()),
+      id: normalizeId(t && t.id, usedIds),
       title: String((t && t.title) || ''),
       dueDate: String((t && t.dueDate) || ''),
       priority: p.indexOf(t && t.priority) > -1 ? t.priority : 'medium',
       completed: !!(t && t.completed)
     };
   }
-  function normalizeCourse(c) {
+  function normalizeCourse(c, usedIds, index) {
     return {
-      id: String((c && c.id) || uid()),
+      id: normalizeId(c && c.id, usedIds),
       name: String((c && c.name) || '').slice(0, 120),
       teacher: String((c && c.teacher) || '').slice(0, 60),
-      color: (c && colors.indexOf(c.color) > -1) ? c.color : colors[state.courses.length % colors.length],
-      notes: Array.isArray(c && c.notes) ? c.notes.map(normalizeNote) : [],
-      todos: Array.isArray(c && c.todos) ? c.todos.map(normalizeTodo) : []
+      color: (c && colors.indexOf(c.color) > -1) ? c.color : colors[(typeof index === 'number' ? index : state.courses.length) % colors.length],
+      notes: records(c && c.notes).map(function (n) { return normalizeNote(n, usedIds); }),
+      todos: records(c && c.todos).map(function (t) { return normalizeTodo(t, usedIds); })
     };
   }
+  function normalizeCourses(value) {
+    const usedIds = new Set();
+    return records(value).map(function (c, index) {
+      return normalizeCourse(c, usedIds, index);
+    });
+  }
+  function hasValidStoredCourses(value) {
+    return Array.isArray(value) && value.every(function (c) {
+      if (!isRecord(c)) return false;
+      if (c.notes != null && (!Array.isArray(c.notes) || c.notes.some(function (n) { return !isRecord(n); }))) return false;
+      if (c.todos != null && (!Array.isArray(c.todos) || c.todos.some(function (t) { return !isRecord(t); }))) return false;
+      return true;
+    });
+  }
   function load() {
+    let raw = null;
     try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      const data = raw ? JSON.parse(raw) : null;
-      if (data && Array.isArray(data.courses)) {
-        state.courses = data.courses.map(normalizeCourse);
+      raw = localStorage.getItem(STORAGE_KEY);
+      const data = raw === null ? null : JSON.parse(raw);
+      if (data && hasValidStoredCourses(data.courses)) {
+        state.courses = normalizeCourses(data.courses);
         state.activeCourseId = data.activeCourseId && state.courses.some(function (c) { return c.id === data.activeCourseId; })
           ? data.activeCourseId
           : (state.courses[0] ? state.courses[0].id : null);
       } else {
+        if (raw !== null) throw new Error('bad stored data');
         state.courses = [];
         state.activeCourseId = null;
       }
     } catch (e) {
+      if (raw !== null) {
+        const backupKey = STORAGE_KEY + '_corrupt';
+        try {
+          if (localStorage.getItem(backupKey) === null) {
+            localStorage.setItem(backupKey, raw);
+            toast('本地数据损坏，原始内容已备份', 'error');
+          } else {
+            toast('本地数据损坏，已有原始内容备份', 'error');
+          }
+        } catch (backupError) {
+          toast('本地数据损坏，原始内容备份失败', 'error');
+        }
+      } else {
+        toast('读取本地数据失败', 'error');
+      }
       state.courses = [];
       state.activeCourseId = null;
     }
@@ -686,7 +753,7 @@ body.modal-open {
   // ---------- 课程 ----------
   function addCourse(name, teacher) {
     state.courses.push({
-      id: uid(), name: name, teacher: teacher,
+      id: nextId(collectStateIds()), name: name, teacher: teacher,
       color: colors[state.courses.length % colors.length],
       notes: [], todos: []
     });
@@ -734,7 +801,7 @@ body.modal-open {
   function addNote(cid, title, date, content, keyPoints) {
     const c = state.courses.find(function (x) { return x.id === cid; });
     if (!c) return;
-    c.notes.push({ id: uid(), title: title, date: date, content: content, keyPoints: keyPoints, pinned: false });
+    c.notes.push({ id: nextId(collectStateIds()), title: title, date: date, content: content, keyPoints: keyPoints, pinned: false });
     save(); renderAll(); toast('笔记已创建');
   }
   function updateNote(cid, nid, data) {
@@ -748,6 +815,7 @@ body.modal-open {
   function deleteNote(cid, nid) {
     const c = state.courses.find(function (x) { return x.id === cid; });
     if (!c) return;
+    if (!confirm('确定删除这条笔记？')) return;
     c.notes = c.notes.filter(function (x) { return x.id !== nid; });
     if (expandedNoteId === nid) expandedNoteId = null;
     save(); renderAll(); toast('笔记已删除');
@@ -792,7 +860,7 @@ body.modal-open {
   function addTodo(cid, title, dueDate, priority) {
     const c = state.courses.find(function (x) { return x.id === cid; });
     if (!c) return;
-    c.todos.push({ id: uid(), title: title, dueDate: dueDate, priority: priority, completed: false });
+    c.todos.push({ id: nextId(collectStateIds()), title: title, dueDate: dueDate, priority: priority, completed: false });
     save(); renderAll(); toast('待办已创建');
   }
   function toggleTodo(cid, tid) {
@@ -807,6 +875,7 @@ body.modal-open {
   function deleteTodo(cid, tid) {
     const c = state.courses.find(function (x) { return x.id === cid; });
     if (!c) return;
+    if (!confirm('确定删除这项待办？')) return;
     c.todos = c.todos.filter(function (x) { return x.id !== tid; });
     save(); renderAll(); toast('待办已删除');
   }
@@ -853,12 +922,12 @@ body.modal-open {
     el.innerHTML = state.courses.map(function (c) {
       const active = c.id === state.activeCourseId ? ' active' : '';
       return '<div class="course-row' + active + '">' +
-        '<button type="button" class="course-select" data-action="select" data-id="' + c.id + '">' +
-        '<span class="course-dot" style="background:' + c.color + '"></span>' +
+        '<button type="button" class="course-select" data-action="select" data-id="' + esc(c.id) + '">' +
+        '<span class="course-dot" style="background:' + esc(c.color) + '"></span>' +
         '<span class="course-name">' + esc(c.name) + '</span></button>' +
         '<div class="course-actions">' +
-        '<button type="button" class="course-action" data-action="edit" data-id="' + c.id + '" aria-label="编辑课程"><svg class="icon icon-sm"><use href="#icon-edit"></use></svg></button>' +
-        '<button type="button" class="course-action danger" data-action="delete" data-id="' + c.id + '" aria-label="删除课程"><svg class="icon icon-sm"><use href="#icon-trash"></use></svg></button>' +
+        '<button type="button" class="course-action" data-action="edit" data-id="' + esc(c.id) + '" aria-label="编辑课程"><svg class="icon icon-sm"><use href="#icon-edit"></use></svg></button>' +
+        '<button type="button" class="course-action danger" data-action="delete" data-id="' + esc(c.id) + '" aria-label="删除课程"><svg class="icon icon-sm"><use href="#icon-trash"></use></svg></button>' +
         '</div></div>';
     }).join('');
   }
@@ -876,7 +945,7 @@ body.modal-open {
     const undone = c.todos.filter(function (t) { return !t.completed; }).length;
     el.innerHTML =
       '<div class="course-head">' +
-      '<span class="course-bar" style="background:' + c.color + '"></span>' +
+      '<span class="course-bar" style="background:' + esc(c.color) + '"></span>' +
       '<h1>' + esc(c.name) + '</h1>' +
       (c.teacher ? '<span class="teacher-badge">' + esc(c.teacher) + '</span>' : '') +
       '</div>' +
@@ -924,18 +993,18 @@ body.modal-open {
         (sq ? '' : '<button type="button" class="btn btn-soft btn-sm" data-action="new-note">新建笔记</button>') + '</div>';
     } else {
       list.forEach(function (n) {
-        html += '<article class="note-card' + (n.pinned ? ' pinned' : '') + (expandedNoteId === n.id ? ' expanded' : '') + '" data-action="expand" data-id="' + n.id + '">' +
+        html += '<article class="note-card' + (n.pinned ? ' pinned' : '') + (expandedNoteId === n.id ? ' expanded' : '') + '" data-action="expand" data-id="' + esc(n.id) + '">' +
           '<div class="note-head">' +
-          '<button type="button" class="note-pin" data-action="pin" data-id="' + n.id + '" aria-label="' + (n.pinned ? '取消置顶' : '置顶') + '" aria-pressed="' + (n.pinned ? 'true' : 'false') + '"><svg class="icon icon-sm"><use href="#icon-pin"></use></svg></button>' +
+          '<button type="button" class="note-pin" data-action="pin" data-id="' + esc(n.id) + '" aria-label="' + esc(n.pinned ? '取消置顶' : '置顶') + '" aria-pressed="' + (n.pinned ? 'true' : 'false') + '"><svg class="icon icon-sm"><use href="#icon-pin"></use></svg></button>' +
           '<span class="note-title">' + esc(n.title) + '</span>' +
           '<span class="note-meta">' + fmtDate(n.date) + '</span></div>' +
           '<div class="note-body">' +
           (n.content ? '<div class="note-content">' + esc(n.content) + '</div>' : '') +
           (n.keyPoints && n.keyPoints.length ? '<div class="keypoints"><div class="keypoints-label">重点</div>' + n.keyPoints.map(function (k) { return '<div class="kp-item">' + esc(k) + '</div>'; }).join('') + '</div>' : '') +
           '<div class="note-actions">' +
-          '<button type="button" class="btn btn-secondary btn-sm" data-action="edit-note" data-id="' + n.id + '">编辑</button>' +
-          '<button type="button" class="btn btn-soft btn-sm" data-action="ai" data-id="' + n.id + '" id="ai-btn-' + n.id + '"><svg class="icon icon-sm"><use href="#icon-sparkles"></use></svg>AI 总结</button>' +
-          '<button type="button" class="btn btn-danger btn-sm" data-action="delete-note" data-id="' + n.id + '">删除</button>' +
+          '<button type="button" class="btn btn-secondary btn-sm" data-action="edit-note" data-id="' + esc(n.id) + '">编辑</button>' +
+          '<button type="button" class="btn btn-soft btn-sm" data-action="ai" data-id="' + esc(n.id) + '" id="ai-btn-' + esc(n.id) + '"><svg class="icon icon-sm"><use href="#icon-sparkles"></use></svg>AI 总结</button>' +
+          '<button type="button" class="btn btn-danger btn-sm" data-action="delete-note" data-id="' + esc(n.id) + '">删除</button>' +
           '</div></div></article>';
       });
     }
@@ -951,11 +1020,11 @@ body.modal-open {
     const cls = { high: 'priority-high', medium: 'priority-medium', low: 'priority-low' };
     function row(t) {
       return '<div class="todo-item' + (t.completed ? ' done' : '') + '">' +
-        '<button type="button" class="todo-check" data-action="toggle" data-id="' + t.id + '" aria-label="标记为' + (t.completed ? '未完成' : '已完成') + '" aria-pressed="' + (t.completed ? 'true' : 'false') + '"><svg class="icon icon-sm"><use href="#icon-check"></use></svg></button>' +
+        '<button type="button" class="todo-check" data-action="toggle" data-id="' + esc(t.id) + '" aria-label="标记为' + esc(t.completed ? '未完成' : '已完成') + '" aria-pressed="' + (t.completed ? 'true' : 'false') + '"><svg class="icon icon-sm"><use href="#icon-check"></use></svg></button>' +
         '<span class="todo-title">' + esc(t.title) + '</span>' +
         '<span class="todo-priority ' + cls[t.priority] + '">' + label[t.priority] + '</span>' +
         '<span class="todo-date">' + fmtDate(t.dueDate) + '</span>' +
-        '<button type="button" class="todo-del" data-action="delete" data-id="' + t.id + '" aria-label="删除待办"><svg class="icon icon-sm"><use href="#icon-trash"></use></svg></button>' +
+        '<button type="button" class="todo-del" data-action="delete" data-id="' + esc(t.id) + '" aria-label="删除待办"><svg class="icon icon-sm"><use href="#icon-trash"></use></svg></button>' +
         '</div>';
     }
     let html = '<div class="section-head"><span class="section-count">' + inc.length + ' 项未完成</span>' +
@@ -1233,23 +1302,46 @@ body.modal-open {
       toast('导出失败', 'error');
     }
   }
+  function hasExistingData() {
+    return state.courses.length > 0 || state.courses.some(function (c) {
+      return Array.isArray(c.notes) && c.notes.length > 0;
+    });
+  }
   function importBackup(file) {
     const reader = new FileReader();
     reader.onload = function () {
+      const rawImport = String(reader.result || '');
       try {
-        const data = JSON.parse(String(reader.result || ''));
-        if (!data || !Array.isArray(data.courses)) throw new Error('bad');
-        if (isRec) stopRecording(true);
-        const courses = data.courses.map(normalizeCourse);
-        state.courses = courses;
-        state.activeCourseId = data.activeCourseId && courses.some(function (c) { return c.id === data.activeCourseId; })
+        const data = JSON.parse(rawImport);
+        if (!data || !hasValidStoredCourses(data.courses)) throw new Error('bad');
+        const courses = normalizeCourses(data.courses);
+        const activeCourseId = data.activeCourseId && courses.some(function (c) { return c.id === data.activeCourseId; })
           ? data.activeCourseId
           : (courses[0] ? courses[0].id : null);
+        let preImportBackupKey = null;
+        if (hasExistingData()) {
+          if (!confirm('导入会覆盖当前课程和笔记，是否继续？')) return;
+          preImportBackupKey = STORAGE_KEY + '_pre_import_' + Date.now();
+          try {
+            localStorage.setItem(preImportBackupKey, JSON.stringify(state));
+          } catch (backupError) {
+            toast('导入失败：无法创建旧数据恢复备份', 'error');
+            return;
+          }
+        }
+        if (isRec) stopRecording(true);
+        state.courses = courses;
+        state.activeCourseId = activeCourseId;
         expandedNoteId = null;
         save(); renderAll();
-        toast('备份已导入');
+        toast(preImportBackupKey ? '备份已导入；旧数据已保存为恢复备份' : '备份已导入');
       } catch (err) {
-        toast('导入失败：文件格式不正确', 'error');
+        try {
+          localStorage.setItem(STORAGE_KEY + '_import_rejected', rawImport);
+          toast('导入失败：文件格式不正确，原始文件已保留', 'error');
+        } catch (backupError) {
+          toast('导入失败：文件格式不正确，且无法保留原始文件', 'error');
+        }
       } finally {
         $('backupFile').value = '';
       }
@@ -1351,7 +1443,7 @@ body.modal-open {
   // ---------- 离线可用 ----------
   if ('serviceWorker' in navigator && location.protocol.indexOf('http') === 0) {
     window.addEventListener('load', function () {
-      navigator.serviceWorker.register('assets/sw.js').catch(function () {});
+      navigator.serviceWorker.register('./sw.js', { scope: './' }).catch(function () {});
     });
   }
 

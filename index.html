@@ -8,6 +8,13 @@
 <meta name="theme-color" content="#0f2e2d">
 <meta name="description" content="安大学生工具箱：绩点计算、考试倒计时、校历、专业成长路线、电路计算、竞赛日历与学习导航。">
 <title>安大学生工具箱</title>
+<link rel="canonical" href="https://lkx478482771-star.github.io/classroom-tool/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="安大学生工具箱">
+<meta property="og:description" content="安大学生工具箱：绩点计算、考试倒计时、校历、专业成长路线、电路计算、竞赛日历与学习导航。">
+<meta property="og:url" content="https://lkx478482771-star.github.io/classroom-tool/">
+<meta property="og:site_name" content="安大学生工具箱">
+<meta name="twitter:card" content="summary">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="assets/app.css">
 <style>
@@ -563,6 +570,11 @@
     updateHomeClock();
     setInterval(updateHomeClock, 1000);
   })();
+</script>
+<script>
+  if ('serviceWorker' in navigator && (location.protocol === 'http:' || location.protocol === 'https:')) {
+    navigator.serviceWorker.register('./sw.js', { scope: './' }).catch(function () {});
+  }
 </script>
 </body>
 </html>

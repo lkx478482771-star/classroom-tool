@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://lkx478482771-star.github.io/classroom-tool/sitemap.xml

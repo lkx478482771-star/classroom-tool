@@ -214,6 +214,7 @@ a:hover {
 }
 
 .btn-soft:hover {
+  background: rgba(79, 91, 255, 0.12);
   background: color-mix(in srgb, var(--accent-soft), var(--surface) 12%);
 }
 
@@ -853,7 +854,9 @@ a:hover {
 }
 
 .note-card.pinned {
+  background: rgba(79, 91, 255, 0.06);
   background: color-mix(in srgb, var(--accent-soft), var(--surface) 60%);
+  border-color: rgba(70, 82, 238, 0.22);
   border-color: color-mix(in srgb, var(--accent), transparent 78%);
 }
 
@@ -1187,6 +1190,7 @@ a:hover {
   position: sticky;
   top: 0;
   z-index: 40;
+  background: var(--surface);
   background: color-mix(in srgb, var(--surface), transparent 12%);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
@@ -1316,6 +1320,7 @@ a:hover {
   margin-top: 14px;
   padding: 18px 20px;
   background: var(--accent-soft);
+  border: 1px solid rgba(70, 82, 238, 0.2);
   border: 1px solid color-mix(in srgb, var(--accent), transparent 80%);
   border-radius: 10px;
   flex-wrap: wrap;
@@ -1488,6 +1493,7 @@ a:hover {
   flex-wrap: wrap;
   padding: 10px 14px;
   background: var(--accent-soft);
+  border: 1px solid rgba(70, 82, 238, 0.2);
   border: 1px solid color-mix(in srgb, var(--accent), transparent 80%);
   border-radius: var(--radius);
   font-size: 12px;
