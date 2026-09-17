@@ -481,7 +481,7 @@
       <a class="home-card" href="#gpa">
         <span class="home-card-icon"><svg class="icon icon-xl"><use href="#icon-target"></use></svg></span>
         <h3>绩点计算器</h3>
-        <p>按安大规则计算加权平均绩点</p>
+        <p>按 5 点绩点制计算加权平均绩点</p>
       </a>
       <a class="home-card" href="#countdown">
         <span class="home-card-icon"><svg class="icon icon-xl"><use href="#icon-clock"></use></svg></span>
@@ -557,18 +557,16 @@
         <button type="button" class="btn btn-secondary btn-sm" data-action="export-courses"><svg class="icon icon-sm"><use href="#icon-download"></use></svg>导出</button>
       </div>
       <div class="result-box" id="gpaResult" hidden>
-        <div><div class="result-value" id="gpaValue">0.00</div><div class="result-label">加权平均绩点</div></div>
+        <div><div class="result-value" id="gpaValue">0.00</div><div class="result-label">加权平均绩点（5 分制）</div></div>
         <div><div class="result-value" id="gpaTotal">0</div><div class="result-label">总学分</div></div>
       </div>
       <details class="details-box">
-        <summary class="details-summary">安大绩点换算规则</summary>
+        <summary class="details-summary">5 点绩点制换算规则</summary>
         <table class="rule-table">
-          <tr><td>90-100</td><td>4.0</td><td>85-89</td><td>3.7</td><td>82-84</td><td>3.3</td></tr>
-          <tr><td>78-81</td><td>3.0</td><td>75-77</td><td>2.7</td><td>72-74</td><td>2.3</td></tr>
-          <tr><td>68-71</td><td>2.0</td><td>64-67</td><td>1.5</td><td>60-63</td><td>1.0</td></tr>
-          <tr><td>&lt;60</td><td>0</td></tr>
+          <tr><td>60-100</td><td>课程绩点 = 百分制成绩 ÷ 10 - 5</td></tr>
+          <tr><td>&lt;60</td><td>课程绩点 = 0</td></tr>
         </table>
-        <p class="rule-note">当前采用安徽大学成绩-绩点换算规则，其他学校请自行核对。</p>
+        <p class="rule-note">课程学分绩点 = 课程学分 × 课程绩点；加权平均绩点 = Σ（课程学分 × 课程绩点）÷ Σ课程学分。不及格课程按 0 绩点计入，其他学校请自行核对。</p>
       </details>
     </div>
   </section>
@@ -1003,9 +1001,6 @@
   switchView(sections.some(function (s) { return s.id === initialView; }) ? initialView : 'home');
 
   // ---------- 绩点模块 ----------
-  const gpaSteps = [90, 85, 82, 78, 75, 72, 68, 64, 60];
-  const gpaValues = [4.0, 3.7, 3.3, 3.0, 2.7, 2.3, 2.0, 1.5, 1.0];
-
   function normalizeCourse(item) {
     return {
       name: String((item && item.name) || '').slice(0, 120),
@@ -1020,10 +1015,7 @@
 
   function scoreToGpa(score) {
     if (score < 60) return 0;
-    for (let i = 0; i < gpaSteps.length; i += 1) {
-      if (score >= gpaSteps[i]) return gpaValues[i];
-    }
-    return 1.0;
+    return score / 10 - 5;
   }
 
   function renderCourses() {
@@ -1056,7 +1048,7 @@
       }));
       const scoreCell = el('td');
       scoreCell.appendChild(el('input', {
-        type: 'number', min: '0', max: '100', step: '1', value: item.score,
+        type: 'number', min: '0', max: '100', step: '0.1', inputmode: 'decimal', value: item.score,
         'aria-label': '成绩 ' + (index + 1),
         dataset: { index: index, field: 'score' }
       }));
