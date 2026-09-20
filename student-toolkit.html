@@ -1041,6 +1041,12 @@
       showToast('快捷事件数据无效', true);
       return;
     }
+    if (countdownState.some(function (item) {
+      return item.name === cleanName && item.date === String(date);
+    })) {
+      showToast('该事件已在倒计时中');
+      return;
+    }
     countdownState.push({ name: cleanName, date: String(date) });
     saveList(STORAGE.countdowns, countdownState);
     renderCountdowns();
@@ -2570,6 +2576,24 @@
       });
   }
 
+  function getNextCalendarDate(text) {
+    const match = /(\d{1,2})月(\d{1,2})/.exec(String(text || ''));
+    if (!match) return '';
+    const month = Number(match[1]);
+    const day = Number(match[2]);
+    if (month < 1 || month > 12 || day < 1 || day > 31) return '';
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    let year = today.getFullYear();
+    let candidate = new Date(year, month - 1, day);
+    if (candidate < today) {
+      year += 1;
+      candidate = new Date(year, month - 1, day);
+    }
+    if (candidate.getMonth() !== month - 1 || candidate.getDate() !== day) return '';
+    return year + '-' + pad2(month) + '-' + pad2(day);
+  }
+
   function renderTimeline(container, months) {
     clearNode(container);
     const timeline = el('div', { className: 'tl' });
@@ -2589,6 +2613,19 @@
         row.appendChild(el('span', { className: 'dt', textContent: event.date }));
         if (event.tag) {
           row.appendChild(el('span', { className: 'tg ' + event.tag[1], textContent: event.tag[0] }));
+        }
+        const countdownDate = getNextCalendarDate(event.date);
+        if (countdownDate) {
+          row.appendChild(el('button', {
+            type: 'button',
+            className: 'tl-add',
+            textContent: '加入倒计时',
+            dataset: {
+              action: 'add-calendar',
+              name: event.name,
+              date: countdownDate
+            }
+          }));
         }
         group.appendChild(row);
       });
@@ -2734,6 +2771,15 @@
     const now = new Date();
     return now.getFullYear() + '-' + pad2(now.getMonth() + 1) + '-' + pad2(now.getDate());
   }
+
+  function handleCalendarCountdown(event) {
+    const button = event.target.closest('button[data-action="add-calendar"]');
+    if (!button) return;
+    quickAdd(button.dataset.name, button.dataset.date);
+  }
+
+  $('calFall').addEventListener('click', handleCalendarCountdown);
+  $('calSpring').addEventListener('click', handleCalendarCountdown);
 
   function renderBackupStatus() {
     const box = $('backupStatus');

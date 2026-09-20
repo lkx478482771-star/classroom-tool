@@ -1643,6 +1643,23 @@ a:hover {
 .tl-ev .tg.th { background: var(--danger-soft); color: var(--danger); }
 .tl-ev .tg.te { background: var(--warn-soft); color: var(--warn); }
 
+.tl-add {
+  margin-left: auto;
+  padding: 3px 8px;
+  border: 1px solid var(--border-strong);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--text-2);
+  font-size: 10px;
+  font-weight: 650;
+  white-space: nowrap;
+}
+
+.tl-add:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
 .tool-card {
   display: flex;
   align-items: center;
