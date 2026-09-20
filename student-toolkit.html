@@ -264,9 +264,43 @@
   .nav-links {
     flex: 1 1 auto;
     min-width: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+    scrollbar-width: thin;
+    padding-bottom: 3px;
+    cursor: grab;
+  }
+  .nav-links:active {
+    cursor: grabbing;
+  }
+  .nav-links::-webkit-scrollbar {
+    display: block;
+    height: 5px;
+  }
+  .nav-links::-webkit-scrollbar-thumb {
+    background: var(--border-strong);
+    border-radius: 999px;
+  }
+  .nav-links::-webkit-scrollbar-track {
+    background: transparent;
   }
   .nav-links a {
     flex-shrink: 0;
+  }
+  @media (max-width: 820px) {
+    .nav-inner {
+      flex-wrap: wrap;
+    }
+    .nav-links {
+      order: 3;
+      flex: 0 0 100%;
+      width: 100%;
+    }
+    .top-clock {
+      margin-left: auto;
+    }
   }
   .course-table {
     min-width: 560px;
@@ -1235,6 +1269,54 @@
   }
 
   document.addEventListener('click', handleHashLink);
+
+  function initNavDragScroll() {
+    const nav = document.querySelector('.nav-links');
+    if (!nav) return;
+    let dragging = false;
+    let moved = false;
+    let startX = 0;
+    let startScroll = 0;
+    let pointerId = null;
+
+    nav.addEventListener('pointerdown', function (event) {
+      if (event.pointerType === 'touch' || (event.pointerType === 'mouse' && event.button !== 0)) return;
+      dragging = true;
+      moved = false;
+      startX = event.clientX;
+      startScroll = nav.scrollLeft;
+      pointerId = event.pointerId;
+      if (nav.setPointerCapture) nav.setPointerCapture(pointerId);
+    });
+
+    nav.addEventListener('pointermove', function (event) {
+      if (!dragging) return;
+      const dx = event.clientX - startX;
+      if (Math.abs(dx) > 4) {
+        moved = true;
+        nav.scrollLeft = startScroll - dx;
+        event.preventDefault();
+      }
+    });
+
+    function endDrag() {
+      dragging = false;
+      pointerId = null;
+    }
+
+    nav.addEventListener('pointerup', endDrag);
+    nav.addEventListener('pointercancel', endDrag);
+    nav.addEventListener('pointerleave', endDrag);
+    nav.addEventListener('click', function (event) {
+      if (moved) {
+        event.preventDefault();
+        event.stopPropagation();
+        moved = false;
+      }
+    }, true);
+  }
+
+  initNavDragScroll();
 
   window.addEventListener('hashchange', function () {
     const id = location.hash ? location.hash.slice(1) : 'home';

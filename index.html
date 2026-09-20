@@ -83,6 +83,11 @@
     -webkit-overflow-scrolling: touch;
     scrollbar-width: thin;
     overscroll-behavior-x: contain;
+    cursor: grab;
+  }
+
+  .home-links:active {
+    cursor: grabbing;
   }
 
   .home-links a {
@@ -581,6 +586,50 @@
     }
     updateHomeClock();
     setInterval(updateHomeClock, 1000);
+  })();
+</script>
+<script>
+  (function () {
+    var nav = document.querySelector('.home-links');
+    if (!nav) return;
+    var dragging = false;
+    var moved = false;
+    var startX = 0;
+    var startScroll = 0;
+
+    nav.addEventListener('pointerdown', function (event) {
+      if (event.pointerType === 'touch' || (event.pointerType === 'mouse' && event.button !== 0)) return;
+      dragging = true;
+      moved = false;
+      startX = event.clientX;
+      startScroll = nav.scrollLeft;
+      if (nav.setPointerCapture) nav.setPointerCapture(event.pointerId);
+    });
+
+    nav.addEventListener('pointermove', function (event) {
+      if (!dragging) return;
+      var distance = event.clientX - startX;
+      if (Math.abs(distance) > 4) {
+        moved = true;
+        nav.scrollLeft = startScroll - distance;
+        event.preventDefault();
+      }
+    });
+
+    function endDrag() {
+      dragging = false;
+    }
+
+    nav.addEventListener('pointerup', endDrag);
+    nav.addEventListener('pointercancel', endDrag);
+    nav.addEventListener('pointerleave', endDrag);
+    nav.addEventListener('click', function (event) {
+      if (moved) {
+        event.preventDefault();
+        event.stopPropagation();
+        moved = false;
+      }
+    }, true);
   })();
 </script>
 <script>
