@@ -483,7 +483,7 @@
       <a href="#countdown">倒计时</a>
       <a href="#calendar">校历</a>
       <a href="#major">专业路线</a>
-      <a href="#circuit" id="navCircuit">电路计算</a>
+      <a href="#circuit" id="navCircuit">硬件速算</a>
       <a href="#financeTools" id="navFinance" hidden>财经工具</a>
       <a href="#managementTools" id="navManagement" hidden>经管工具</a>
       <a href="#contest">竞赛</a>
@@ -542,8 +542,8 @@
       </a>
       <a class="home-card" href="#circuit" id="homeCircuitCard">
         <span class="home-card-icon"><svg class="icon icon-xl"><use href="#icon-zap"></use></svg></span>
-        <h3>电路计算器</h3>
-        <p>欧姆定律、分压与 RC 时间常数</p>
+        <h3>硬件速算</h3>
+        <p>欧姆定律与功率、RC 截止频率、电阻串并联、运放增益、LED 限流、PCB 压降与电池续航</p>
       </a>
       <a class="home-card" href="#financeTools" id="homeFinanceCard" hidden>
         <span class="home-card-icon"><svg class="icon icon-xl"><use href="#icon-target"></use></svg></span>
@@ -696,7 +696,8 @@
 
   <section class="section" id="circuit">
     <div class="card">
-      <h2><svg class="icon"><use href="#icon-zap"></use></svg>电路计算器</h2>
+      <h2><svg class="icon"><use href="#icon-zap"></use></svg>硬件速算</h2>
+      <p class="section-intro">集中完成常用电路估算，覆盖欧姆定律与功率、分压、RC 截止频率、电阻串并联、运放增益、LED 限流、PCB 走线压降和电池续航。</p>
       <div class="calc-grid">
         <div class="calc-box">
           <h3>欧姆定律 U = I × R</h3>
@@ -845,6 +846,156 @@
             <button type="button" class="btn btn-primary btn-sm" id="powerBtn" aria-label="计算功率与能量">计算</button>
           </form>
           <div class="calc-result" id="powerResult">填写电压、电流与时间，计算功率和能量。</div>
+        </div>
+
+        <div class="calc-box">
+          <h3>电阻串并联</h3>
+          <form class="calc-form" id="resistorNetworkForm">
+            <label class="calc-field">
+              <span>电阻列表</span>
+              <span class="calc-input-row">
+                <input class="input" id="resistorNetworkValues" type="text" inputmode="decimal" placeholder="例如 10, 20, 30" autocomplete="off">
+                <select class="select" id="resistorNetworkUnit" aria-label="电阻列表单位">
+                  <option value="ohm">Ω</option>
+                  <option value="kohm">kΩ</option>
+                  <option value="Mohm">MΩ</option>
+                </select>
+              </span>
+            </label>
+            <button type="button" class="btn btn-primary btn-sm" id="resistorNetworkBtn" aria-label="计算电阻串联与并联等效电阻">计算</button>
+          </form>
+          <div class="calc-result" id="resistorNetworkResult">用逗号、中文逗号或空格分隔至少两个大于 0 的电阻。</div>
+        </div>
+
+        <div class="calc-box">
+          <h3>运放增益</h3>
+          <form class="calc-form" id="opampGainForm">
+            <label class="calc-field">
+              <span>模式</span>
+              <select class="select" id="opampMode" aria-label="运放增益模式">
+                <option value="inverting">反相</option>
+                <option value="nonInverting">同相</option>
+              </select>
+            </label>
+            <label class="calc-field">
+              <span>反馈电阻 Rf</span>
+              <span class="calc-input-row">
+                <input class="input" id="opampRf" type="number" min="0" step="any" placeholder="例如 100" autocomplete="off">
+                <select class="select" id="opampRfUnit" aria-label="反馈电阻 Rf 单位">
+                  <option value="kohm">kΩ</option>
+                  <option value="ohm">Ω</option>
+                  <option value="Mohm">MΩ</option>
+                </select>
+              </span>
+            </label>
+            <label class="calc-field">
+              <span>输入电阻 Rin / Rg</span>
+              <span class="calc-input-row">
+                <input class="input" id="opampRin" type="number" min="0" step="any" placeholder="例如 10" autocomplete="off">
+                <select class="select" id="opampRinUnit" aria-label="输入电阻 Rin 或 Rg 单位">
+                  <option value="kohm">kΩ</option>
+                  <option value="ohm">Ω</option>
+                  <option value="Mohm">MΩ</option>
+                </select>
+              </span>
+            </label>
+            <button type="button" class="btn btn-primary btn-sm" id="opampGainBtn" aria-label="计算运放电压增益与分贝增益">计算</button>
+          </form>
+          <div class="calc-result" id="opampGainResult">反相 Av = -Rf / Rin，同相 Av = 1 + Rf / Rg。</div>
+        </div>
+
+        <div class="calc-box">
+          <h3>LED 限流电阻</h3>
+          <form class="calc-form" id="ledResistorForm">
+            <label class="calc-field">
+              <span>供电电压 Vs</span>
+              <span class="calc-input-row">
+                <input class="input" id="ledVs" type="number" step="any" placeholder="例如 5" autocomplete="off">
+                <span>V</span>
+              </span>
+            </label>
+            <label class="calc-field">
+              <span>LED 正向压降 Vf</span>
+              <span class="calc-input-row">
+                <input class="input" id="ledVf" type="number" step="any" placeholder="例如 2" autocomplete="off">
+                <span>V</span>
+              </span>
+            </label>
+            <label class="calc-field">
+              <span>期望电流 If</span>
+              <span class="calc-input-row">
+                <input class="input" id="ledIf" type="number" min="0" step="any" placeholder="例如 20" autocomplete="off">
+                <span>mA</span>
+              </span>
+            </label>
+            <button type="button" class="btn btn-primary btn-sm" id="ledResistorBtn" aria-label="计算 LED 限流电阻与电阻功率">计算</button>
+          </form>
+          <div class="calc-result" id="ledResistorResult">需满足 Vs &gt; Vf 且 If &gt; 0。</div>
+        </div>
+
+        <div class="calc-box">
+          <h3>PCB 走线压降</h3>
+          <form class="calc-form" id="pcbDropForm">
+            <label class="calc-field">
+              <span>走线长度 L</span>
+              <span class="calc-input-row">
+                <input class="input" id="pcbLength" type="number" min="0" step="any" placeholder="例如 10" autocomplete="off">
+                <span>mm</span>
+              </span>
+            </label>
+            <label class="calc-field">
+              <span>走线宽度 W</span>
+              <span class="calc-input-row">
+                <input class="input" id="pcbWidth" type="number" min="0" step="any" placeholder="例如 1" autocomplete="off">
+                <span>mm</span>
+              </span>
+            </label>
+            <label class="calc-field">
+              <span>铜厚</span>
+              <select class="select" id="pcbCopper" aria-label="PCB 铜厚">
+                <option value="1">1 oz（34.79 μm）</option>
+                <option value="2">2 oz（69.58 μm）</option>
+              </select>
+            </label>
+            <label class="calc-field">
+              <span>负载电流 I</span>
+              <span class="calc-input-row">
+                <input class="input" id="pcbCurrent" type="number" min="0" step="any" placeholder="例如 1" autocomplete="off">
+                <span>A</span>
+              </span>
+            </label>
+            <button type="button" class="btn btn-primary btn-sm" id="pcbDropBtn" aria-label="计算 PCB 走线电阻、压降和功率损耗">计算</button>
+          </form>
+          <div class="calc-result" id="pcbDropResult">按铜电阻率 ρ = 1.72e-8 Ω·m 估算。</div>
+        </div>
+
+        <div class="calc-box">
+          <h3>电池续航</h3>
+          <form class="calc-form" id="batteryLifeForm">
+            <label class="calc-field">
+              <span>电池容量 C</span>
+              <span class="calc-input-row">
+                <input class="input" id="batteryCapacity" type="number" min="0" step="any" placeholder="例如 2000" autocomplete="off">
+                <span>mAh</span>
+              </span>
+            </label>
+            <label class="calc-field">
+              <span>平均负载电流 I</span>
+              <span class="calc-input-row">
+                <input class="input" id="batteryCurrent" type="number" min="0" step="any" placeholder="例如 100" autocomplete="off">
+                <span>mA</span>
+              </span>
+            </label>
+            <label class="calc-field">
+              <span>效率 η</span>
+              <span class="calc-input-row">
+                <input class="input" id="batteryEfficiency" type="number" min="0" max="100" step="any" placeholder="例如 90" autocomplete="off">
+                <span>%</span>
+              </span>
+            </label>
+            <button type="button" class="btn btn-primary btn-sm" id="batteryLifeBtn" aria-label="计算电池预计续航时间">计算</button>
+          </form>
+          <div class="calc-result" id="batteryLifeResult">需满足 C &gt; 0、I &gt; 0 且 0 &lt; η ≤ 100%。</div>
         </div>
       </div>
     </div>
@@ -1121,7 +1272,7 @@
         </div>
         <label class="check-row">
           <input type="checkbox" id="majorShowCircuit">
-          <span>显示电路计算器（适合集成电路、电子、自动化等专业）</span>
+          <span>显示硬件速算（适合集成电路、电子、自动化等专业）</span>
         </label>
         <label class="check-row">
           <input type="checkbox" id="majorShowFinance">
@@ -3007,7 +3158,7 @@
     quickAdd(btn.dataset.name, btn.dataset.date);
   });
 
-  // ---------- 电路计算器 ----------
+  // ---------- 硬件设计速算 ----------
   const unitFactor = {
     V: 1, mV: 1e-3,
     A: 1, mA: 1e-3,
@@ -3044,6 +3195,32 @@
     return fmtNum(seconds * 1e9) + ' ns';
   }
 
+  function fmtResistance(ohms) {
+    if (!isFinite(ohms)) return '--';
+    const abs = Math.abs(ohms);
+    if (abs >= 1e6) return fmtNum(ohms / 1e6) + ' MΩ';
+    if (abs >= 1e3) return fmtNum(ohms / 1e3) + ' kΩ';
+    return fmtNum(ohms) + ' Ω';
+  }
+
+  function fmtFrequency(hz) {
+    if (!isFinite(hz)) return '--';
+    const abs = Math.abs(hz);
+    if (abs >= 1e6) return fmtNum(hz / 1e6) + ' MHz';
+    if (abs >= 1e3) return fmtNum(hz / 1e3) + ' kHz';
+    return fmtNum(hz) + ' Hz';
+  }
+
+  function fmtPower(watts) {
+    if (!isFinite(watts)) return '--';
+    if (watts === 0) return '0 W';
+    const abs = Math.abs(watts);
+    if (abs >= 1) return fmtNum(watts) + ' W';
+    if (abs >= 1e-3) return fmtNum(watts * 1e3) + ' mW';
+    if (abs >= 1e-6) return fmtNum(watts * 1e6) + ' μW';
+    return fmtNum(watts * 1e9) + ' nW';
+  }
+
   function calcOhm() {
     const result = $('ohmResult');
     const u = readNum('ohmU');
@@ -3062,28 +3239,48 @@
       result.textContent = '三个量都填了，请保留两个来计算。';
       return;
     }
+    if ((isFinite(u) && u < 0) || (isFinite(i) && i < 0) || (isFinite(r) && r < 0)) {
+      result.textContent = '电压、电流和电阻请输入非负值。';
+      return;
+    }
     if (isFinite(uV) && isFinite(iA)) {
       if (iA === 0) {
-        result.textContent = '电流不能为 0。';
+        result.textContent = uV === 0 ? 'U 和 I 都为 0，无法唯一确定 R。' : '电流不能为 0。';
         return;
       }
       const unit = $('ohmRUnit').value;
       const resistance = uV / iA;
-      result.textContent = 'R = ' + fmtNum(resistance / unitFactor[unit]) + ' ' + unitLabel[unit];
+      let text = 'R = ' + fmtNum(resistance / unitFactor[unit]) + ' ' + unitLabel[unit]
+        + ' · P = ' + fmtPower(uV * iA);
+      if (resistance === 0) text += '（电阻为 0，理想短路）';
+      result.textContent = text;
       return;
     }
     if (isFinite(uV) && isFinite(rOhm)) {
       if (rOhm === 0) {
-        result.textContent = '电阻不能为 0。';
+        result.textContent = uV === 0 ? 'U 和 R 都为 0，无法唯一确定 I。' : '电阻不能为 0。';
         return;
       }
       const unit = $('ohmIUnit').value;
-      result.textContent = 'I = ' + fmtNum(uV / rOhm / unitFactor[unit]) + ' ' + unitLabel[unit];
+      const current = uV / rOhm;
+      let text = 'I = ' + fmtNum(current / unitFactor[unit]) + ' ' + unitLabel[unit]
+        + ' · P = ' + fmtPower(uV * current);
+      if (current === 0) text += '（电流为 0）';
+      result.textContent = text;
       return;
     }
     if (isFinite(iA) && isFinite(rOhm)) {
       const unit = $('ohmUUnit').value;
-      result.textContent = 'U = ' + fmtNum(iA * rOhm / unitFactor[unit]) + ' ' + unitLabel[unit];
+      const voltage = iA * rOhm;
+      let text = 'U = ' + fmtNum(voltage / unitFactor[unit]) + ' ' + unitLabel[unit]
+        + ' · P = ' + fmtPower(voltage * iA);
+      if (iA === 0 || rOhm === 0) {
+        const zeroParts = [];
+        if (iA === 0) zeroParts.push('电流为 0');
+        if (rOhm === 0) zeroParts.push('电阻为 0');
+        text += '（' + zeroParts.join('、') + '，因此 U 和 P 均为 0）';
+      }
+      result.textContent = text;
     }
   }
 
@@ -3112,8 +3309,18 @@
       result.textContent = '请完整填写 R 和 C。';
       return;
     }
+    if (r <= 0 || c <= 0) {
+      result.textContent = 'R 和 C 必须大于 0，才能计算 τ、5τ 和 fc。';
+      return;
+    }
     const tau = r * c;
-    result.textContent = 'τ ≈ ' + fmtTime(tau) + '，5τ ≈ ' + fmtTime(tau * 5);
+    if (!isFinite(tau) || tau === 0) {
+      result.textContent = '结果超出可计算范围，请调整 R 或 C。';
+      return;
+    }
+    const cutoff = 1 / (2 * Math.PI * tau);
+    result.textContent = 'τ ≈ ' + fmtTime(tau) + ' · 5τ ≈ ' + fmtTime(tau * 5)
+      + ' · fc ≈ ' + fmtFrequency(cutoff) + '（一阶 RC 低通/高通）';
   }
 
   function calcPowerEnergy() {
@@ -3139,11 +3346,150 @@
       + fmtNum(energy) + ' J（' + fmtNum(energy * 1000) + ' mJ）';
   }
 
+  function calcResistorNetwork() {
+    const result = $('resistorNetworkResult');
+    const values = readNumList('resistorNetworkValues');
+    if (!values || values.length < 2) {
+      result.textContent = '请用逗号、中文逗号或空格分隔至少两个电阻。';
+      return;
+    }
+    if (values.some(function (value) { return value <= 0; })) {
+      result.textContent = '所有电阻值必须大于 0。';
+      return;
+    }
+    const factor = unitFactor[$('resistorNetworkUnit').value];
+    const resistances = values.map(function (value) { return value * factor; });
+    const series = resistances.reduce(function (sum, value) { return sum + value; }, 0);
+    const conductance = resistances.reduce(function (sum, value) { return sum + 1 / value; }, 0);
+    const parallel = 1 / conductance;
+    if (!isFinite(series) || !isFinite(parallel) || parallel <= 0) {
+      result.textContent = '结果超出可计算范围，请调整电阻值。';
+      return;
+    }
+    result.textContent = '串联 Rs ≈ ' + fmtResistance(series) + ' · 并联 Rp ≈ ' + fmtResistance(parallel);
+  }
+
+  function calcOpampGain() {
+    const result = $('opampGainResult');
+    const rf = readNum('opampRf') * unitFactor[$('opampRfUnit').value];
+    const rin = readNum('opampRin') * unitFactor[$('opampRinUnit').value];
+    if (!isFinite(rf) || !isFinite(rin)) {
+      result.textContent = '请完整填写 Rf 和 Rin/Rg。';
+      return;
+    }
+    if (rf <= 0 || rin <= 0) {
+      result.textContent = 'Rf 和 Rin/Rg 必须大于 0。';
+      return;
+    }
+    const mode = $('opampMode').value;
+    const av = mode === 'inverting' ? -rf / rin : 1 + rf / rin;
+    const gainDb = 20 * Math.log10(Math.abs(av));
+    if (!isFinite(av) || !isFinite(gainDb)) {
+      result.textContent = '结果超出可计算范围，请调整电阻值。';
+      return;
+    }
+    result.textContent = 'Av ≈ ' + fmtNum(av) + ' · 增益 ≈ ' + fmtNum(gainDb) + ' dB'
+      + '（' + (mode === 'inverting' ? '反相' : '同相') + '）';
+  }
+
+  function calcLedResistor() {
+    const result = $('ledResistorResult');
+    const vs = readNum('ledVs');
+    const vf = readNum('ledVf');
+    const currentMa = readNum('ledIf');
+    if (!isFinite(vs) || !isFinite(vf) || !isFinite(currentMa)) {
+      result.textContent = '请完整填写 Vs、Vf 和 If。';
+      return;
+    }
+    if (vs < 0 || vf < 0 || vs <= vf || currentMa <= 0) {
+      result.textContent = '必须满足 Vs ≥ 0、Vf ≥ 0、Vs > Vf 且 If > 0。';
+      return;
+    }
+    const voltageDrop = vs - vf;
+    const resistance = voltageDrop / (currentMa / 1000);
+    const powerMw = voltageDrop * currentMa;
+    if (!isFinite(resistance) || !isFinite(powerMw)) {
+      result.textContent = '结果超出可计算范围，请调整输入值。';
+      return;
+    }
+    result.textContent = 'R ≈ ' + fmtResistance(resistance) + ' · P ≈ ' + fmtNum(powerMw) + ' mW';
+  }
+
+  function calcPcbDrop() {
+    const result = $('pcbDropResult');
+    const lengthMm = readNum('pcbLength');
+    const widthMm = readNum('pcbWidth');
+    const current = readNum('pcbCurrent');
+    const copperOz = Number($('pcbCopper').value);
+    if (!isFinite(lengthMm) || !isFinite(widthMm) || !isFinite(current)) {
+      result.textContent = '请完整填写走线长度、宽度、铜厚和负载电流。';
+      return;
+    }
+    if (lengthMm <= 0 || widthMm <= 0 || current <= 0) {
+      result.textContent = '走线长度、宽度和负载电流必须大于 0。';
+      return;
+    }
+    const lengthM = lengthMm / 1000;
+    const widthM = widthMm / 1000;
+    const thicknessM = copperOz === 2 ? 69.58e-6 : 34.79e-6;
+    const resistance = 1.72e-8 * lengthM / (widthM * thicknessM);
+    const drop = current * resistance;
+    const power = current * current * resistance;
+    if (!isFinite(resistance) || !isFinite(drop) || !isFinite(power)) {
+      result.textContent = '结果超出可计算范围，请调整输入值。';
+      return;
+    }
+    result.textContent = 'R ≈ ' + fmtNum(resistance * 1000) + ' mΩ · ΔV ≈ '
+      + fmtNum(drop * 1000) + ' mV · P ≈ ' + fmtNum(power * 1000) + ' mW';
+  }
+
+  function calcBatteryLife() {
+    const result = $('batteryLifeResult');
+    const capacity = readNum('batteryCapacity');
+    const current = readNum('batteryCurrent');
+    const efficiency = readNum('batteryEfficiency');
+    if (!isFinite(capacity) || !isFinite(current) || !isFinite(efficiency)) {
+      result.textContent = '请完整填写容量、平均负载电流和效率。';
+      return;
+    }
+    if (capacity <= 0 || current <= 0 || efficiency <= 0 || efficiency > 100) {
+      result.textContent = '必须满足 C > 0、I > 0 且 0 < η ≤ 100%。';
+      return;
+    }
+    const hours = capacity / current * (efficiency / 100);
+    if (!isFinite(hours) || hours < 0) {
+      result.textContent = '结果超出可计算范围，请调整输入值。';
+      return;
+    }
+    let wholeHours = Math.floor(hours);
+    let minutes = Math.round((hours - wholeHours) * 60);
+    if (minutes === 60) {
+      wholeHours += 1;
+      minutes = 0;
+    }
+    if (wholeHours === 0 && minutes === 0) {
+      const seconds = Math.round(hours * 3600);
+      result.textContent = '预计续航 ' + fmtNum(seconds) + ' 秒（' + fmtNum(hours)
+        + ' 小时，约 ' + fmtNum(hours / 24) + ' 天）';
+    } else {
+      result.textContent = '预计续航 ' + fmtNum(wholeHours) + ' 小时 ' + minutes + ' 分钟（'
+        + fmtNum(hours) + ' 小时，约 ' + fmtNum(hours / 24) + ' 天）';
+    }
+  }
+
   $('ohmBtn').addEventListener('click', calcOhm);
   $('dividerBtn').addEventListener('click', calcDivider);
   $('rcBtn').addEventListener('click', calcRC);
   $('powerBtn').addEventListener('click', calcPowerEnergy);
-  ['ohmForm', 'dividerForm', 'rcForm', 'powerForm'].forEach(function (id) {
+  $('resistorNetworkBtn').addEventListener('click', calcResistorNetwork);
+  $('opampGainBtn').addEventListener('click', calcOpampGain);
+  $('ledResistorBtn').addEventListener('click', calcLedResistor);
+  $('pcbDropBtn').addEventListener('click', calcPcbDrop);
+  $('batteryLifeBtn').addEventListener('click', calcBatteryLife);
+  [
+    'ohmForm', 'dividerForm', 'rcForm', 'powerForm', 'resistorNetworkForm',
+    'opampGainForm', 'ledResistorForm', 'pcbDropForm', 'batteryLifeForm'
+  ].forEach(function (id) {
     $(id).addEventListener('submit', function (event) {
       event.preventDefault();
     });
