@@ -252,6 +252,7 @@
   }
   .nav-inner {
     min-width: 0;
+    flex-wrap: wrap;
   }
   .brand {
     min-width: 0;
@@ -262,7 +263,9 @@
     text-overflow: ellipsis;
   }
   .nav-links {
-    flex: 1 1 auto;
+    order: 3;
+    flex: 0 0 100%;
+    width: 100%;
     min-width: 0;
     overflow-x: auto;
     overflow-y: hidden;
@@ -288,6 +291,9 @@
   }
   .nav-links a {
     flex-shrink: 0;
+  }
+  .top-clock {
+    margin-left: auto;
   }
   @media (max-width: 820px) {
     .nav-inner {
