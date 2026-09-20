@@ -411,6 +411,11 @@
     <path d="M12 19V5"/>
     <polyline points="5 12 12 5 19 12"/>
   </symbol>
+  <symbol id="icon-save" viewBox="0 0 24 24">
+    <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+    <polyline points="17 21 17 13 7 13 7 21"/>
+    <polyline points="7 3 7 8 15 8"/>
+  </symbol>
   <symbol id="icon-external" viewBox="0 0 24 24">
     <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
     <polyline points="15 3 21 3 21 9"/>
@@ -460,6 +465,7 @@
       <a href="#contest">竞赛</a>
       <a href="#tools">学习导航</a>
       <a href="#nav">校园导航</a>
+      <a href="#backup">数据备份</a>
       <a href="classroom.html">课堂整理</a>
     </nav>
     <div class="top-clock" aria-label="当前时间" role="timer">
@@ -480,7 +486,7 @@
         <a class="btn btn-secondary" href="#calendar">打开校历</a>
       </div>
       <div class="home-stats">
-        <div class="home-stat"><strong id="homeModuleCount">7</strong><span>常用模块</span></div>
+        <div class="home-stat"><strong id="homeModuleCount">8</strong><span>常用模块</span></div>
         <div class="home-stat"><strong id="homeStageCount">16</strong><span>成长阶段</span></div>
         <div class="home-stat"><strong id="homeTaskCount">96</strong><span>可勾选任务</span></div>
       </div>
@@ -520,6 +526,11 @@
         <span class="home-card-icon"><svg class="icon icon-xl"><use href="#icon-external"></use></svg></span>
         <h3>校园导航</h3>
         <p>学院官网、智慧安大与校园服务入口</p>
+      </a>
+      <a class="home-card" href="#backup">
+        <span class="home-card-icon"><svg class="icon icon-xl"><use href="#icon-save"></use></svg></span>
+        <h3>数据备份</h3>
+        <p>导出和恢复本机上的全部数据</p>
       </a>
     </div>
   </section>
@@ -717,6 +728,20 @@
       <p class="hint" style="margin-top:10px">校园入口与专业资源持续补充，点击链接前往对应网站。</p>
     </div>
   </section>
+
+  <section class="section" id="backup">
+    <div class="card">
+      <h2><svg class="icon"><use href="#icon-save"></use></svg>数据备份与恢复</h2>
+      <p class="section-intro">把专业模板、路线勾选进度、倒计时、校历偏好和课堂整理数据导出为 JSON 文件。换设备、换浏览器或清理缓存前，建议先导出备份。</p>
+      <div class="backup-status" id="backupStatus">正在检查备份状态…</div>
+      <div class="result-actions">
+        <button type="button" class="btn btn-primary btn-sm" id="exportAllBtn">导出全部数据</button>
+        <button type="button" class="btn btn-secondary btn-sm" id="importAllBtn">导入备份</button>
+      </div>
+      <input type="file" id="importAllFile" accept=".json,application/json" hidden>
+      <p class="hint" style="margin-top:10px">备份文件包含个人数据，请妥善保管；不包含 AI API Key 等敏感设置。导入会覆盖当前浏览器中的同名数据。</p>
+    </div>
+  </section>
 </main>
 
 <div class="modal-overlay" id="majorEditorModal">
@@ -775,6 +800,7 @@
 <footer class="site-footer">
   安大学生工具箱 · 开源学生项目
   <a href="https://github.com/lkx478482771-star/classroom-tool" target="_blank" rel="noopener noreferrer">Github 仓库</a>
+  · <a href="https://github.com/lkx478482771-star/classroom-tool/issues" target="_blank" rel="noopener noreferrer">反馈与建议</a>
   · 欢迎提交建议
 </footer>
 
@@ -2691,6 +2717,121 @@
     const item = quickMineDate(button.dataset.sem, button.dataset.kind);
     quickAdd(item.name, item.date);
   });
+
+  // ---------- 数据备份与恢复 ----------
+  const BACKUP_TIME_KEY = 'ahut_last_backup_at';
+  const BACKUP_KEYS = [
+    'ahutMajorProfiles_v1',
+    'majorRoadmap',
+    'gradeData',
+    'cdData',
+    'dark_mode',
+    'classroom_organizer',
+    'courseData'
+  ];
+
+  function backupStamp() {
+    const now = new Date();
+    return now.getFullYear() + '-' + pad2(now.getMonth() + 1) + '-' + pad2(now.getDate());
+  }
+
+  function renderBackupStatus() {
+    const box = $('backupStatus');
+    let raw = '';
+    try { raw = localStorage.getItem(BACKUP_TIME_KEY) || ''; } catch (err) {}
+    if (!raw) {
+      box.className = 'backup-status warn';
+      box.textContent = '尚未导出过备份。清除浏览器数据或更换设备前，建议先导出一次。';
+      return;
+    }
+    const time = new Date(raw);
+    if (!isFinite(time.getTime())) {
+      box.className = 'backup-status warn';
+      box.textContent = '上次备份时间无法识别，建议重新导出。';
+      return;
+    }
+    const days = Math.floor((Date.now() - time.getTime()) / 86400000);
+    box.className = days > 30 ? 'backup-status warn' : 'backup-status ok';
+    box.textContent = '上次备份：' + time.toLocaleString('zh-CN')
+      + (days > 30 ? '（已超过 30 天，建议重新导出）' : '');
+  }
+
+  function exportAllData() {
+    const data = {};
+    BACKUP_KEYS.forEach(function (key) {
+      try {
+        const value = localStorage.getItem(key);
+        if (value !== null) data[key] = value;
+      } catch (err) {}
+    });
+    const payload = {
+      app: '安大学生工具箱',
+      version: 1,
+      exportedAt: new Date().toISOString(),
+      data: data
+    };
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+    const objectUrl = URL.createObjectURL(blob);
+    const link = el('a', { href: objectUrl, download: 'ahut-toolkit-backup-' + backupStamp() + '.json' });
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    setTimeout(function () { URL.revokeObjectURL(objectUrl); }, 1000);
+    try { localStorage.setItem(BACKUP_TIME_KEY, payload.exportedAt); } catch (err) {}
+    renderBackupStatus();
+    showToast('全部数据已导出');
+  }
+
+  function importAllData(file) {
+    const reader = new FileReader();
+    reader.onload = function () {
+      try {
+        const payload = JSON.parse(String(reader.result || ''));
+        if (!payload || payload.app !== '安大学生工具箱' || !payload.data || typeof payload.data !== 'object') {
+          throw new Error('bad backup');
+        }
+        if (!confirm('导入会覆盖当前浏览器中的同名数据，是否继续？')) return;
+        const previous = {};
+        BACKUP_KEYS.forEach(function (key) {
+          try {
+            const value = localStorage.getItem(key);
+            if (value !== null) previous[key] = value;
+          } catch (err) {}
+        });
+        try {
+          localStorage.setItem('ahut_pre_restore_backup', JSON.stringify({
+            exportedAt: new Date().toISOString(),
+            data: previous
+          }));
+        } catch (err) {}
+        BACKUP_KEYS.forEach(function (key) {
+          if (Object.prototype.hasOwnProperty.call(payload.data, key) && typeof payload.data[key] === 'string') {
+            try { localStorage.setItem(key, payload.data[key]); } catch (err) {}
+          }
+        });
+        try { localStorage.setItem(BACKUP_TIME_KEY, payload.exportedAt || new Date().toISOString()); } catch (err) {}
+        alert('导入完成，页面将刷新以应用数据。');
+        location.reload();
+      } catch (err) {
+        showToast('备份文件格式不正确', true);
+      } finally {
+        $('importAllFile').value = '';
+      }
+    };
+    reader.onerror = function () {
+      showToast('读取备份文件失败', true);
+      $('importAllFile').value = '';
+    };
+    reader.readAsText(file);
+  }
+
+  $('exportAllBtn').addEventListener('click', exportAllData);
+  $('importAllBtn').addEventListener('click', function () { $('importAllFile').click(); });
+  $('importAllFile').addEventListener('change', function (event) {
+    const file = event.target.files && event.target.files[0];
+    if (file) importAllData(file);
+  });
+  renderBackupStatus();
 
   // ---------- 初始化 ----------
   renderCountdowns();
