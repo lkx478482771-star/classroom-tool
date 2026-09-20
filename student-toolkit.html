@@ -444,6 +444,8 @@
       <a href="#calendar">校历</a>
       <a href="#major">专业路线</a>
       <a href="#circuit" id="navCircuit">电路计算</a>
+      <a href="#financeTools" id="navFinance" hidden>财经工具</a>
+      <a href="#managementTools" id="navManagement" hidden>经管工具</a>
       <a href="#contest">竞赛</a>
       <a href="#tools">学习导航</a>
       <a href="#nav">校园导航</a>
@@ -461,15 +463,15 @@
     <div class="home-hero">
       <span class="home-kicker">AHU STUDENT TOOLKIT</span>
       <h2>安大学生工具箱</h2>
-      <p>绩点、倒计时、校历、专业路线、电路计算、竞赛日历和学习导航全部集中在一个工作台。选择下面的模块直接进入，功能数据保存在本机浏览器中。</p>
+      <p>绩点、倒计时、校历、专业路线、专业计算器、竞赛日历和学习导航全部集中在一个工作台。选择下面的模块直接进入，功能数据保存在本机浏览器中。</p>
       <div class="home-actions">
-        <a class="btn btn-primary" href="#major">查看 16 阶段成长路线</a>
+        <a class="btn btn-primary" href="#major">查看专业成长路线</a>
         <a class="btn btn-secondary" href="#calendar">打开校历</a>
       </div>
       <div class="home-stats">
-        <div class="home-stat"><strong>9</strong><span>常用模块</span></div>
-        <div class="home-stat"><strong>16</strong><span>成长阶段</span></div>
-        <div class="home-stat"><strong>96</strong><span>可勾选任务</span></div>
+        <div class="home-stat"><strong id="homeModuleCount">9</strong><span>常用模块</span></div>
+        <div class="home-stat"><strong id="homeStageCount">16</strong><span>成长阶段</span></div>
+        <div class="home-stat"><strong id="homeTaskCount">96</strong><span>可勾选任务</span></div>
       </div>
     </div>
     <div class="home-grid" style="margin-top:18px" id="homeGrid">
@@ -496,17 +498,27 @@
       <a class="home-card" href="#major">
         <span class="home-card-icon"><svg class="icon icon-xl"><use href="#icon-book"></use></svg></span>
         <h3>四年成长路线</h3>
-        <p>16 个阶段、96 项任务，可勾选进度</p>
+        <p id="homeMajorCardDesc">16 个阶段、96 项任务，可勾选进度</p>
       </a>
-      <a class="home-card" href="#circuit">
+      <a class="home-card" href="#circuit" id="homeCircuitCard">
         <span class="home-card-icon"><svg class="icon icon-xl"><use href="#icon-zap"></use></svg></span>
         <h3>电路计算器</h3>
         <p>欧姆定律、分压与 RC 时间常数</p>
       </a>
+      <a class="home-card" href="#financeTools" id="homeFinanceCard" hidden>
+        <span class="home-card-icon"><svg class="icon icon-xl"><use href="#icon-target"></use></svg></span>
+        <h3>财经工具</h3>
+        <p>复利定投、贷款月供与投资收益率</p>
+      </a>
+      <a class="home-card" href="#managementTools" id="homeManagementCard" hidden>
+        <span class="home-card-icon"><svg class="icon icon-xl"><use href="#icon-toolkit"></use></svg></span>
+        <h3>经管工具</h3>
+        <p>盈亏平衡、投资回收期与 NPV / IRR</p>
+      </a>
       <a class="home-card" href="#contest">
         <span class="home-card-icon"><svg class="icon icon-xl"><use href="#icon-calendar"></use></svg></span>
         <h3>竞赛日历</h3>
-        <p>集创赛、电赛、蓝桥杯等赛事信息</p>
+        <p>按专业显示竞赛与报名节点</p>
       </a>
       <a class="home-card" href="#tools">
         <span class="home-card-icon"><svg class="icon icon-xl"><use href="#icon-toolkit"></use></svg></span>
@@ -680,7 +692,7 @@
                 </select>
               </span>
             </label>
-            <button type="button" class="btn btn-primary btn-sm" id="ohmBtn">计算</button>
+            <button type="button" class="btn btn-primary btn-sm" id="ohmBtn" aria-label="计算欧姆定律未知量">计算</button>
           </form>
           <div class="calc-result" id="ohmResult">填写任意两个量，自动计算第三个。</div>
         </div>
@@ -720,7 +732,7 @@
                 </select>
               </span>
             </label>
-            <button type="button" class="btn btn-primary btn-sm" id="dividerBtn">计算</button>
+            <button type="button" class="btn btn-primary btn-sm" id="dividerBtn" aria-label="计算电阻分压输出电压">计算</button>
           </form>
           <div class="calc-result" id="dividerResult">Vout = Vin × R2 / (R1 + R2)</div>
         </div>
@@ -751,9 +763,244 @@
                 </select>
               </span>
             </label>
-            <button type="button" class="btn btn-primary btn-sm" id="rcBtn">计算</button>
+            <button type="button" class="btn btn-primary btn-sm" id="rcBtn" aria-label="计算 RC 时间常数">计算</button>
           </form>
           <div class="calc-result" id="rcResult">τ 约为充电到 63.2% 所需时间，5τ 视为基本稳定。</div>
+        </div>
+
+        <div class="calc-box">
+          <h3>功率与能量 P = U × I，E = P × t</h3>
+          <form class="calc-form" id="powerForm">
+            <label class="calc-field">
+              <span>电压 U</span>
+              <span class="calc-input-row">
+                <input class="input" id="powerU" type="number" step="any" placeholder="例如 5" autocomplete="off">
+                <select class="select" id="powerUUnit" aria-label="功率计算电压单位">
+                  <option value="V">V</option>
+                  <option value="mV">mV</option>
+                </select>
+              </span>
+            </label>
+            <label class="calc-field">
+              <span>电流 I</span>
+              <span class="calc-input-row">
+                <input class="input" id="powerI" type="number" step="any" placeholder="例如 20" autocomplete="off">
+                <select class="select" id="powerIUnit" aria-label="功率计算电流单位">
+                  <option value="mA">mA</option>
+                  <option value="A">A</option>
+                </select>
+              </span>
+            </label>
+            <label class="calc-field">
+              <span>时间 t</span>
+              <span class="calc-input-row">
+                <input class="input" id="powerT" type="number" step="any" placeholder="例如 60" autocomplete="off">
+                <select class="select" id="powerTUnit" aria-label="功率计算时间单位">
+                  <option value="s">s</option>
+                  <option value="ms">ms</option>
+                  <option value="us">us</option>
+                </select>
+              </span>
+            </label>
+            <button type="button" class="btn btn-primary btn-sm" id="powerBtn" aria-label="计算功率与能量">计算</button>
+          </form>
+          <div class="calc-result" id="powerResult">填写电压、电流与时间，计算功率和能量。</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="financeTools" hidden>
+    <div class="card">
+      <h2><svg class="icon"><use href="#icon-target"></use></svg>财经计算器</h2>
+      <div class="calc-grid">
+        <div class="calc-box">
+          <h3>复利 / 定投终值</h3>
+          <form class="calc-form" id="financeCompoundForm">
+            <label class="calc-field">
+              <span>初始本金</span>
+              <span class="calc-input-row">
+                <input class="input" id="financeCompoundPrincipal" type="number" min="0" step="any" placeholder="例如 10000" autocomplete="off">
+                <span>元</span>
+              </span>
+            </label>
+            <label class="calc-field">
+              <span>每期定投金额</span>
+              <span class="calc-input-row">
+                <input class="input" id="financeCompoundContribution" type="number" min="0" step="any" placeholder="例如 1000" autocomplete="off">
+                <span>元</span>
+              </span>
+            </label>
+            <label class="calc-field">
+              <span>预期年化收益率</span>
+              <span class="calc-input-row">
+                <input class="input" id="financeCompoundRate" type="number" min="0" step="any" placeholder="例如 6" autocomplete="off">
+                <span>%</span>
+              </span>
+            </label>
+            <label class="calc-field">
+              <span>投资年限</span>
+              <span class="calc-input-row">
+                <input class="input" id="financeCompoundYears" type="number" min="0" step="any" placeholder="例如 10" autocomplete="off">
+                <span>年</span>
+              </span>
+            </label>
+            <label class="calc-field">
+              <span>定投频率</span>
+              <select class="select" id="financeCompoundFrequency" aria-label="定投频率">
+                <option value="12">每月</option>
+                <option value="1">每年</option>
+              </select>
+            </label>
+            <button type="button" class="btn btn-primary btn-sm" id="financeCompoundBtn" aria-label="计算复利或定投终值">计算</button>
+          </form>
+          <div class="calc-result" id="financeCompoundResult">填写本金、定投、收益率和年限。</div>
+        </div>
+
+        <div class="calc-box">
+          <h3>等额本息月供</h3>
+          <form class="calc-form" id="financeLoanForm">
+            <label class="calc-field">
+              <span>贷款本金</span>
+              <span class="calc-input-row">
+                <input class="input" id="financeLoanAmount" type="number" min="0" step="any" placeholder="例如 500000" autocomplete="off">
+                <span>元</span>
+              </span>
+            </label>
+            <label class="calc-field">
+              <span>贷款年利率</span>
+              <span class="calc-input-row">
+                <input class="input" id="financeLoanRate" type="number" min="0" step="any" placeholder="例如 3.5" autocomplete="off">
+                <span>%</span>
+              </span>
+            </label>
+            <label class="calc-field">
+              <span>贷款年限</span>
+              <span class="calc-input-row">
+                <input class="input" id="financeLoanYears" type="number" min="0" step="any" placeholder="例如 20" autocomplete="off">
+                <span>年</span>
+              </span>
+            </label>
+            <button type="button" class="btn btn-primary btn-sm" id="financeLoanBtn" aria-label="计算等额本息月供">计算</button>
+          </form>
+          <div class="calc-result" id="financeLoanResult">填写贷款本金、年利率和贷款年限。</div>
+        </div>
+
+        <div class="calc-box">
+          <h3>投资年化收益率 / 总收益率</h3>
+          <form class="calc-form" id="financeReturnForm">
+            <label class="calc-field">
+              <span>初始投入金额</span>
+              <span class="calc-input-row">
+                <input class="input" id="financeReturnStart" type="number" min="0" step="any" placeholder="例如 10000" autocomplete="off">
+                <span>元</span>
+              </span>
+            </label>
+            <label class="calc-field">
+              <span>期末资产价值</span>
+              <span class="calc-input-row">
+                <input class="input" id="financeReturnEnd" type="number" min="0" step="any" placeholder="例如 12500" autocomplete="off">
+                <span>元</span>
+              </span>
+            </label>
+            <label class="calc-field">
+              <span>持有天数</span>
+              <span class="calc-input-row">
+                <input class="input" id="financeReturnDays" type="number" min="0" step="any" placeholder="例如 365" autocomplete="off">
+                <span>天</span>
+              </span>
+            </label>
+            <button type="button" class="btn btn-primary btn-sm" id="financeReturnBtn" aria-label="计算投资总收益率和年化收益率">计算</button>
+          </form>
+          <div class="calc-result" id="financeReturnResult">填写初始金额、期末金额和持有天数。</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="managementTools" hidden>
+    <div class="card">
+      <h2><svg class="icon"><use href="#icon-toolkit"></use></svg>经济管理计算器</h2>
+      <div class="calc-grid">
+        <div class="calc-box">
+          <h3>盈亏平衡点</h3>
+          <form class="calc-form" id="managementBreakEvenForm">
+            <label class="calc-field">
+              <span>固定成本 FC</span>
+              <span class="calc-input-row">
+                <input class="input" id="managementBreakEvenFC" type="number" min="0" step="any" placeholder="例如 100000" autocomplete="off">
+                <span>元</span>
+              </span>
+            </label>
+            <label class="calc-field">
+              <span>单位售价 P</span>
+              <span class="calc-input-row">
+                <input class="input" id="managementBreakEvenPrice" type="number" min="0" step="any" placeholder="例如 50" autocomplete="off">
+                <span>元/件</span>
+              </span>
+            </label>
+            <label class="calc-field">
+              <span>单位变动成本 VC</span>
+              <span class="calc-input-row">
+                <input class="input" id="managementBreakEvenVC" type="number" min="0" step="any" placeholder="例如 30" autocomplete="off">
+                <span>元/件</span>
+              </span>
+            </label>
+            <button type="button" class="btn btn-primary btn-sm" id="managementBreakEvenBtn" aria-label="计算盈亏平衡销量和销售额">计算</button>
+          </form>
+          <div class="calc-result" id="managementBreakEvenResult">填写固定成本、单位售价与单位变动成本。</div>
+        </div>
+
+        <div class="calc-box">
+          <h3>投资回收期</h3>
+          <form class="calc-form" id="managementPaybackForm">
+            <label class="calc-field">
+              <span>初始投资 I0</span>
+              <span class="calc-input-row">
+                <input class="input" id="managementPaybackInvestment" type="number" min="0" step="any" placeholder="例如 100000" autocomplete="off">
+                <span>元</span>
+              </span>
+            </label>
+            <label class="calc-field">
+              <span>现金流模式</span>
+              <select class="select" id="managementPaybackMode" aria-label="投资回收期现金流模式">
+                <option value="equal">每期等额</option>
+                <option value="variable">各期不等额</option>
+              </select>
+            </label>
+            <label class="calc-field">
+              <span>每期净现金流 CF</span>
+              <textarea class="textarea" id="managementPaybackCFs" rows="2" placeholder="等额模式填 25000；不等额模式填 20000, 30000, 40000"></textarea>
+            </label>
+            <button type="button" class="btn btn-primary btn-sm" id="managementPaybackBtn" aria-label="计算静态投资回收期">计算</button>
+          </form>
+          <div class="calc-result" id="managementPaybackResult">等额模式只填一个 CF；不等额模式用逗号分隔各期现金流。</div>
+        </div>
+
+        <div class="calc-box">
+          <h3>NPV / IRR</h3>
+          <form class="calc-form" id="managementNpvForm">
+            <label class="calc-field">
+              <span>初始投资 I0</span>
+              <span class="calc-input-row">
+                <input class="input" id="managementNpvInvestment" type="number" min="0" step="any" placeholder="例如 100000" autocomplete="off">
+                <span>元</span>
+              </span>
+            </label>
+            <label class="calc-field">
+              <span>折现率 r</span>
+              <span class="calc-input-row">
+                <input class="input" id="managementNpvRate" type="number" min="-99.99" step="any" placeholder="例如 8" autocomplete="off">
+                <span>%</span>
+              </span>
+            </label>
+            <label class="calc-field">
+              <span>各期净现金流 CF1..CFn</span>
+              <textarea class="textarea" id="managementNpvCFs" rows="2" placeholder="例如 30000, 40000, 50000, 60000"></textarea>
+            </label>
+            <button type="button" class="btn btn-primary btn-sm" id="managementNpvBtn" aria-label="计算净现值和内部收益率">计算</button>
+          </form>
+          <div class="calc-result" id="managementNpvResult">填写初始投资、折现率，并用逗号分隔各期净现金流。</div>
         </div>
       </div>
     </div>
@@ -835,6 +1082,14 @@
         <label class="check-row">
           <input type="checkbox" id="majorShowCircuit">
           <span>显示电路计算器（适合集成电路、电子、自动化等专业）</span>
+        </label>
+        <label class="check-row">
+          <input type="checkbox" id="majorShowFinance">
+          <span>显示财经计算器</span>
+        </label>
+        <label class="check-row">
+          <input type="checkbox" id="majorShowManagement">
+          <span>显示经管计算器</span>
         </label>
         <div class="editor-section">
           <div class="editor-section-head">
@@ -996,9 +1251,6 @@
   });
   window.addEventListener('scroll', updateBackTop, { passive: true });
   updateBackTop();
-
-  const initialView = location.hash ? location.hash.slice(1) : 'home';
-  switchView(sections.some(function (s) { return s.id === initialView; }) ? initialView : 'home');
 
   // ---------- 绩点模块 ----------
   function normalizeCourse(item) {
@@ -1313,6 +1565,8 @@
     name: '集成电路设计与集成系统',
     intro: '面向芯片设计、制造与系统集成方向，按 16 个细分阶段推进：每学期拆成前后两段，逐步覆盖数学、电路、编程、Verilog、EDA、FPGA、竞赛与毕业去向。',
     showCircuit: true,
+    showFinance: false,
+    showManagement: false,
     roadmap: [
       {
         year: '大一 · 秋季 · 第1段',
@@ -1562,8 +1816,475 @@
     updatedAt: 0
   };
 
+  const BUILTIN_FINANCE = {
+    id: 'finance',
+    name: '财经',
+    intro: '面向安大经济、金融、会计、财政等方向，强调课程、证书、数据分析和实习就业的实操路线。',
+    showCircuit: false,
+    showFinance: true,
+    showManagement: false,
+    roadmap: [
+      {
+        year: '大一上',
+        title: '学科入门与办公工具',
+        goal: '完成学习方式转换，建立经济学基本概念，熟练使用 Excel/WPS 处理财经数据',
+        items: [
+          '浏览安徽大学官网和经济学院、商学院培养方案，标出专业核心课程与毕业要求',
+          '政治经济学：理解商品、价值、资本积累等基本概念，每周整理一次思维导图',
+          '微观经济学入门：掌握供求、弹性、机会成本与成本曲线的基础表达',
+          '高数上：学完极限、连续、导数，优先完成与边际分析有关的应用题',
+          'Excel/WPS：练习 SUMIF、VLOOKUP、数据透视表和基础图表',
+          '建立财经新闻阅读习惯，每周记录 3 条国家统计局或东方财富数据'
+        ]
+      },
+      {
+        year: '大一下',
+        title: '经济理论、会计与 Python 起步',
+        goal: '形成微观、宏观分析框架，掌握会计记账逻辑并开始用 Python 处理数据',
+        items: [
+          '微观经济学：掌握消费者理论、生产者理论、市场结构与福利分析',
+          '宏观经济学入门：理解 GDP、失业、通胀与货币政策的核算逻辑',
+          '会计学：学会借贷记账法，能读懂资产负债表、利润表和现金流量表的基本结构',
+          'Python 基础：学完变量、条件、循环、函数和文件读写，完成一次小数据处理',
+          '用 Excel 或 Python 整理一份家庭、班级或小型企业财务收支表',
+          '关注市场调查与分析大赛、数学建模竞赛通知，开始寻找 1-2 位队友'
+        ]
+      },
+      {
+        year: '大二上',
+        title: '金融、统计与财报分析',
+        goal: '建立金融与统计知识底座，能够用描述统计和财务指标分析一家公司',
+        items: [
+          '金融学：掌握利率、货币、金融体系、金融市场与金融机构的运作框架',
+          '会计学进阶：掌握资产、负债、所有者权益与收入费用的确认和列报',
+          '统计学：掌握描述统计、概率分布、抽样分布与假设检验',
+          '财政学：理解税收、政府支出、预算与公共政策分析的基本方法',
+          'Python pandas 入门：完成缺失值处理、筛选、分组与合并',
+          '用证券投资学课程工具完成一次模拟交易，记录买卖理由和复盘'
+        ]
+      },
+      {
+        year: '大二下',
+        title: '公司金融与计量经济',
+        goal: '掌握估值、风险与回归分析，完成第一个完整的数据分析小项目',
+        items: [
+          '公司金融：掌握货币时间价值、净现值、内部收益率与资本预算',
+          '投资学：理解收益与风险、资产组合、CAPM 和市场有效性',
+          '商业银行经营管理：了解资产负债管理、信贷、流动性与风险管理',
+          '计量经济学：掌握一元和多元线性回归、显著性检验与常见模型诊断',
+          '用 Stata、SPSS 或 Python statsmodels 完成一次回归分析并写解释',
+          '报名市场调查与分析大赛、金融精英挑战赛或数学建模，完成选题与分工'
+        ]
+      },
+      {
+        year: '大三上',
+        title: '国际金融、保险与证书启动',
+        goal: '拓展国际金融和保险知识，用可视化工具呈现数据，开始评估职业证书',
+        items: [
+          '财务报表分析：完成杜邦分析，判断偿债、盈利、营运和成长能力',
+          '国际金融：掌握汇率、国际收支、外汇市场与开放经济政策',
+          '保险学：理解风险、保险产品、定价与保险合同的基本逻辑',
+          'Python 可视化：用 pandas 和 Matplotlib 绘制财报趋势和宏观指标图',
+          '根据职业方向评估 CPA、CFA、证券从业或基金从业的报考安排',
+          '撰写第一版简历，投递寒假实习或参加校园金融、银行招聘活动'
+        ]
+      },
+      {
+        year: '大三下',
+        title: '数据项目与去向规划',
+        goal: '完成一个可展示的财经数据分析项目，明确考研、保研、留学或就业方向',
+        items: [
+          '完成一个财经数据分析项目：从巨潮资讯或国家统计局获取数据并形成报告',
+          '用 Tableau Public 或 Power BI 制作至少 1 个交互式数据看板',
+          '参加商业数据分析类、挑战杯或市调大赛决赛，完成作品、测试与答辩材料',
+          '按选择方向完成 CPA 或 CFA 第一轮备考，或准备证券、基金从业考试',
+          '投递暑期实习、夏令营或科研训练，更新简历和项目作品集',
+          '补齐薄弱专业课，明确毕业去向的时间表和备选方案'
+        ]
+      },
+      {
+        year: '大四上',
+        title: '秋招、考研与毕设开题',
+        goal: '同步推进考研或求职与毕业论文开题，把四年经历整理成可面试的成果',
+        items: [
+          '确定考研、保研、就业或留学主方案，制定月历和关键节点',
+          '秋招投递、考研报名或夏令营联系导师三线并行，每周复盘节奏',
+          '毕业设计完成选题、文献综述与开题报告，确定数据来源和模型',
+          '整理简历、成绩单、获奖证书、项目代码和数据分析报告',
+          '练习行测、金融岗位笔试与常见专业面试题',
+          '对照目标岗位或院校要求，补齐专业关键词和成果描述'
+        ]
+      },
+      {
+        year: '大四下',
+        title: '毕设答辩与毕业复盘',
+        goal: '完成毕业论文、答辩与离校手续，沉淀可复用的财经学习资源',
+        items: [
+          '完成毕业论文的数据分析、模型检验、撰写与中期检查',
+          '完成论文答辩、修改和提交，归档数据、代码、报告和证书',
+          '办理学分、成绩单、档案、党组织关系等毕业手续',
+          '归档实习报告、项目作品集和四年课程笔记',
+          '复盘四年的课程、证书、竞赛和实习路线，写一份给学弟学妹的建议',
+          '制定毕业后的三个月过渡计划：技能、证书、求职和习惯'
+        ]
+      }
+    ],
+    tools: [
+      { tag: '学校', name: '安徽大学官网', url: 'https://www.ahu.edu.cn/', desc: '从院系设置进入经济学院、商学院，查看培养方案、通知与教务入口' },
+      { tag: '课程', name: '中国大学MOOC', url: 'https://www.icourse163.org/', desc: '微观经济学、宏观经济学、金融学、会计学等公开课' },
+      { tag: '数据', name: '国家统计局', url: 'https://data.stats.gov.cn/', desc: '查询 GDP、CPI、就业、财政与月度年度宏观指标' },
+      { tag: '数据', name: '巨潮资讯网', url: 'https://www.cninfo.com.cn/', desc: '上市公司公告、年报、财报和原始披露文件' },
+      { tag: '行情', name: '东方财富网', url: 'https://www.eastmoney.com/', desc: '行情、研报、财经资讯与模拟投资入口' },
+      { tag: '行情', name: '同花顺财经', url: 'https://www.10jqka.com.cn/', desc: '股票、基金、宏观数据与财经工具查询' },
+      { tag: '数据库', name: 'CSMAR 国泰安', url: 'https://data.csmar.com/', desc: '学术研究常用金融数据库，需校园网或机构授权；Wind 同为机构授权终端' },
+      { tag: '办公', name: 'WPS Office', url: 'https://www.wps.cn/', desc: '表格公式、数据透视表、图表和文档，适合课程作业与实习' },
+      { tag: '编程', name: 'Python / pandas', url: 'https://pandas.pydata.org/', desc: '数据清洗、计算、统计和自动化，配合 Jupyter 使用' },
+      { tag: '统计', name: 'Stata / SPSS', url: 'https://www.stata.com/', desc: '计量经济与问卷统计常用软件；SPSS 可查 IBM SPSS Statistics 官方页' },
+      { tag: '可视化', name: 'Tableau Public / Power BI', url: 'https://public.tableau.com/', desc: '免费学习交互式图表和数据看板；Power BI 可查微软官方页' },
+      { tag: '证书', name: '中国注册会计师协会', url: 'https://www.cicpa.org.cn/', desc: 'CPA 报名、大纲与考试安排；CFA 查 CFA Institute，证券和基金从业分别查 SAC、AMAC' }
+    ],
+    contests: [
+      {
+        name: '市调赛',
+        full: '全国大学生市场调查与分析大赛',
+        url: 'http://www.china-cssc.org/',
+        date: '2027-01-10',
+        note: '中国商业统计学会主办，适合用问卷、统计和数据分析完成真实商业选题'
+      },
+      {
+        name: '金融精英赛',
+        full: '东方财富杯全国大学生金融精英挑战赛',
+        url: 'https://contest.eastmoney.com/',
+        date: '2027-04-01',
+        note: '东方财富官方报名页，部分网络环境需从学校通知或东方财富首页入口进入'
+      },
+      {
+        name: '数模',
+        full: '全国大学生数学建模竞赛',
+        url: 'https://www.mcm.edu.cn/',
+        date: '2027-09-09',
+        note: '经典学科竞赛，适合用统计、优化和数据方法解决财经与管理问题'
+      }
+    ],
+    updatedAt: 0
+  };
+
+  const BUILTIN_MICROELECTRONICS = {
+    id: 'microelectronics',
+    name: '微电子科学与工程',
+    intro: '面向半导体材料、器件物理、集成电路工艺、版图与测试方向，与芯片设计类模板区分开：强调器件物理、工艺实验与器件仿真，兼顾 Verilog/FPGA 数字基础。',
+    showCircuit: true,
+    showFinance: false,
+    showManagement: false,
+    roadmap: [
+      {
+        year: '大一上 · 秋季学期',
+        title: '数学物理与专业认知',
+        goal: '完成学习方式转换，打牢高数、线代与大学物理基础，建立半导体行业认知',
+        items: [
+          '高等数学上：学完极限、连续、导数与微分，每周至少 5 小时做题',
+          '线性代数：学完矩阵、行列式、线性方程组与初等变换',
+          '大学物理：学完质点运动、牛顿定律、动量与能量',
+          'C 语言：学完顺序、分支、循环、数组与函数',
+          '专业导论：画出半导体材料→器件→芯片→系统产业链简图',
+          '用万用表测量电阻、电压、电流，完成 1 个面包板基础电路'
+        ]
+      },
+      {
+        year: '大一下 · 春季学期',
+        title: '电路分析与电磁基础',
+        goal: '学完电路分析与大学物理电磁学，建立工程工具与实验规范',
+        items: [
+          '高等数学下：学完多元函数、偏导数、重积分与级数',
+          '电路分析：掌握 KCL、KVL、戴维南、诺顿与叠加定理',
+          '大学物理：学完静电场、稳恒磁场、电磁感应与麦克斯韦方程组概念',
+          'Python 基础：学完列表、字典、函数与文件读写',
+          '用示波器测量交流波形，学会读频率、幅值与相位',
+          '学习 Git 基础并建立 GitHub 账号，归档课程实验报告'
+        ]
+      },
+      {
+        year: '大二上 · 秋季学期',
+        title: '模拟与数字电路',
+        goal: '掌握模电与数电两大基础，会用 SPICE 仿真验证电路',
+        items: [
+          '模拟电子技术：学完二极管、三极管放大电路与负反馈',
+          '数字电子技术：学完组合逻辑、时序逻辑与状态机',
+          '电磁场与电磁波：理解静电场、恒定磁场与传输线初步',
+          '安装 LTspice/ngspice，跑通整流、放大与 RC 滤波仿真',
+          '四级冲刺：真题模拟并整理高频词汇',
+          '加入电赛或电子设计兴趣小组，找 1-2 位队友'
+        ]
+      },
+      {
+        year: '大二下 · 春季学期',
+        title: '半导体物理与数字设计',
+        goal: '进入半导体物理核心，走通 Verilog/FPGA 数字设计流程',
+        items: [
+          '半导体物理：学完能带理论、载流子统计、PN 结与金属-半导体接触',
+          '信号与系统：掌握卷积、傅里叶变换与 LTI 系统分析',
+          'Verilog HDL：学完模块、assign、always 与 testbench',
+          '用 ModelSim 仿真计数器、序列检测器，并在 FPGA 开发板跑通',
+          '完成模电/数电课程设计，写 README 与答辩稿',
+          '阅读 1 篇半导体器件或工艺方向中文综述，建立知识地图'
+        ]
+      },
+      {
+        year: '大三上 · 秋季学期',
+        title: '器件物理与工艺核心',
+        goal: '学完量子、固体物理与微电子器件、工艺，会用 TCAD 做器件仿真',
+        items: [
+          '量子力学：学完薛定谔方程、一维势阱与势垒隧穿',
+          '固体物理：学完晶体结构、能带、有效质量与半导体输运',
+          '微电子器件：掌握 MOSFET 阈值电压、I-V 特性与短沟道效应',
+          '集成电路工艺：掌握氧化、光刻、刻蚀、掺杂、薄膜与互连流程',
+          '用 Sentaurus TCAD/Silvaco 跑 1 个 PN 结或 MOS 器件仿真',
+          '集创赛组队并完成选题与方案，锁定器件/工艺或数字方向'
+        ]
+      },
+      {
+        year: '大三下 · 春季学期',
+        title: '版图设计与器件仿真',
+        goal: '掌握版图设计工具与器件仿真，完成一个可展示的微电子项目',
+        items: [
+          '版图设计：学习 Cadence Virtuoso/KLayout 画反相器、晶体管版图并做 DRC',
+          '半导体材料与器件仿真：完成 MOS 阈值电压或掺杂浓度扫描',
+          '嵌入式：掌握 GPIO、中断、定时器与串口，完成 1 个小作品',
+          '集成电路工艺实验：完成氧化/光刻/刻蚀等工艺实验并写报告',
+          '投递暑期实习、夏令营或科研训练申请',
+          '整理个人作品集（版图、仿真、实验报告）到 GitHub'
+        ]
+      },
+      {
+        year: '大四上 · 秋季学期',
+        title: '毕设启动与去向冲刺',
+        goal: '完成毕设开题并同步推进考研、保研或就业',
+        items: [
+          '毕业设计：完成选题、文献调研与开题报告',
+          '确定考研、保研、就业或出国方向并制定月度日历',
+          '秋招投递/考研报名/联系导师三线并行',
+          '完善简历，把版图、TCAD 与 FPGA 项目写成可量化成果',
+          '针对岗位 JD 刷专业面试题（器件物理、工艺、Verilog）',
+          '整理四年课程笔记与实验报告，形成个人资源库'
+        ]
+      },
+      {
+        year: '大四下 · 春季学期',
+        title: '毕设收官与四年复盘',
+        goal: '完成毕设答辩与毕业手续，复盘去向并沉淀经验',
+        items: [
+          '完成毕设核心实现、仿真/测试与中期检查',
+          '撰写毕业论文并准备答辩 PPT',
+          '办理学分、成绩单、档案等毕业手续',
+          '归档项目代码、版图、仿真文件与获奖材料',
+          '给学弟学妹写 1 份路线建议（课程、竞赛、工具）',
+          '做四年总复盘：目标、成果、遗憾与下一阶段计划'
+        ]
+      }
+    ],
+    tools: [
+      { tag: '学院', name: '安徽大学集成电路学院', url: 'https://ic.ahu.edu.cn', desc: '学院官网：通知公告、培养方案、课程实验与实验室信息' },
+      { tag: '科研', name: '集成电路先进材料与技术产教研融合研究院', url: 'https://imtic.ahu.edu.cn/', desc: '合肥综合性国家科学中心研究院，器件/材料/工艺产学研平台' },
+      { tag: '课程', name: '中国大学MOOC', url: 'https://www.icourse163.org/', desc: '半导体物理、微电子器件、模拟/数字电路等公开课' },
+      { tag: '数字', name: 'HDLBits', url: 'https://hdlbits.01xz.net/wiki/Main_Page', desc: 'Verilog 在线练习平台，边学边写边验证' },
+      { tag: '仿真', name: 'LTspice / ngspice', url: 'https://www.analog.com/en/design-center/design-tools-and-calculators/ltspice-simulator.html', desc: '免费 SPICE 仿真；LTspice 界面友好，ngspice 开源可脚本化' },
+      { tag: '电路', name: 'Cadence Virtuoso', url: 'https://www.cadence.com/en_US/home/tools/custom-ic-analog-rf-design.html', desc: '模拟/版图设计工具，通常在校内实验室或授权平台使用' },
+      { tag: '器件', name: 'Sentaurus TCAD / Silvaco', url: 'https://www.synopsys.com/silicon/tcad.html', desc: '器件与工艺仿真，用于 PN 结/MOS 特性模拟，校内或授权平台使用' },
+      { tag: '版图', name: 'KLayout / L-Edit', url: 'https://www.klayout.de/', desc: '版图查看与编辑，KLayout 开源；L-Edit 属 Siemens EDA' },
+      { tag: '仿真', name: 'ModelSim', url: 'https://eda.sw.siemens.com/en-US/ic/modelsim/', desc: 'HDL 功能仿真，配 Verilog/VHDL testbench 验证' },
+      { tag: '电路', name: 'KiCad', url: 'https://www.kicad.org/', desc: '开源原理图与 PCB 设计，适合课程设计和作品' },
+      { tag: '社区', name: '与非网 EEFOCUS', url: 'https://www.eefocus.com/', desc: '电子与集成电路行业资讯、教程与社区讨论' },
+      { tag: '作品集', name: 'GitHub', url: 'https://github.com/', desc: '版本管理与个人作品集，归档代码、仿真与报告' }
+    ],
+    contests: [
+      {
+        name: '集创赛',
+        full: '全国大学生集成电路创新创业大赛',
+        url: 'https://univ.ciciec.com/',
+        date: '2027-04-01',
+        note: '春季报名、暑期总决赛，器件/工艺/数字/EDA 等多赛道'
+      },
+      {
+        name: '电赛',
+        full: '全国大学生电子设计竞赛',
+        url: 'https://www.nuedc-training.com.cn/',
+        date: '2027-08-01',
+        note: '偶数年全国赛、奇数年省赛或邀请赛，锻炼动手与系统设计'
+      },
+      {
+        name: '蓝桥杯',
+        full: '蓝桥杯电子类个人赛（嵌入式/单片机）',
+        url: 'https://dasai.lanqiao.cn/',
+        date: '2027-04-01',
+        note: '适合用大一 C 语言基础起步，个人赛制易上手'
+      }
+    ],
+    updatedAt: 0
+  };
+
+  const BUILTIN_MANAGEMENT = {
+    id: 'management',
+    name: '经济管理',
+    intro: '面向工商管理、市场营销、财务管理、人力资源、信息管理、电子商务、物流与供应链等方向，以数据分析、商业案例与实习实践为主线，把经济学与管理学基础转化为可量化的职业能力。',
+    showCircuit: false,
+    showFinance: false,
+    showManagement: true,
+    roadmap: [
+      {
+        year: '大一上 · 秋季学期',
+        title: '经管入门与微观经济',
+        goal: '完成高中到大学的转型，打牢管理学与经济学基础',
+        items: [
+          '管理学原理：学完管理职能、组织结构与决策模型',
+          '微观经济学：学完供求、弹性、消费者与生产者理论',
+          '高等数学（经管类）：学完极限、导数、微分与一元积分初步',
+          '大学英语：背四级词汇第 1-2 单元，每天 30 词',
+          '用 Excel 建个人学习计划与成绩追踪表',
+          '参加 1 次商学院/管理学院新生专业导论并记录方向'
+        ]
+      },
+      {
+        year: '大一下 · 春季学期',
+        title: '宏观与会计基础',
+        goal: '学完宏观经济学与会计学基础，建立数据工具意识',
+        items: [
+          '宏观经济学：学完 GDP、失业、通胀与货币财政政策',
+          '会计学：掌握会计恒等式、借贷记账法与三大报表',
+          '线性代数：学完矩阵、行列式与线性方程组',
+          '统计学导论：学完描述统计、抽样与基本概率',
+          '用 Excel/WPS 完成 1 个财务表格与图表练习',
+          '制定暑假计划：英语、Python 基础、社会调研'
+        ]
+      },
+      {
+        year: '大二上 · 秋季学期',
+        title: '统计营销与财务',
+        goal: '掌握统计学、市场营销与财务管理，开始用数据说话',
+        items: [
+          '统计学：学完假设检验、区间估计与方差分析',
+          '市场营销：学完 STP、4P 与消费者行为',
+          '财务管理：学完资金时间价值、风险收益与资本预算',
+          '用 Excel 完成描述统计与 1 份调研问卷分析',
+          '学习 Python/pandas 基础，处理 1 个小数据集',
+          '四级冲刺，整理统计学与财务公式速查手册'
+        ]
+      },
+      {
+        year: '大二下 · 春季学期',
+        title: '组织运营与运筹',
+        goal: '学完组织行为、人力资源、运营管理与运筹学',
+        items: [
+          '组织行为学：学完个体、群体与组织层面的激励与领导',
+          '人力资源管理：学完招聘、培训、绩效与薪酬',
+          '运营管理：学完流程分析、库存管理与质量',
+          '运筹学：掌握线性规划、整数规划与网络模型',
+          '用 Excel 求解器或 Python 解 1 个线性规划案例',
+          '参加 1 次企业参访或模拟经营活动并复盘'
+        ]
+      },
+      {
+        year: '大三上 · 秋季学期',
+        title: '战略与数字化',
+        goal: '学完战略管理、管理信息系统与电子商务，掌握商业数据分析',
+        items: [
+          '战略管理：学完五力模型、SWOT 与竞争战略',
+          '管理信息系统：理解 ERP、CRM 与信息系统规划',
+          '电子商务：学完平台模式、数字营销与用户增长',
+          '商业数据分析：用 Python/pandas 完成 1 个完整分析项目',
+          '学习 SQL 基础，完成多表查询与聚合练习',
+          '挑战杯/互联网+组队并确定商业策划选题'
+        ]
+      },
+      {
+        year: '大三下 · 春季学期',
+        title: '供应链与实战',
+        goal: '学完供应链与物流，把课程能力转化为竞赛与实习成果',
+        items: [
+          '供应链管理：学完牛鞭效应、库存与供应商管理',
+          '物流与配送：掌握网络规划、仓储与最后一公里',
+          '商业数据分析进阶：用 Tableau/Power BI 做 1 个仪表板',
+          '完成企业竞争模拟或 ERP 沙盘对抗并复盘决策',
+          '投递暑期实习、调研课题或科研训练申请',
+          '完善竞赛策划书/调研报告，参加校级选拔'
+        ]
+      },
+      {
+        year: '大四上 · 秋季学期',
+        title: '论文启动与去向冲刺',
+        goal: '完成毕业论文开题，同步推进求职、考研或留学',
+        items: [
+          '毕业论文：完成选题、文献综述与开题报告',
+          '确定求职、考研、考公、保研或留学方向并制定日历',
+          '秋招投递/考研报名/公务员备考三线并行',
+          '完善简历，把实习、竞赛与数据分析项目写成量化成果',
+          '针对目标岗位练笔试：行测、财务、SQL、Excel 案例分析',
+          '整理四年课程笔记、案例与获奖材料'
+        ]
+      },
+      {
+        year: '大四下 · 春季学期',
+        title: '毕业收官与四年复盘',
+        goal: '完成论文答辩与毕业手续，复盘去向并沉淀经验',
+        items: [
+          '完成毕业论文数据分析与写作，准备答辩',
+          '办理学分、成绩单、档案等毕业手续',
+          '完成实习或毕业去向确认',
+          '归档竞赛策划书、实习报告与项目作品',
+          '给学弟学妹写 1 份路线建议（课程、工具、竞赛）',
+          '做四年总复盘：目标、成果、遗憾与下一阶段计划'
+        ]
+      }
+    ],
+    tools: [
+      { tag: '学院', name: '安徽大学商学院', url: 'http://sba.ahu.edu.cn/', desc: '工商管理、会计学、财务管理、市场营销等培养方案与通知' },
+      { tag: '学院', name: '安徽大学管理学院', url: 'http://man.ahu.edu.cn/', desc: '管理科学、信息管理、电子商务、物流与供应链方向' },
+      { tag: '课程', name: '中国大学MOOC', url: 'https://www.icourse163.org/', desc: '管理学、经济学、会计学、统计学等公开课' },
+      { tag: '数据', name: '国家统计局', url: 'https://www.stats.gov.cn/', desc: '官方宏观数据、统计公报与行业数据，论文与案例素材' },
+      { tag: '案例', name: '中国管理案例共享中心', url: 'http://www.cmcc-dut.cn/', desc: '中国本土管理案例库，适合案例分析、毕设与竞赛' },
+      { tag: '表格', name: 'Excel / WPS 官方学习', url: 'https://support.microsoft.com/zh-cn/excel', desc: '函数、数据透视表、Power Query 与图表学习' },
+      { tag: '分析', name: 'Python / pandas', url: 'https://pandas.pydata.org/', desc: '数据清洗、统计与商业数据分析入门' },
+      { tag: '统计', name: 'Stata / SPSS', url: 'https://www.stata.com/', desc: '计量与统计分析，可用校内授权或公开学习资源' },
+      { tag: '可视化', name: 'Power BI / Tableau', url: 'https://powerbi.microsoft.com/', desc: '商业智能仪表板与数据可视化' },
+      { tag: '数据库', name: 'SQLZoo', url: 'https://sqlzoo.net/', desc: '在线 SQL 练习，掌握查询、聚合与多表连接' },
+      { tag: '财务', name: '用友 / 金蝶公开学习', url: 'https://www.yonyou.com/', desc: '财务软件与 ERP 概念（以官网公开资源为准）' },
+      { tag: '模拟', name: '企业竞争模拟', url: 'https://www.bizsim.cn/', desc: '全国企业竞争模拟大赛与在线经营对抗练习' }
+    ],
+    contests: [
+      {
+        name: '挑战杯',
+        full: '“挑战杯”全国大学生课外学术科技作品竞赛',
+        url: 'https://www.tiaozhanbei.net/',
+        date: '2027-05-01',
+        note: '哲学社科类调查报告与学术论文适合经管方向'
+      },
+      {
+        name: '互联网+',
+        full: '中国国际大学生创新大赛（原“互联网+”）',
+        url: 'https://cy.ncss.cn/',
+        date: '2027-06-01',
+        note: '创业计划与商业策划书，经管是核心赛道之一'
+      },
+      {
+        name: '企业竞争模拟',
+        full: '全国企业竞争模拟大赛',
+        url: 'https://www.bizsim.cn/',
+        date: '2027-03-01',
+        note: '企业经营决策对抗，经管专业对口'
+      }
+    ],
+    updatedAt: 0
+  };
+
   function normalizeProfile(p) {
     if (!p || typeof p !== 'object') return null;
+    function safeExternalUrl(value) {
+      try {
+        const url = new URL(String(value || ''), location.href);
+        return (url.protocol === 'http:' || url.protocol === 'https:') ? url.href : '';
+      } catch (err) {
+        return '';
+      }
+    }
     const roadmap = Array.isArray(p.roadmap) ? p.roadmap.map(function (s) {
       return {
         year: String((s && s.year) || ''),
@@ -1576,7 +2297,7 @@
       return {
         tag: String((t && t.tag) || ''),
         name: String((t && t.name) || ''),
-        url: String((t && t.url) || ''),
+        url: safeExternalUrl(t && t.url),
         desc: String((t && t.desc) || '')
       };
     }) : [];
@@ -1584,7 +2305,7 @@
       return {
         name: String((c && c.name) || ''),
         full: String((c && c.full) || ''),
-        url: String((c && c.url) || ''),
+        url: safeExternalUrl(c && c.url),
         date: String((c && c.date) || ''),
         note: String((c && c.note) || '')
       };
@@ -1594,6 +2315,8 @@
       name: String((p.name || '').slice(0, 60)),
       intro: String((p.intro || '').slice(0, 300)),
       showCircuit: !!p.showCircuit,
+      showFinance: !!p.showFinance,
+      showManagement: !!p.showManagement,
       roadmap: roadmap,
       tools: tools,
       contests: contests,
@@ -1616,7 +2339,8 @@
       if (Array.isArray(data.profiles)) {
         customProfiles = data.profiles.map(normalizeProfile).filter(Boolean);
       }
-      if (typeof data.activeId === 'string' && data.activeId !== 'ic') {
+      if (typeof data.activeId === 'string' &&
+          (isBuiltin(data.activeId) || customProfiles.some(function (p) { return p.id === data.activeId; }))) {
         activeMajorId = data.activeId;
       }
     } catch (err) {
@@ -1633,7 +2357,7 @@
   }
 
   function allProfiles() {
-    return [BUILTIN_IC].concat(customProfiles);
+    return [BUILTIN_IC, BUILTIN_FINANCE, BUILTIN_MICROELECTRONICS, BUILTIN_MANAGEMENT].concat(customProfiles);
   }
 
   function getProfile(id) {
@@ -1641,7 +2365,7 @@
   }
 
   function isBuiltin(id) {
-    return id === 'ic';
+    return ['ic', 'finance', 'microelectronics', 'management'].indexOf(id) !== -1;
   }
 
   function encodeBase64Url(str) {
@@ -1668,7 +2392,7 @@
   }
 
   if (sharedProfile) {
-    if (sharedProfile.id === 'ic' || customProfiles.some(function (p) { return p.id === sharedProfile.id; })) {
+    if (isBuiltin(sharedProfile.id) || customProfiles.some(function (p) { return p.id === sharedProfile.id; })) {
       sharedProfile.id = 'm' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
     }
     customProfiles.push(sharedProfile);
@@ -1676,9 +2400,9 @@
     saveCustomStore();
   } else {
     const urlMajor = urlParams.get('m');
-    if (urlMajor && getProfile(urlMajor)) {
+    if (urlMajor && allProfiles().some(function (p) { return p.id === urlMajor; })) {
       activeMajorId = urlMajor;
-    } else if (!getProfile(activeMajorId)) {
+    } else if (!allProfiles().some(function (p) { return p.id === activeMajorId; })) {
       activeMajorId = 'ic';
     }
   }
@@ -1792,7 +2516,7 @@
     const select = $('majorSelect');
     clearNode(select);
     allProfiles().forEach(function (p) {
-      const opt = el('option', { value: p.id, textContent: p.name + (p.id === 'ic' ? '（内置示例）' : '') });
+      const opt = el('option', { value: p.id, textContent: p.name + (isBuiltin(p.id) ? '（内置模板）' : '') });
       opt.selected = p.id === activeMajorId;
       select.appendChild(opt);
     });
@@ -1805,8 +2529,22 @@
     info.appendChild(el('span', { className: 'major-manage-name', textContent: p.name }));
     info.appendChild(el('span', {
       className: 'major-manage-meta',
-      textContent: (isBuiltin(p.id) ? '内置示例 · ' : '自定义专业 · ') + p.roadmap.length + ' 个阶段 · ' + p.tools.length + ' 个资源 · ' + p.contests.length + ' 个竞赛'
+      textContent: (isBuiltin(p.id) ? '内置模板 · ' : '自定义专业 · ') + p.roadmap.length + ' 个阶段 · ' + p.tools.length + ' 个资源 · ' + p.contests.length + ' 个竞赛'
     }));
+  }
+
+  function updateHomeMajorStats(profile) {
+    const stageCount = profile.roadmap.length;
+    const taskCount = profile.roadmap.reduce(function (sum, stage) {
+      return sum + stage.items.length;
+    }, 0);
+    const moduleCount = Array.from(document.querySelectorAll('#homeGrid .home-card')).filter(function (card) {
+      return !card.hidden;
+    }).length;
+    $('homeStageCount').textContent = stageCount;
+    $('homeTaskCount').textContent = taskCount;
+    $('homeModuleCount').textContent = moduleCount;
+    $('homeMajorCardDesc').textContent = stageCount + ' 个阶段、' + taskCount + ' 项任务，可勾选进度';
   }
 
   function applyMajor(id) {
@@ -1821,15 +2559,25 @@
     $('majorHint').textContent = '当前模板：' + profile.name + '，路线、资源、竞赛和计算器已自动切换。';
     renderMajorSelect();
     renderMajorManageInfo();
-    const show = !!profile.showCircuit;
-    const circuit = $('circuit');
-    const circuitWasActive = circuit.classList.contains('view-active');
-    circuit.hidden = !show;
-    $('navCircuit').hidden = !show;
+    const optionalViews = [
+      { section: $('circuit'), nav: $('navCircuit'), card: $('homeCircuitCard'), show: !!profile.showCircuit },
+      { section: $('financeTools'), nav: $('navFinance'), card: $('homeFinanceCard'), show: !!profile.showFinance },
+      { section: $('managementTools'), nav: $('navManagement'), card: $('homeManagementCard'), show: !!profile.showManagement }
+    ];
+    optionalViews.forEach(function (item) {
+      item.section.hidden = !item.show;
+      item.nav.hidden = !item.show;
+      item.card.hidden = !item.show;
+    });
+    updateHomeMajorStats(profile);
     renderRoadmap();
     renderTools();
     renderContests();
-    if (!show && circuitWasActive) switchView('major');
+    if (optionalViews.some(function (item) {
+      return item.section.hidden && item.section.classList.contains('view-active');
+    })) {
+      switchView('major');
+    }
   }
 
   $('majorSelect').addEventListener('change', function () {
@@ -1846,6 +2594,8 @@
       name: '',
       intro: '',
       showCircuit: false,
+      showFinance: false,
+      showManagement: false,
       roadmap: [
         { year: '大一', title: '基础与入门', goal: '', items: [''] },
         { year: '大二', title: '', goal: '', items: [''] },
@@ -2012,6 +2762,8 @@
       name: $('majorName').value.trim(),
       intro: $('majorIntroInput').value.trim(),
       showCircuit: $('majorShowCircuit').checked,
+      showFinance: $('majorShowFinance').checked,
+      showManagement: $('majorShowManagement').checked,
       roadmap: roadmap,
       tools: tools,
       contests: contests,
@@ -2026,6 +2778,8 @@
     $('majorName').value = profile.name;
     $('majorIntroInput').value = profile.intro;
     $('majorShowCircuit').checked = !!profile.showCircuit;
+    $('majorShowFinance').checked = !!profile.showFinance;
+    $('majorShowManagement').checked = !!profile.showManagement;
     renderRoadStageRows(profile.roadmap);
     renderToolRows(profile.tools);
     renderContestRows(profile.contests);
@@ -2042,8 +2796,8 @@
       showToast('请填写专业名称', true);
       return;
     }
-    if (profile.id === 'ic') {
-      showToast('内置示例不能直接覆盖，可复制后修改', true);
+    if (isBuiltin(profile.id)) {
+      showToast('内置模板不能直接覆盖，可复制后修改', true);
       return;
     }
     const index = customProfiles.findIndex(function (p) { return p.id === profile.id; });
@@ -2070,6 +2824,8 @@
       $('majorName').value = copy.name;
       $('majorIntroInput').value = copy.intro;
       $('majorShowCircuit').checked = !!copy.showCircuit;
+      $('majorShowFinance').checked = !!copy.showFinance;
+      $('majorShowManagement').checked = !!copy.showManagement;
       renderRoadStageRows(copy.roadmap);
       renderToolRows(copy.tools);
       renderContestRows(copy.contests);
@@ -2132,7 +2888,7 @@
           return;
         }
         imported.forEach(function (p) {
-          if (p.id === 'ic' || customProfiles.some(function (x) { return x.id === p.id; })) {
+        if (isBuiltin(p.id) || customProfiles.some(function (x) { return x.id === p.id; })) {
             p.id = 'm' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
           }
           customProfiles.push(p);
@@ -2168,7 +2924,8 @@
     V: 1, mV: 1e-3,
     A: 1, mA: 1e-3,
     ohm: 1, kohm: 1e3, Mohm: 1e6,
-    F: 1, mF: 1e-3, uF: 1e-6, nF: 1e-9, pF: 1e-12
+    F: 1, mF: 1e-3, uF: 1e-6, nF: 1e-9, pF: 1e-12,
+    s: 1, ms: 1e-3, us: 1e-6
   };
 
   const unitLabel = {
@@ -2271,10 +3028,300 @@
     result.textContent = 'τ ≈ ' + fmtTime(tau) + '，5τ ≈ ' + fmtTime(tau * 5);
   }
 
+  function calcPowerEnergy() {
+    const result = $('powerResult');
+    const u = readNum('powerU') * unitFactor[$('powerUUnit').value];
+    const i = readNum('powerI') * unitFactor[$('powerIUnit').value];
+    const t = readNum('powerT') * unitFactor[$('powerTUnit').value];
+    if (!isFinite(u) || !isFinite(i) || !isFinite(t)) {
+      result.textContent = '请完整填写电压 U、电流 I 和时间 t。';
+      return;
+    }
+    if (u < 0 || i < 0 || t < 0) {
+      result.textContent = '电压、电流和时间不能为负数。';
+      return;
+    }
+    const power = u * i;
+    const energy = power * t;
+    if (!isFinite(power) || !isFinite(energy)) {
+      result.textContent = '结果超出可计算范围，请缩小输入值。';
+      return;
+    }
+    result.textContent = 'P = ' + fmtNum(power) + ' W（' + fmtNum(power * 1000) + ' mW） · E = '
+      + fmtNum(energy) + ' J（' + fmtNum(energy * 1000) + ' mJ）';
+  }
+
   $('ohmBtn').addEventListener('click', calcOhm);
   $('dividerBtn').addEventListener('click', calcDivider);
   $('rcBtn').addEventListener('click', calcRC);
-  ['ohmForm', 'dividerForm', 'rcForm'].forEach(function (id) {
+  $('powerBtn').addEventListener('click', calcPowerEnergy);
+  ['ohmForm', 'dividerForm', 'rcForm', 'powerForm'].forEach(function (id) {
+    $(id).addEventListener('submit', function (event) {
+      event.preventDefault();
+    });
+  });
+
+  // ---------- 财经计算器 ----------
+  function fmtMoney(value) {
+    return Number(value).toFixed(2);
+  }
+
+  function fmtPercent(value) {
+    return Number(value).toFixed(2) + '%';
+  }
+
+  function calcFinanceCompound() {
+    const result = $('financeCompoundResult');
+    const principal = readNum('financeCompoundPrincipal');
+    const contribution = readNum('financeCompoundContribution');
+    const annualRate = readNum('financeCompoundRate');
+    const years = readNum('financeCompoundYears');
+    const periodsPerYear = Number($('financeCompoundFrequency').value);
+    if (![principal, contribution, annualRate, years, periodsPerYear].every(function (n) { return isFinite(n); })
+        || principal < 0 || contribution < 0 || annualRate < 0 || years <= 0) {
+      result.textContent = '请输入有效的非负本金、定投、收益率和大于 0 的年限。';
+      return;
+    }
+    const periods = years * periodsPerYear;
+    const periodRate = annualRate / 100 / periodsPerYear;
+    if (!isFinite(periods) || periods <= 0 || !isFinite(periodRate)) {
+      result.textContent = '投资年限或定投频率无效。';
+      return;
+    }
+    let futureValue;
+    if (periodRate === 0) {
+      futureValue = principal + contribution * periods;
+    } else {
+      const growth = Math.pow(1 + periodRate, periods);
+      futureValue = principal * growth + contribution * (growth - 1) / periodRate;
+    }
+    const totalInvested = principal + contribution * periods;
+    const totalReturn = futureValue - totalInvested;
+    const returnRate = totalInvested === 0 ? 0 : totalReturn / totalInvested * 100;
+    if (!isFinite(futureValue) || !isFinite(totalInvested) || !isFinite(totalReturn) || !isFinite(returnRate)) {
+      result.textContent = '结果超出可计算范围，请缩小金额或年限。';
+      return;
+    }
+    result.textContent = '到期总价值 ' + fmtMoney(futureValue) + ' 元 · 累计投入 ' + fmtMoney(totalInvested)
+      + ' 元 · 累计收益 ' + fmtMoney(totalReturn) + ' 元 · 总收益率 ' + fmtPercent(returnRate);
+  }
+
+  function calcFinanceLoan() {
+    const result = $('financeLoanResult');
+    const loanAmount = readNum('financeLoanAmount');
+    const annualRate = readNum('financeLoanRate');
+    const years = readNum('financeLoanYears');
+    if (![loanAmount, annualRate, years].every(function (n) { return isFinite(n); })
+        || loanAmount < 0 || annualRate < 0 || years <= 0) {
+      result.textContent = '请输入有效的非负贷款本金、年利率和大于 0 的贷款年限。';
+      return;
+    }
+    const monthlyRate = annualRate / 100 / 12;
+    const months = years * 12;
+    if (!isFinite(months) || months <= 0) {
+      result.textContent = '请输入大于 0 的贷款年限。';
+      return;
+    }
+    let monthlyPayment;
+    if (monthlyRate === 0) {
+      monthlyPayment = loanAmount / months;
+    } else {
+      const growth = Math.pow(1 + monthlyRate, months);
+      monthlyPayment = loanAmount * monthlyRate * growth / (growth - 1);
+    }
+    const totalPayment = monthlyPayment * months;
+    const totalInterest = totalPayment - loanAmount;
+    if (![monthlyPayment, totalPayment, totalInterest].every(function (n) { return isFinite(n); })) {
+      result.textContent = '结果超出可计算范围，请缩小金额或年限。';
+      return;
+    }
+    result.textContent = '每月还款 ' + fmtMoney(monthlyPayment) + ' 元 · 还款总额 ' + fmtMoney(totalPayment)
+      + ' 元 · 总利息 ' + fmtMoney(totalInterest) + ' 元';
+  }
+
+  function calcFinanceReturn() {
+    const result = $('financeReturnResult');
+    const startValue = readNum('financeReturnStart');
+    const endValue = readNum('financeReturnEnd');
+    const holdingDays = readNum('financeReturnDays');
+    if (![startValue, endValue, holdingDays].every(function (n) { return isFinite(n); })
+        || startValue < 0 || endValue < 0 || holdingDays <= 0) {
+      result.textContent = '请输入有效的非负金额和大于 0 的持有天数。';
+      return;
+    }
+    if (startValue === 0) {
+      result.textContent = '初始投入金额必须大于 0，无法计算收益率。';
+      return;
+    }
+    const profit = endValue - startValue;
+    const totalReturnRate = profit / startValue * 100;
+    const annualizedReturn = (Math.pow(endValue / startValue, 365 / holdingDays) - 1) * 100;
+    if (![profit, totalReturnRate, annualizedReturn].every(function (n) { return isFinite(n); })) {
+      result.textContent = '结果超出可计算范围，请检查输入。';
+      return;
+    }
+    result.textContent = '绝对收益 ' + fmtMoney(profit) + ' 元 · 总收益率 ' + fmtPercent(totalReturnRate)
+      + ' · 年化收益率 ' + fmtPercent(annualizedReturn);
+  }
+
+  $('financeCompoundBtn').addEventListener('click', calcFinanceCompound);
+  $('financeLoanBtn').addEventListener('click', calcFinanceLoan);
+  $('financeReturnBtn').addEventListener('click', calcFinanceReturn);
+  ['financeCompoundForm', 'financeLoanForm', 'financeReturnForm'].forEach(function (id) {
+    $(id).addEventListener('submit', function (event) {
+      event.preventDefault();
+    });
+  });
+
+  // ---------- 经济管理计算器 ----------
+  function readNumList(id) {
+    const raw = $(id).value.trim();
+    if (!raw) return [];
+    const parts = raw.split(/[,，\s]+/).filter(Boolean);
+    const values = parts.map(Number);
+    return values.every(function (n) { return isFinite(n); }) ? values : null;
+  }
+
+  function calcBreakEven() {
+    const result = $('managementBreakEvenResult');
+    const fixedCost = readNum('managementBreakEvenFC');
+    const price = readNum('managementBreakEvenPrice');
+    const variableCost = readNum('managementBreakEvenVC');
+    if (![fixedCost, price, variableCost].every(function (n) { return isFinite(n); })
+        || fixedCost < 0 || price <= 0 || variableCost < 0) {
+      result.textContent = '请输入非负固定成本、大于 0 的单价和非负单位变动成本。';
+      return;
+    }
+    const contributionMargin = price - variableCost;
+    if (contributionMargin <= 0) {
+      result.textContent = '单价必须高于单位变动成本，否则不存在盈亏平衡点。';
+      return;
+    }
+    const quantity = fixedCost / contributionMargin;
+    const sales = price * quantity;
+    const contributionMarginRate = contributionMargin / price * 100;
+    if (!isFinite(quantity) || !isFinite(sales) || !isFinite(contributionMarginRate)) {
+      result.textContent = '结果超出可计算范围，请检查固定成本、售价和变动成本。';
+      return;
+    }
+    result.textContent = '盈亏平衡销量 Q* = ' + fmtNum(quantity) + ' 件 · 盈亏平衡销售额 S* = '
+      + fmtMoney(sales) + ' 元 · 贡献毛益率 ' + fmtPercent(contributionMarginRate);
+  }
+
+  function calcPayback() {
+    const result = $('managementPaybackResult');
+    const investment = readNum('managementPaybackInvestment');
+    const cashFlows = readNumList('managementPaybackCFs');
+    const mode = $('managementPaybackMode').value;
+    if (!isFinite(investment) || investment < 0 || !cashFlows || cashFlows.length === 0) {
+      result.textContent = '请输入非负初始投资和有效的净现金流。';
+      return;
+    }
+    if (investment === 0) {
+      result.textContent = '静态回收期 PP = 0.00 年。';
+      return;
+    }
+    if (mode === 'equal') {
+      if (cashFlows.length !== 1 || cashFlows[0] <= 0) {
+        result.textContent = '等额模式只填写一个大于 0 的每期净现金流。';
+        return;
+      }
+      const payback = investment / cashFlows[0];
+      result.textContent = '静态回收期 PP ≈ ' + fmtNum(payback) + ' 年。';
+      return;
+    }
+    let cumulative = 0;
+    let payback = null;
+    for (let i = 0; i < cashFlows.length; i += 1) {
+      const cashFlow = cashFlows[i];
+      if (cashFlow > 0 && cumulative + cashFlow >= investment) {
+        payback = i + (investment - cumulative) / cashFlow;
+        break;
+      }
+      cumulative += cashFlow;
+    }
+    result.textContent = payback === null
+      ? '在给定现金流期内无法回收初始投资。'
+      : '静态回收期 PP ≈ ' + fmtNum(payback) + ' 年。';
+  }
+
+  function npvAt(rate, investment, cashFlows) {
+    return -investment + cashFlows.reduce(function (sum, cashFlow, index) {
+      return sum + cashFlow / Math.pow(1 + rate, index + 1);
+    }, 0);
+  }
+
+  function solveIrr(investment, cashFlows) {
+    let low = -0.9999;
+    let high = 10;
+    let lowValue = npvAt(low, investment, cashFlows);
+    let highValue = npvAt(high, investment, cashFlows);
+    if (!isFinite(lowValue) || !isFinite(highValue)) return null;
+    if (lowValue === 0) return low;
+    if (highValue === 0) return high;
+    if ((lowValue < 0 && highValue < 0) || (lowValue > 0 && highValue > 0)) return null;
+    for (let iteration = 0; iteration < 120; iteration += 1) {
+      const middle = (low + high) / 2;
+      const middleValue = npvAt(middle, investment, cashFlows);
+      if (!isFinite(middleValue)) return null;
+      if (Math.abs(middleValue) < 1e-8 || high - low < 1e-10) return middle;
+      if ((lowValue < 0 && middleValue > 0) || (lowValue > 0 && middleValue < 0)) {
+        high = middle;
+        highValue = middleValue;
+      } else {
+        low = middle;
+        lowValue = middleValue;
+      }
+    }
+    return (low + high) / 2;
+  }
+
+  function calcNpvIrr() {
+    const result = $('managementNpvResult');
+    const investment = readNum('managementNpvInvestment');
+    const discountRate = readNum('managementNpvRate');
+    const cashFlows = readNumList('managementNpvCFs');
+    if (!isFinite(investment) || investment < 0 || !isFinite(discountRate)
+        || discountRate <= -100 || !cashFlows || cashFlows.length === 0) {
+      result.textContent = '请输入非负初始投资、大于 -100% 的折现率和至少一期有效现金流。';
+      return;
+    }
+    const rate = discountRate / 100;
+    const npv = npvAt(rate, investment, cashFlows);
+    if (!isFinite(npv)) {
+      result.textContent = 'NPV 结果超出可计算范围，请检查输入。';
+      return;
+    }
+    const hasPositiveCashFlow = cashFlows.some(function (cashFlow) { return cashFlow > 0; });
+    if (investment <= 0 || !hasPositiveCashFlow) {
+      result.textContent = 'NPV ≈ ' + fmtMoney(npv) + ' 元 · IRR 无解（需正初始投资和至少一笔正向现金流）。';
+      return;
+    }
+    const signedFlows = [-investment].concat(cashFlows);
+    let signChanges = 0;
+    for (let i = 1; i < signedFlows.length; i += 1) {
+      if (signedFlows[i] !== 0 && signedFlows[i - 1] !== 0
+          && Math.sign(signedFlows[i]) !== Math.sign(signedFlows[i - 1])) {
+        signChanges += 1;
+      }
+    }
+    const irr = solveIrr(investment, cashFlows);
+    let text = 'NPV ≈ ' + fmtMoney(npv) + ' 元 · ';
+    if (irr === null) {
+      text += '在 -99.99% 至 1000% 区间内未找到 IRR';
+    } else {
+      text += 'IRR ≈ ' + fmtPercent(irr * 100);
+    }
+    if (signChanges > 1) {
+      text += '（现金流多次变号，IRR 可能不唯一）';
+    }
+    result.textContent = text;
+  }
+
+  $('managementBreakEvenBtn').addEventListener('click', calcBreakEven);
+  $('managementPaybackBtn').addEventListener('click', calcPayback);
+  $('managementNpvBtn').addEventListener('click', calcNpvIrr);
+  ['managementBreakEvenForm', 'managementPaybackForm', 'managementNpvForm'].forEach(function (id) {
     $(id).addEventListener('submit', function (event) {
       event.preventDefault();
     });
@@ -2592,6 +3639,8 @@
   renderCountdowns();
   renderMajorSelect();
   applyMajor(activeMajorId);
+  const initialView = location.hash ? location.hash.slice(1) : 'home';
+  switchView(sections.some(function (s) { return s.id === initialView; }) ? initialView : 'home');
   if (sharedProfile) {
     showToast('已载入分享的专业模板，可点击“编辑”继续修改');
   }
