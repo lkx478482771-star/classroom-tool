@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#4f5bff">
 <script>(function(){try{var d=localStorage.getItem('dark_mode')==='true';document.documentElement.dataset.theme=d?'dark':'light';var m=document.querySelector('meta[name="theme-color"]');if(m)m.content=d?'#0d0e13':'#4f5bff';}catch(e){}})();</script>
-<meta name="description" content="安大学生工具箱：绩点计算、考试倒计时、时钟与校历。">
+<meta name="description" content="安大学生工具箱：专业路线、考试倒计时、校历、竞赛日历、学习导航与课堂整理。">
 <title>安大学生工具箱</title>
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="assets/app.css">
@@ -308,19 +308,9 @@
       margin-left: auto;
     }
   }
-  .course-table {
-    min-width: 560px;
-  }
-  .course-table input:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: -2px;
-  }
   .tl-ev .n {
     min-width: 0;
     overflow-wrap: anywhere;
-  }
-  .calc-input-row {
-    min-width: 0;
   }
   .countdown-form .input {
     min-width: 0;
@@ -397,9 +387,6 @@
     <circle cx="12" cy="12" r="4"/>
     <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
   </symbol>
-  <symbol id="icon-plus" viewBox="0 0 24 24">
-    <path d="M12 5v14M5 12h14"/>
-  </symbol>
   <symbol id="icon-clock" viewBox="0 0 24 24">
     <circle cx="12" cy="12" r="10"/>
     <polyline points="12 6 12 12 16 14"/>
@@ -448,9 +435,6 @@
     <line x1="3" y1="12" x2="3.01" y2="12"/>
     <line x1="3" y1="18" x2="3.01" y2="18"/>
   </symbol>
-  <symbol id="icon-zap" viewBox="0 0 24 24">
-    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
-  </symbol>
   <symbol id="icon-target" viewBox="0 0 24 24">
     <circle cx="12" cy="12" r="10"/>
     <circle cx="12" cy="12" r="6"/>
@@ -459,15 +443,6 @@
   <symbol id="icon-settings" viewBox="0 0 24 24">
     <circle cx="12" cy="12" r="3"/>
     <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/>
-  </symbol>
-  <symbol id="icon-download" viewBox="0 0 24 24">
-    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-    <polyline points="7 10 12 15 17 10"/>
-    <line x1="12" y1="15" x2="12" y2="3"/>
-  </symbol>
-  <symbol id="icon-notebook" viewBox="0 0 24 24">
-    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
-    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
   </symbol>
 </svg>
 <header class="site-nav">
@@ -479,13 +454,9 @@
     <nav class="nav-links" aria-label="页面导航">
       <a href="#home" class="active" aria-current="page">总览</a>
       <a href="#majorManager">我的专业</a>
-      <a href="#gpa">绩点计算器</a>
       <a href="#countdown">倒计时</a>
       <a href="#calendar">校历</a>
       <a href="#major">专业路线</a>
-      <a href="#circuit" id="navCircuit">硬件速算</a>
-      <a href="#financeTools" id="navFinance" hidden>财经工具</a>
-      <a href="#managementTools" id="navManagement" hidden>经管工具</a>
       <a href="#contest">竞赛</a>
       <a href="#tools">学习导航</a>
       <a href="#nav">校园导航</a>
@@ -503,13 +474,13 @@
     <div class="home-hero">
       <span class="home-kicker">AHU STUDENT TOOLKIT</span>
       <h2>安大学生工具箱</h2>
-      <p>绩点、倒计时、校历、专业路线、专业计算器、竞赛日历和学习导航全部集中在一个工作台。选择下面的模块直接进入，功能数据保存在本机浏览器中。</p>
+      <p>专业路线、校历、考试倒计时、竞赛日历、学习导航和课堂整理集中在一个工作台。选择下面的模块直接进入，功能数据保存在本机浏览器中。</p>
       <div class="home-actions">
         <a class="btn btn-primary" href="#major">查看专业成长路线</a>
         <a class="btn btn-secondary" href="#calendar">打开校历</a>
       </div>
       <div class="home-stats">
-        <div class="home-stat"><strong id="homeModuleCount">9</strong><span>常用模块</span></div>
+        <div class="home-stat"><strong id="homeModuleCount">7</strong><span>常用模块</span></div>
         <div class="home-stat"><strong id="homeStageCount">16</strong><span>成长阶段</span></div>
         <div class="home-stat"><strong id="homeTaskCount">96</strong><span>可勾选任务</span></div>
       </div>
@@ -519,11 +490,6 @@
         <span class="home-card-icon"><svg class="icon icon-xl"><use href="#icon-settings"></use></svg></span>
         <h3>我的专业</h3>
         <p>切换、新建、复制或导出专业模板</p>
-      </a>
-      <a class="home-card" href="#gpa">
-        <span class="home-card-icon"><svg class="icon icon-xl"><use href="#icon-target"></use></svg></span>
-        <h3>绩点计算器</h3>
-        <p>按 5 点绩点制计算加权平均绩点</p>
       </a>
       <a class="home-card" href="#countdown">
         <span class="home-card-icon"><svg class="icon icon-xl"><use href="#icon-clock"></use></svg></span>
@@ -539,21 +505,6 @@
         <span class="home-card-icon"><svg class="icon icon-xl"><use href="#icon-book"></use></svg></span>
         <h3>四年成长路线</h3>
         <p id="homeMajorCardDesc">16 个阶段、96 项任务，可勾选进度</p>
-      </a>
-      <a class="home-card" href="#circuit" id="homeCircuitCard">
-        <span class="home-card-icon"><svg class="icon icon-xl"><use href="#icon-zap"></use></svg></span>
-        <h3>硬件速算</h3>
-        <p>欧姆定律与功率、RC 截止频率、电阻串并联、运放增益、LED 限流、PCB 压降与电池续航</p>
-      </a>
-      <a class="home-card" href="#financeTools" id="homeFinanceCard" hidden>
-        <span class="home-card-icon"><svg class="icon icon-xl"><use href="#icon-target"></use></svg></span>
-        <h3>财经工具</h3>
-        <p>复利定投、贷款月供与投资收益率</p>
-      </a>
-      <a class="home-card" href="#managementTools" id="homeManagementCard" hidden>
-        <span class="home-card-icon"><svg class="icon icon-xl"><use href="#icon-toolkit"></use></svg></span>
-        <h3>经管工具</h3>
-        <p>盈亏平衡、投资回收期与 NPV / IRR</p>
       </a>
       <a class="home-card" href="#contest">
         <span class="home-card-icon"><svg class="icon icon-xl"><use href="#icon-calendar"></use></svg></span>
@@ -594,32 +545,7 @@
         <div class="major-manage-info" id="majorManageInfo"></div>
       </div>
       <input type="file" id="importMajorFile" accept=".json,application/json" hidden>
-      <p class="hint" id="majorHint">选择专业后，路线、资源、竞赛和计算器会自动切换。</p>
-    </div>
-  </section>
-
-  <section class="section" id="gpa">
-    <div class="card">
-      <h2><svg class="icon"><use href="#icon-target"></use></svg>绩点计算器</h2>
-      <div class="table-wrap" id="courseList"></div>
-      <div class="result-actions" id="gpaActions">
-        <button type="button" class="btn btn-secondary btn-sm" data-action="add-course"><svg class="icon icon-sm"><use href="#icon-plus"></use></svg>添加课程</button>
-        <button type="button" class="btn btn-primary btn-sm" data-action="calc-gpa">计算绩点</button>
-        <button type="button" class="btn btn-danger btn-sm" data-action="clear-courses">清空</button>
-        <button type="button" class="btn btn-secondary btn-sm" data-action="export-courses"><svg class="icon icon-sm"><use href="#icon-download"></use></svg>导出</button>
-      </div>
-      <div class="result-box" id="gpaResult" hidden>
-        <div><div class="result-value" id="gpaValue">0.00</div><div class="result-label">加权平均绩点（5 分制）</div></div>
-        <div><div class="result-value" id="gpaTotal">0</div><div class="result-label">总学分</div></div>
-      </div>
-      <details class="details-box">
-        <summary class="details-summary">5 点绩点制换算规则</summary>
-        <table class="rule-table">
-          <tr><td>60-100</td><td>课程绩点 = 百分制成绩 ÷ 10 - 5</td></tr>
-          <tr><td>&lt;60</td><td>课程绩点 = 0</td></tr>
-        </table>
-        <p class="rule-note">课程学分绩点 = 课程学分 × 课程绩点；加权平均绩点 = Σ（课程学分 × 课程绩点）÷ Σ课程学分。不及格课程按 0 绩点计入，其他学校请自行核对。</p>
-      </details>
+      <p class="hint" id="majorHint">选择专业后，路线、资源和竞赛会自动切换。</p>
     </div>
   </section>
 
@@ -691,509 +617,6 @@
       <p class="section-intro" id="majorIntro">把大一到大四拆成可勾选的阶段目标，每完成一项就点一下，进度会保存在本机。</p>
       <div class="road-progress" id="roadProgress"></div>
       <div class="major-grid" id="roadmapBox"></div>
-    </div>
-  </section>
-
-  <section class="section" id="circuit">
-    <div class="card">
-      <h2><svg class="icon"><use href="#icon-zap"></use></svg>硬件速算</h2>
-      <p class="section-intro">集中完成常用电路估算，覆盖欧姆定律与功率、分压、RC 截止频率、电阻串并联、运放增益、LED 限流、PCB 走线压降和电池续航。</p>
-      <div class="calc-grid">
-        <div class="calc-box">
-          <h3>欧姆定律 U = I × R</h3>
-          <form class="calc-form" id="ohmForm">
-            <label class="calc-field">
-              <span>电压 U</span>
-              <span class="calc-input-row">
-                <input class="input" id="ohmU" type="number" step="any" placeholder="例如 5" autocomplete="off">
-                <select class="select" id="ohmUUnit" aria-label="电压单位">
-                  <option value="V">V</option>
-                  <option value="mV">mV</option>
-                </select>
-              </span>
-            </label>
-            <label class="calc-field">
-              <span>电流 I</span>
-              <span class="calc-input-row">
-                <input class="input" id="ohmI" type="number" step="any" placeholder="例如 0.02" autocomplete="off">
-                <select class="select" id="ohmIUnit" aria-label="电流单位">
-                  <option value="A">A</option>
-                  <option value="mA">mA</option>
-                </select>
-              </span>
-            </label>
-            <label class="calc-field">
-              <span>电阻 R</span>
-              <span class="calc-input-row">
-                <input class="input" id="ohmR" type="number" step="any" placeholder="例如 250" autocomplete="off">
-                <select class="select" id="ohmRUnit" aria-label="电阻单位">
-                  <option value="ohm">Ω</option>
-                  <option value="kohm">kΩ</option>
-                  <option value="Mohm">MΩ</option>
-                </select>
-              </span>
-            </label>
-            <button type="button" class="btn btn-primary btn-sm" id="ohmBtn" aria-label="计算欧姆定律未知量">计算</button>
-          </form>
-          <div class="calc-result" id="ohmResult">填写任意两个量，自动计算第三个。</div>
-        </div>
-
-        <div class="calc-box">
-          <h3>电阻分压 Vout</h3>
-          <form class="calc-form" id="dividerForm">
-            <label class="calc-field">
-              <span>输入电压 Vin</span>
-              <span class="calc-input-row">
-                <input class="input" id="dividerVin" type="number" step="any" placeholder="例如 5" autocomplete="off">
-                <select class="select" id="dividerVinUnit" aria-label="电压单位">
-                  <option value="V">V</option>
-                  <option value="mV">mV</option>
-                </select>
-              </span>
-            </label>
-            <label class="calc-field">
-              <span>上电阻 R1</span>
-              <span class="calc-input-row">
-                <input class="input" id="dividerR1" type="number" step="any" placeholder="例如 10" autocomplete="off">
-                <select class="select" id="dividerR1Unit" aria-label="R1 单位">
-                  <option value="ohm">Ω</option>
-                  <option value="kohm">kΩ</option>
-                  <option value="Mohm">MΩ</option>
-                </select>
-              </span>
-            </label>
-            <label class="calc-field">
-              <span>下电阻 R2</span>
-              <span class="calc-input-row">
-                <input class="input" id="dividerR2" type="number" step="any" placeholder="例如 10" autocomplete="off">
-                <select class="select" id="dividerR2Unit" aria-label="R2 单位">
-                  <option value="ohm">Ω</option>
-                  <option value="kohm">kΩ</option>
-                  <option value="Mohm">MΩ</option>
-                </select>
-              </span>
-            </label>
-            <button type="button" class="btn btn-primary btn-sm" id="dividerBtn" aria-label="计算电阻分压输出电压">计算</button>
-          </form>
-          <div class="calc-result" id="dividerResult">Vout = Vin × R2 / (R1 + R2)</div>
-        </div>
-
-        <div class="calc-box">
-          <h3>RC 时间常数 τ = R × C</h3>
-          <form class="calc-form" id="rcForm">
-            <label class="calc-field">
-              <span>电阻 R</span>
-              <span class="calc-input-row">
-                <input class="input" id="rcR" type="number" step="any" placeholder="例如 10" autocomplete="off">
-                <select class="select" id="rcRUnit" aria-label="电阻单位">
-                  <option value="kohm">kΩ</option>
-                  <option value="ohm">Ω</option>
-                  <option value="Mohm">MΩ</option>
-                </select>
-              </span>
-            </label>
-            <label class="calc-field">
-              <span>电容 C</span>
-              <span class="calc-input-row">
-                <input class="input" id="rcC" type="number" step="any" placeholder="例如 100" autocomplete="off">
-                <select class="select" id="rcCUnit" aria-label="电容单位">
-                  <option value="nF">nF</option>
-                  <option value="uF">uF</option>
-                  <option value="pF">pF</option>
-                  <option value="mF">mF</option>
-                </select>
-              </span>
-            </label>
-            <button type="button" class="btn btn-primary btn-sm" id="rcBtn" aria-label="计算 RC 时间常数">计算</button>
-          </form>
-          <div class="calc-result" id="rcResult">τ 约为充电到 63.2% 所需时间，5τ 视为基本稳定。</div>
-        </div>
-
-        <div class="calc-box">
-          <h3>功率与能量 P = U × I，E = P × t</h3>
-          <form class="calc-form" id="powerForm">
-            <label class="calc-field">
-              <span>电压 U</span>
-              <span class="calc-input-row">
-                <input class="input" id="powerU" type="number" step="any" placeholder="例如 5" autocomplete="off">
-                <select class="select" id="powerUUnit" aria-label="功率计算电压单位">
-                  <option value="V">V</option>
-                  <option value="mV">mV</option>
-                </select>
-              </span>
-            </label>
-            <label class="calc-field">
-              <span>电流 I</span>
-              <span class="calc-input-row">
-                <input class="input" id="powerI" type="number" step="any" placeholder="例如 20" autocomplete="off">
-                <select class="select" id="powerIUnit" aria-label="功率计算电流单位">
-                  <option value="mA">mA</option>
-                  <option value="A">A</option>
-                </select>
-              </span>
-            </label>
-            <label class="calc-field">
-              <span>时间 t</span>
-              <span class="calc-input-row">
-                <input class="input" id="powerT" type="number" step="any" placeholder="例如 60" autocomplete="off">
-                <select class="select" id="powerTUnit" aria-label="功率计算时间单位">
-                  <option value="s">s</option>
-                  <option value="ms">ms</option>
-                  <option value="us">us</option>
-                </select>
-              </span>
-            </label>
-            <button type="button" class="btn btn-primary btn-sm" id="powerBtn" aria-label="计算功率与能量">计算</button>
-          </form>
-          <div class="calc-result" id="powerResult">填写电压、电流与时间，计算功率和能量。</div>
-        </div>
-
-        <div class="calc-box">
-          <h3>电阻串并联</h3>
-          <form class="calc-form" id="resistorNetworkForm">
-            <label class="calc-field">
-              <span>电阻列表</span>
-              <span class="calc-input-row">
-                <input class="input" id="resistorNetworkValues" type="text" inputmode="decimal" placeholder="例如 10, 20, 30" autocomplete="off">
-                <select class="select" id="resistorNetworkUnit" aria-label="电阻列表单位">
-                  <option value="ohm">Ω</option>
-                  <option value="kohm">kΩ</option>
-                  <option value="Mohm">MΩ</option>
-                </select>
-              </span>
-            </label>
-            <button type="button" class="btn btn-primary btn-sm" id="resistorNetworkBtn" aria-label="计算电阻串联与并联等效电阻">计算</button>
-          </form>
-          <div class="calc-result" id="resistorNetworkResult">用逗号、中文逗号或空格分隔至少两个大于 0 的电阻。</div>
-        </div>
-
-        <div class="calc-box">
-          <h3>运放增益</h3>
-          <form class="calc-form" id="opampGainForm">
-            <label class="calc-field">
-              <span>模式</span>
-              <select class="select" id="opampMode" aria-label="运放增益模式">
-                <option value="inverting">反相</option>
-                <option value="nonInverting">同相</option>
-              </select>
-            </label>
-            <label class="calc-field">
-              <span>反馈电阻 Rf</span>
-              <span class="calc-input-row">
-                <input class="input" id="opampRf" type="number" min="0" step="any" placeholder="例如 100" autocomplete="off">
-                <select class="select" id="opampRfUnit" aria-label="反馈电阻 Rf 单位">
-                  <option value="kohm">kΩ</option>
-                  <option value="ohm">Ω</option>
-                  <option value="Mohm">MΩ</option>
-                </select>
-              </span>
-            </label>
-            <label class="calc-field">
-              <span>输入电阻 Rin / Rg</span>
-              <span class="calc-input-row">
-                <input class="input" id="opampRin" type="number" min="0" step="any" placeholder="例如 10" autocomplete="off">
-                <select class="select" id="opampRinUnit" aria-label="输入电阻 Rin 或 Rg 单位">
-                  <option value="kohm">kΩ</option>
-                  <option value="ohm">Ω</option>
-                  <option value="Mohm">MΩ</option>
-                </select>
-              </span>
-            </label>
-            <button type="button" class="btn btn-primary btn-sm" id="opampGainBtn" aria-label="计算运放电压增益与分贝增益">计算</button>
-          </form>
-          <div class="calc-result" id="opampGainResult">反相 Av = -Rf / Rin，同相 Av = 1 + Rf / Rg。</div>
-        </div>
-
-        <div class="calc-box">
-          <h3>LED 限流电阻</h3>
-          <form class="calc-form" id="ledResistorForm">
-            <label class="calc-field">
-              <span>供电电压 Vs</span>
-              <span class="calc-input-row">
-                <input class="input" id="ledVs" type="number" step="any" placeholder="例如 5" autocomplete="off">
-                <span>V</span>
-              </span>
-            </label>
-            <label class="calc-field">
-              <span>LED 正向压降 Vf</span>
-              <span class="calc-input-row">
-                <input class="input" id="ledVf" type="number" step="any" placeholder="例如 2" autocomplete="off">
-                <span>V</span>
-              </span>
-            </label>
-            <label class="calc-field">
-              <span>期望电流 If</span>
-              <span class="calc-input-row">
-                <input class="input" id="ledIf" type="number" min="0" step="any" placeholder="例如 20" autocomplete="off">
-                <span>mA</span>
-              </span>
-            </label>
-            <button type="button" class="btn btn-primary btn-sm" id="ledResistorBtn" aria-label="计算 LED 限流电阻与电阻功率">计算</button>
-          </form>
-          <div class="calc-result" id="ledResistorResult">需满足 Vs &gt; Vf 且 If &gt; 0。</div>
-        </div>
-
-        <div class="calc-box">
-          <h3>PCB 走线压降</h3>
-          <form class="calc-form" id="pcbDropForm">
-            <label class="calc-field">
-              <span>走线长度 L</span>
-              <span class="calc-input-row">
-                <input class="input" id="pcbLength" type="number" min="0" step="any" placeholder="例如 10" autocomplete="off">
-                <span>mm</span>
-              </span>
-            </label>
-            <label class="calc-field">
-              <span>走线宽度 W</span>
-              <span class="calc-input-row">
-                <input class="input" id="pcbWidth" type="number" min="0" step="any" placeholder="例如 1" autocomplete="off">
-                <span>mm</span>
-              </span>
-            </label>
-            <label class="calc-field">
-              <span>铜厚</span>
-              <select class="select" id="pcbCopper" aria-label="PCB 铜厚">
-                <option value="1">1 oz（34.79 μm）</option>
-                <option value="2">2 oz（69.58 μm）</option>
-              </select>
-            </label>
-            <label class="calc-field">
-              <span>负载电流 I</span>
-              <span class="calc-input-row">
-                <input class="input" id="pcbCurrent" type="number" min="0" step="any" placeholder="例如 1" autocomplete="off">
-                <span>A</span>
-              </span>
-            </label>
-            <button type="button" class="btn btn-primary btn-sm" id="pcbDropBtn" aria-label="计算 PCB 走线电阻、压降和功率损耗">计算</button>
-          </form>
-          <div class="calc-result" id="pcbDropResult">按铜电阻率 ρ = 1.72e-8 Ω·m 估算。</div>
-        </div>
-
-        <div class="calc-box">
-          <h3>电池续航</h3>
-          <form class="calc-form" id="batteryLifeForm">
-            <label class="calc-field">
-              <span>电池容量 C</span>
-              <span class="calc-input-row">
-                <input class="input" id="batteryCapacity" type="number" min="0" step="any" placeholder="例如 2000" autocomplete="off">
-                <span>mAh</span>
-              </span>
-            </label>
-            <label class="calc-field">
-              <span>平均负载电流 I</span>
-              <span class="calc-input-row">
-                <input class="input" id="batteryCurrent" type="number" min="0" step="any" placeholder="例如 100" autocomplete="off">
-                <span>mA</span>
-              </span>
-            </label>
-            <label class="calc-field">
-              <span>效率 η</span>
-              <span class="calc-input-row">
-                <input class="input" id="batteryEfficiency" type="number" min="0" max="100" step="any" placeholder="例如 90" autocomplete="off">
-                <span>%</span>
-              </span>
-            </label>
-            <button type="button" class="btn btn-primary btn-sm" id="batteryLifeBtn" aria-label="计算电池预计续航时间">计算</button>
-          </form>
-          <div class="calc-result" id="batteryLifeResult">需满足 C &gt; 0、I &gt; 0 且 0 &lt; η ≤ 100%。</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="section" id="financeTools" hidden>
-    <div class="card">
-      <h2><svg class="icon"><use href="#icon-target"></use></svg>财经计算器</h2>
-      <div class="calc-grid">
-        <div class="calc-box">
-          <h3>复利 / 定投终值</h3>
-          <form class="calc-form" id="financeCompoundForm">
-            <label class="calc-field">
-              <span>初始本金</span>
-              <span class="calc-input-row">
-                <input class="input" id="financeCompoundPrincipal" type="number" min="0" step="any" placeholder="例如 10000" autocomplete="off">
-                <span>元</span>
-              </span>
-            </label>
-            <label class="calc-field">
-              <span>每期定投金额</span>
-              <span class="calc-input-row">
-                <input class="input" id="financeCompoundContribution" type="number" min="0" step="any" placeholder="例如 1000" autocomplete="off">
-                <span>元</span>
-              </span>
-            </label>
-            <label class="calc-field">
-              <span>预期年化收益率</span>
-              <span class="calc-input-row">
-                <input class="input" id="financeCompoundRate" type="number" min="0" step="any" placeholder="例如 6" autocomplete="off">
-                <span>%</span>
-              </span>
-            </label>
-            <label class="calc-field">
-              <span>投资年限</span>
-              <span class="calc-input-row">
-                <input class="input" id="financeCompoundYears" type="number" min="0" step="any" placeholder="例如 10" autocomplete="off">
-                <span>年</span>
-              </span>
-            </label>
-            <label class="calc-field">
-              <span>定投频率</span>
-              <select class="select" id="financeCompoundFrequency" aria-label="定投频率">
-                <option value="12">每月</option>
-                <option value="1">每年</option>
-              </select>
-            </label>
-            <button type="button" class="btn btn-primary btn-sm" id="financeCompoundBtn" aria-label="计算复利或定投终值">计算</button>
-          </form>
-          <div class="calc-result" id="financeCompoundResult">填写本金、定投、收益率和年限。</div>
-        </div>
-
-        <div class="calc-box">
-          <h3>等额本息月供</h3>
-          <form class="calc-form" id="financeLoanForm">
-            <label class="calc-field">
-              <span>贷款本金</span>
-              <span class="calc-input-row">
-                <input class="input" id="financeLoanAmount" type="number" min="0" step="any" placeholder="例如 500000" autocomplete="off">
-                <span>元</span>
-              </span>
-            </label>
-            <label class="calc-field">
-              <span>贷款年利率</span>
-              <span class="calc-input-row">
-                <input class="input" id="financeLoanRate" type="number" min="0" step="any" placeholder="例如 3.5" autocomplete="off">
-                <span>%</span>
-              </span>
-            </label>
-            <label class="calc-field">
-              <span>贷款年限</span>
-              <span class="calc-input-row">
-                <input class="input" id="financeLoanYears" type="number" min="0" step="any" placeholder="例如 20" autocomplete="off">
-                <span>年</span>
-              </span>
-            </label>
-            <button type="button" class="btn btn-primary btn-sm" id="financeLoanBtn" aria-label="计算等额本息月供">计算</button>
-          </form>
-          <div class="calc-result" id="financeLoanResult">填写贷款本金、年利率和贷款年限。</div>
-        </div>
-
-        <div class="calc-box">
-          <h3>投资年化收益率 / 总收益率</h3>
-          <form class="calc-form" id="financeReturnForm">
-            <label class="calc-field">
-              <span>初始投入金额</span>
-              <span class="calc-input-row">
-                <input class="input" id="financeReturnStart" type="number" min="0" step="any" placeholder="例如 10000" autocomplete="off">
-                <span>元</span>
-              </span>
-            </label>
-            <label class="calc-field">
-              <span>期末资产价值</span>
-              <span class="calc-input-row">
-                <input class="input" id="financeReturnEnd" type="number" min="0" step="any" placeholder="例如 12500" autocomplete="off">
-                <span>元</span>
-              </span>
-            </label>
-            <label class="calc-field">
-              <span>持有天数</span>
-              <span class="calc-input-row">
-                <input class="input" id="financeReturnDays" type="number" min="0" step="any" placeholder="例如 365" autocomplete="off">
-                <span>天</span>
-              </span>
-            </label>
-            <button type="button" class="btn btn-primary btn-sm" id="financeReturnBtn" aria-label="计算投资总收益率和年化收益率">计算</button>
-          </form>
-          <div class="calc-result" id="financeReturnResult">填写初始金额、期末金额和持有天数。</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="section" id="managementTools" hidden>
-    <div class="card">
-      <h2><svg class="icon"><use href="#icon-toolkit"></use></svg>经济管理计算器</h2>
-      <div class="calc-grid">
-        <div class="calc-box">
-          <h3>盈亏平衡点</h3>
-          <form class="calc-form" id="managementBreakEvenForm">
-            <label class="calc-field">
-              <span>固定成本 FC</span>
-              <span class="calc-input-row">
-                <input class="input" id="managementBreakEvenFC" type="number" min="0" step="any" placeholder="例如 100000" autocomplete="off">
-                <span>元</span>
-              </span>
-            </label>
-            <label class="calc-field">
-              <span>单位售价 P</span>
-              <span class="calc-input-row">
-                <input class="input" id="managementBreakEvenPrice" type="number" min="0" step="any" placeholder="例如 50" autocomplete="off">
-                <span>元/件</span>
-              </span>
-            </label>
-            <label class="calc-field">
-              <span>单位变动成本 VC</span>
-              <span class="calc-input-row">
-                <input class="input" id="managementBreakEvenVC" type="number" min="0" step="any" placeholder="例如 30" autocomplete="off">
-                <span>元/件</span>
-              </span>
-            </label>
-            <button type="button" class="btn btn-primary btn-sm" id="managementBreakEvenBtn" aria-label="计算盈亏平衡销量和销售额">计算</button>
-          </form>
-          <div class="calc-result" id="managementBreakEvenResult">填写固定成本、单位售价与单位变动成本。</div>
-        </div>
-
-        <div class="calc-box">
-          <h3>投资回收期</h3>
-          <form class="calc-form" id="managementPaybackForm">
-            <label class="calc-field">
-              <span>初始投资 I0</span>
-              <span class="calc-input-row">
-                <input class="input" id="managementPaybackInvestment" type="number" min="0" step="any" placeholder="例如 100000" autocomplete="off">
-                <span>元</span>
-              </span>
-            </label>
-            <label class="calc-field">
-              <span>现金流模式</span>
-              <select class="select" id="managementPaybackMode" aria-label="投资回收期现金流模式">
-                <option value="equal">每期等额</option>
-                <option value="variable">各期不等额</option>
-              </select>
-            </label>
-            <label class="calc-field">
-              <span>每期净现金流 CF</span>
-              <textarea class="textarea" id="managementPaybackCFs" rows="2" placeholder="等额模式填 25000；不等额模式填 20000, 30000, 40000"></textarea>
-            </label>
-            <button type="button" class="btn btn-primary btn-sm" id="managementPaybackBtn" aria-label="计算静态投资回收期">计算</button>
-          </form>
-          <div class="calc-result" id="managementPaybackResult">等额模式只填一个 CF；不等额模式用逗号分隔各期现金流。</div>
-        </div>
-
-        <div class="calc-box">
-          <h3>NPV / IRR</h3>
-          <form class="calc-form" id="managementNpvForm">
-            <label class="calc-field">
-              <span>初始投资 I0</span>
-              <span class="calc-input-row">
-                <input class="input" id="managementNpvInvestment" type="number" min="0" step="any" placeholder="例如 100000" autocomplete="off">
-                <span>元</span>
-              </span>
-            </label>
-            <label class="calc-field">
-              <span>折现率 r</span>
-              <span class="calc-input-row">
-                <input class="input" id="managementNpvRate" type="number" min="-99.99" step="any" placeholder="例如 8" autocomplete="off">
-                <span>%</span>
-              </span>
-            </label>
-            <label class="calc-field">
-              <span>各期净现金流 CF1..CFn</span>
-              <textarea class="textarea" id="managementNpvCFs" rows="2" placeholder="例如 30000, 40000, 50000, 60000"></textarea>
-            </label>
-            <button type="button" class="btn btn-primary btn-sm" id="managementNpvBtn" aria-label="计算净现值和内部收益率">计算</button>
-          </form>
-          <div class="calc-result" id="managementNpvResult">填写初始投资、折现率，并用逗号分隔各期净现金流。</div>
-        </div>
-      </div>
     </div>
   </section>
 
@@ -1270,18 +693,6 @@
           <label class="label" for="majorIntroInput">专业简介</label>
           <textarea class="textarea" id="majorIntroInput" rows="2" placeholder="一句话介绍这个专业的学习重点"></textarea>
         </div>
-        <label class="check-row">
-          <input type="checkbox" id="majorShowCircuit">
-          <span>显示硬件速算（适合集成电路、电子、自动化等专业）</span>
-        </label>
-        <label class="check-row">
-          <input type="checkbox" id="majorShowFinance">
-          <span>显示财经计算器</span>
-        </label>
-        <label class="check-row">
-          <input type="checkbox" id="majorShowManagement">
-          <span>显示经管计算器</span>
-        </label>
         <div class="editor-section">
           <div class="editor-section-head">
             <h4>四年成长路线</h4>
@@ -1327,7 +738,7 @@
 (function () {
   'use strict';
 
-  const STORAGE = { courses: 'courseData', countdowns: 'cdData' };
+  const STORAGE = { countdowns: 'cdData' };
 
   function $(id) { return document.getElementById(id); }
 
@@ -1491,141 +902,6 @@
   window.addEventListener('scroll', updateBackTop, { passive: true });
   updateBackTop();
 
-  // ---------- 绩点模块 ----------
-  function normalizeCourse(item) {
-    return {
-      name: String((item && item.name) || '').slice(0, 120),
-      score: String((item && item.score) || ''),
-      credit: String((item && item.credit) || '')
-    };
-  }
-
-  const courseState = loadList(STORAGE.courses).map(normalizeCourse);
-  const courseListEl = $('courseList');
-  const gpaResult = $('gpaResult');
-
-  function scoreToGpa(score) {
-    if (score < 60) return 0;
-    return score / 10 - 5;
-  }
-
-  function renderCourses() {
-    clearNode(courseListEl);
-    if (courseState.length === 0) {
-      courseListEl.appendChild(el('div', { className: 'empty' },
-        [el('svg', { className: 'icon' },
-          [el('use', { href: '#icon-notebook' })]),
-         el('p', { textContent: '还没有课程，点击“添加课程”开始' })]));
-      return;
-    }
-
-    const table = el('table', { className: 'course-table' });
-    const thead = el('thead');
-    const headRow = el('tr');
-    ['课程名', '成绩', '学分', '操作'].forEach(function (title) {
-      headRow.appendChild(el('th', { scope: 'col', textContent: title }));
-    });
-    thead.appendChild(headRow);
-    table.appendChild(thead);
-
-    const tbody = el('tbody');
-    courseState.forEach(function (item, index) {
-      const row = el('tr');
-      const nameCell = el('td');
-      nameCell.appendChild(el('input', {
-        type: 'text', value: item.name,
-        'aria-label': '课程名称 ' + (index + 1),
-        dataset: { index: index, field: 'name' }
-      }));
-      const scoreCell = el('td');
-      scoreCell.appendChild(el('input', {
-        type: 'number', min: '0', max: '100', step: '0.1', inputmode: 'decimal', value: item.score,
-        'aria-label': '成绩 ' + (index + 1),
-        dataset: { index: index, field: 'score' }
-      }));
-      const creditCell = el('td');
-      creditCell.appendChild(el('input', {
-        type: 'number', min: '0', step: '0.5', value: item.credit,
-        'aria-label': '学分 ' + (index + 1),
-        dataset: { index: index, field: 'credit' }
-      }));
-      const actionCell = el('td');
-      const del = el('button', {
-        type: 'button', className: 'btn btn-danger btn-sm', textContent: '删除',
-        dataset: { action: 'delete-course', index: index }
-      });
-      actionCell.appendChild(del);
-      row.appendChild(nameCell);
-      row.appendChild(scoreCell);
-      row.appendChild(creditCell);
-      row.appendChild(actionCell);
-      tbody.appendChild(row);
-    });
-    table.appendChild(tbody);
-    courseListEl.appendChild(table);
-  }
-
-  function addCourse() {
-    courseState.push({ name: '', score: '', credit: '' });
-    saveList(STORAGE.courses, courseState);
-    renderCourses();
-    const inputs = courseListEl.querySelectorAll('input[data-field="name"]');
-    if (inputs.length) inputs[inputs.length - 1].focus();
-  }
-
-  function calcGPA() {
-    let totalCredit = 0;
-    let totalGpa = 0;
-    let hasValidRow = false;
-    const invalidLabels = [];
-
-    courseState.forEach(function (item, index) {
-      const scoreText = String(item.score).trim();
-      const creditText = String(item.credit).trim();
-      const isEmpty = !String(item.name).trim() && !scoreText && !creditText;
-      if (isEmpty) return;
-
-      hasValidRow = true;
-      const label = String(item.name).trim() || ('第 ' + (index + 1) + ' 行');
-      const score = Number(scoreText);
-      const credit = Number(creditText);
-      if (!scoreText || !creditText || !isFinite(score) || score < 0 || score > 100 || !isFinite(credit) || credit <= 0) {
-        invalidLabels.push(label);
-        return;
-      }
-      totalCredit += credit;
-      totalGpa += scoreToGpa(score) * credit;
-    });
-
-    if (invalidLabels.length) {
-      showToast('“' + invalidLabels.join('、') + '”成绩或学分无效', true);
-      return;
-    }
-    if (!hasValidRow || totalCredit === 0) {
-      showToast('暂无有效课程', true);
-      return;
-    }
-
-    $('gpaValue').textContent = (totalGpa / totalCredit).toFixed(2);
-    $('gpaTotal').textContent = totalCredit;
-    gpaResult.hidden = false;
-    gpaResult.scrollIntoView({ behavior: 'smooth' });
-    showToast('绩点计算完成');
-  }
-
-  function clearCourses() {
-    if (courseState.length === 0) {
-      showToast('暂无课程可清空', true);
-      return;
-    }
-    if (!confirm('确定清空全部课程？')) return;
-    courseState.length = 0;
-    saveList(STORAGE.courses, courseState);
-    gpaResult.hidden = true;
-    renderCourses();
-    showToast('已清空');
-  }
-
   function copyText(text) {
     if (navigator.clipboard && navigator.clipboard.writeText) {
       return navigator.clipboard.writeText(text);
@@ -1643,51 +919,6 @@
       else reject(new Error('copy failed'));
     });
   }
-
-  function exportCourses() {
-    const text = courseState
-      .map(function (item) { return item.name + ' ' + item.score + '分 ' + item.credit + '学分'; })
-      .join('\n');
-    if (!text.trim()) {
-      showToast('暂无可导出的课程', true);
-      return;
-    }
-    copyText(text).then(function () {
-      showToast('课程信息已复制剪贴板');
-    }, function () {
-      showToast('复制失败，请手动复制', true);
-    });
-  }
-
-  courseListEl.addEventListener('change', function (event) {
-    const input = event.target;
-    if (input.dataset.index === undefined || !input.dataset.field) return;
-    const index = Number(input.dataset.index);
-    if (!Number.isInteger(index) || !courseState[index]) return;
-    courseState[index][input.dataset.field] = input.value;
-    saveList(STORAGE.courses, courseState);
-  });
-
-  courseListEl.addEventListener('click', function (event) {
-    const button = event.target.closest('button[data-action="delete-course"]');
-    if (!button) return;
-    const index = Number(button.dataset.index);
-    if (!Number.isInteger(index) || !courseState[index]) return;
-    courseState.splice(index, 1);
-    saveList(STORAGE.courses, courseState);
-    renderCourses();
-    showToast('已删除课程');
-  });
-
-  $('gpaActions').addEventListener('click', function (event) {
-    const button = event.target.closest('button[data-action]');
-    if (!button) return;
-    const action = button.dataset.action;
-    if (action === 'add-course') addCourse();
-    else if (action === 'calc-gpa') calcGPA();
-    else if (action === 'clear-courses') clearCourses();
-    else if (action === 'export-courses') exportCourses();
-  });
 
   // ---------- 倒计时模块 ----------
   function normalizeCountdown(item) {
@@ -1803,9 +1034,6 @@
     id: 'ic',
     name: '集成电路设计与集成系统',
     intro: '面向芯片设计、制造与系统集成方向，按 16 个细分阶段推进：每学期拆成前后两段，逐步覆盖数学、电路、编程、Verilog、EDA、FPGA、竞赛与毕业去向。',
-    showCircuit: true,
-    showFinance: false,
-    showManagement: false,
     roadmap: [
       {
         year: '大一 · 秋季 · 第1段',
@@ -1823,7 +1051,7 @@
       {
         year: '大一 · 秋季 · 第2段',
         title: '期中巩固与期末闭环',
-        goal: '学完一元积分，完成第一次课程项目并复盘绩点',
+        goal: '学完一元积分，完成第一次课程项目并做好期中复盘',
         items: [
           '高数上：学完微分应用、一元积分并整理错题本',
           'C 语言学完函数、指针、结构体，独立调试 3 个小程序',
@@ -1947,7 +1175,7 @@
           '明确方向：数字前端、验证、嵌入式或后端',
           '撰写简历初稿，请老师或学长学姐修改',
           '投递暑期实习、夏令营或科研训练',
-          '补齐薄弱专业课，提升绩点'
+          '补齐薄弱专业课，巩固学习成果'
         ]
       },
       {
@@ -2059,9 +1287,6 @@
     id: 'finance',
     name: '财经',
     intro: '面向安大经济、金融、会计、财政等方向，强调课程、证书、数据分析和实习就业的实操路线。',
-    showCircuit: false,
-    showFinance: true,
-    showManagement: false,
     roadmap: [
       {
         year: '大一上',
@@ -2174,7 +1399,7 @@
       { tag: '数据', name: '国家统计局', url: 'https://data.stats.gov.cn/', desc: '查询 GDP、CPI、就业、财政与月度年度宏观指标' },
       { tag: '数据', name: '巨潮资讯网', url: 'https://www.cninfo.com.cn/', desc: '上市公司公告、年报、财报和原始披露文件' },
       { tag: '行情', name: '东方财富网', url: 'https://www.eastmoney.com/', desc: '行情、研报、财经资讯与模拟投资入口' },
-      { tag: '行情', name: '同花顺财经', url: 'https://www.10jqka.com.cn/', desc: '股票、基金、宏观数据与财经工具查询' },
+      { tag: '行情', name: '同花顺财经', url: 'https://www.10jqka.com.cn/', desc: '股票、基金与宏观数据查询' },
       { tag: '数据库', name: 'CSMAR 国泰安', url: 'https://data.csmar.com/', desc: '学术研究常用金融数据库，需校园网或机构授权；Wind 同为机构授权终端' },
       { tag: '办公', name: 'WPS Office', url: 'https://www.wps.cn/', desc: '表格公式、数据透视表、图表和文档，适合课程作业与实习' },
       { tag: '编程', name: 'Python / pandas', url: 'https://pandas.pydata.org/', desc: '数据清洗、计算、统计和自动化，配合 Jupyter 使用' },
@@ -2212,9 +1437,6 @@
     id: 'microelectronics',
     name: '微电子科学与工程',
     intro: '面向半导体材料、器件物理、集成电路工艺、版图与测试方向，与芯片设计类模板区分开：强调器件物理、工艺实验与器件仿真，兼顾 Verilog/FPGA 数字基础。',
-    showCircuit: true,
-    showFinance: false,
-    showManagement: false,
     roadmap: [
       {
         year: '大一上 · 秋季学期',
@@ -2365,9 +1587,6 @@
     id: 'management',
     name: '经济管理',
     intro: '面向工商管理、市场营销、财务管理、人力资源、信息管理、电子商务、物流与供应链等方向，以数据分析、商业案例与实习实践为主线，把经济学与管理学基础转化为可量化的职业能力。',
-    showCircuit: false,
-    showFinance: false,
-    showManagement: true,
     roadmap: [
       {
         year: '大一上 · 秋季学期',
@@ -2553,9 +1772,6 @@
       id: String(p.id || ('m' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6))),
       name: String((p.name || '').slice(0, 60)),
       intro: String((p.intro || '').slice(0, 300)),
-      showCircuit: !!p.showCircuit,
-      showFinance: !!p.showFinance,
-      showManagement: !!p.showManagement,
       roadmap: roadmap,
       tools: tools,
       contests: contests,
@@ -2777,9 +1993,7 @@
     const taskCount = profile.roadmap.reduce(function (sum, stage) {
       return sum + stage.items.length;
     }, 0);
-    const moduleCount = Array.from(document.querySelectorAll('#homeGrid .home-card')).filter(function (card) {
-      return !card.hidden;
-    }).length;
+    const moduleCount = document.querySelectorAll('#homeGrid .home-card').length;
     $('homeStageCount').textContent = stageCount;
     $('homeTaskCount').textContent = taskCount;
     $('homeModuleCount').textContent = moduleCount;
@@ -2795,28 +2009,13 @@
     contestData = profile.contests;
     $('majorTitle').textContent = profile.name + ' 四年成长路线';
     $('majorIntro').textContent = profile.intro || '把大一到大四拆成可勾选的阶段目标，每完成一项就点一下。';
-    $('majorHint').textContent = '当前模板：' + profile.name + '，路线、资源、竞赛和计算器已自动切换。';
+    $('majorHint').textContent = '当前模板：' + profile.name + '，路线、资源和竞赛已自动切换。';
     renderMajorSelect();
     renderMajorManageInfo();
-    const optionalViews = [
-      { section: $('circuit'), nav: $('navCircuit'), card: $('homeCircuitCard'), show: !!profile.showCircuit },
-      { section: $('financeTools'), nav: $('navFinance'), card: $('homeFinanceCard'), show: !!profile.showFinance },
-      { section: $('managementTools'), nav: $('navManagement'), card: $('homeManagementCard'), show: !!profile.showManagement }
-    ];
-    optionalViews.forEach(function (item) {
-      item.section.hidden = !item.show;
-      item.nav.hidden = !item.show;
-      item.card.hidden = !item.show;
-    });
     updateHomeMajorStats(profile);
     renderRoadmap();
     renderTools();
     renderContests();
-    if (optionalViews.some(function (item) {
-      return item.section.hidden && item.section.classList.contains('view-active');
-    })) {
-      switchView('major');
-    }
   }
 
   $('majorSelect').addEventListener('change', function () {
@@ -2832,9 +2031,6 @@
       id: '',
       name: '',
       intro: '',
-      showCircuit: false,
-      showFinance: false,
-      showManagement: false,
       roadmap: [
         { year: '大一', title: '基础与入门', goal: '', items: [''] },
         { year: '大二', title: '', goal: '', items: [''] },
@@ -3000,9 +2196,6 @@
       id: editingMajorId || '',
       name: $('majorName').value.trim(),
       intro: $('majorIntroInput').value.trim(),
-      showCircuit: $('majorShowCircuit').checked,
-      showFinance: $('majorShowFinance').checked,
-      showManagement: $('majorShowManagement').checked,
       roadmap: roadmap,
       tools: tools,
       contests: contests,
@@ -3016,9 +2209,6 @@
     $('majorEditorTitle').textContent = id ? '编辑专业：' + profile.name : '新建专业';
     $('majorName').value = profile.name;
     $('majorIntroInput').value = profile.intro;
-    $('majorShowCircuit').checked = !!profile.showCircuit;
-    $('majorShowFinance').checked = !!profile.showFinance;
-    $('majorShowManagement').checked = !!profile.showManagement;
     renderRoadStageRows(profile.roadmap);
     renderToolRows(profile.tools);
     renderContestRows(profile.contests);
@@ -3062,9 +2252,6 @@
       $('majorEditorTitle').textContent = '复制示例并编辑';
       $('majorName').value = copy.name;
       $('majorIntroInput').value = copy.intro;
-      $('majorShowCircuit').checked = !!copy.showCircuit;
-      $('majorShowFinance').checked = !!copy.showFinance;
-      $('majorShowManagement').checked = !!copy.showManagement;
       renderRoadStageRows(copy.roadmap);
       renderToolRows(copy.tools);
       renderContestRows(copy.contests);
@@ -3156,609 +2343,6 @@
     const btn = event.target.closest('button[data-action="add-contest"]');
     if (!btn) return;
     quickAdd(btn.dataset.name, btn.dataset.date);
-  });
-
-  // ---------- 硬件设计速算 ----------
-  const unitFactor = {
-    V: 1, mV: 1e-3,
-    A: 1, mA: 1e-3,
-    ohm: 1, kohm: 1e3, Mohm: 1e6,
-    F: 1, mF: 1e-3, uF: 1e-6, nF: 1e-9, pF: 1e-12,
-    s: 1, ms: 1e-3, us: 1e-6
-  };
-
-  const unitLabel = {
-    V: 'V', mV: 'mV', A: 'A', mA: 'mA',
-    ohm: 'Ω', kohm: 'kΩ', Mohm: 'MΩ'
-  };
-
-  function readNum(id) {
-    const value = $(id).value.trim();
-    if (!value) return NaN;
-    const n = Number(value);
-    return isFinite(n) ? n : NaN;
-  }
-
-  function fmtNum(v) {
-    if (!isFinite(v)) return '--';
-    if (v !== 0 && (Math.abs(v) >= 10000 || Math.abs(v) < 0.0001)) {
-      return parseFloat(v.toExponential(4)).toString();
-    }
-    return parseFloat(v.toPrecision(4)).toString();
-  }
-
-  function fmtTime(seconds) {
-    if (!isFinite(seconds)) return '--';
-    if (seconds >= 1) return fmtNum(seconds) + ' s';
-    if (seconds >= 0.001) return fmtNum(seconds * 1000) + ' ms';
-    if (seconds >= 0.000001) return fmtNum(seconds * 1e6) + ' us';
-    return fmtNum(seconds * 1e9) + ' ns';
-  }
-
-  function fmtResistance(ohms) {
-    if (!isFinite(ohms)) return '--';
-    const abs = Math.abs(ohms);
-    if (abs >= 1e6) return fmtNum(ohms / 1e6) + ' MΩ';
-    if (abs >= 1e3) return fmtNum(ohms / 1e3) + ' kΩ';
-    return fmtNum(ohms) + ' Ω';
-  }
-
-  function fmtFrequency(hz) {
-    if (!isFinite(hz)) return '--';
-    const abs = Math.abs(hz);
-    if (abs >= 1e6) return fmtNum(hz / 1e6) + ' MHz';
-    if (abs >= 1e3) return fmtNum(hz / 1e3) + ' kHz';
-    return fmtNum(hz) + ' Hz';
-  }
-
-  function fmtPower(watts) {
-    if (!isFinite(watts)) return '--';
-    if (watts === 0) return '0 W';
-    const abs = Math.abs(watts);
-    if (abs >= 1) return fmtNum(watts) + ' W';
-    if (abs >= 1e-3) return fmtNum(watts * 1e3) + ' mW';
-    if (abs >= 1e-6) return fmtNum(watts * 1e6) + ' μW';
-    return fmtNum(watts * 1e9) + ' nW';
-  }
-
-  function calcOhm() {
-    const result = $('ohmResult');
-    const u = readNum('ohmU');
-    const i = readNum('ohmI');
-    const r = readNum('ohmR');
-    const uV = u * unitFactor[$('ohmUUnit').value];
-    const iA = i * unitFactor[$('ohmIUnit').value];
-    const rOhm = r * unitFactor[$('ohmRUnit').value];
-    const filled = [isFinite(u), isFinite(i), isFinite(r)].filter(Boolean).length;
-
-    if (filled < 2) {
-      result.textContent = '请至少填写两个量。';
-      return;
-    }
-    if (filled > 2) {
-      result.textContent = '三个量都填了，请保留两个来计算。';
-      return;
-    }
-    if ((isFinite(u) && u < 0) || (isFinite(i) && i < 0) || (isFinite(r) && r < 0)) {
-      result.textContent = '电压、电流和电阻请输入非负值。';
-      return;
-    }
-    if (isFinite(uV) && isFinite(iA)) {
-      if (iA === 0) {
-        result.textContent = uV === 0 ? 'U 和 I 都为 0，无法唯一确定 R。' : '电流不能为 0。';
-        return;
-      }
-      const unit = $('ohmRUnit').value;
-      const resistance = uV / iA;
-      let text = 'R = ' + fmtNum(resistance / unitFactor[unit]) + ' ' + unitLabel[unit]
-        + ' · P = ' + fmtPower(uV * iA);
-      if (resistance === 0) text += '（电阻为 0，理想短路）';
-      result.textContent = text;
-      return;
-    }
-    if (isFinite(uV) && isFinite(rOhm)) {
-      if (rOhm === 0) {
-        result.textContent = uV === 0 ? 'U 和 R 都为 0，无法唯一确定 I。' : '电阻不能为 0。';
-        return;
-      }
-      const unit = $('ohmIUnit').value;
-      const current = uV / rOhm;
-      let text = 'I = ' + fmtNum(current / unitFactor[unit]) + ' ' + unitLabel[unit]
-        + ' · P = ' + fmtPower(uV * current);
-      if (current === 0) text += '（电流为 0）';
-      result.textContent = text;
-      return;
-    }
-    if (isFinite(iA) && isFinite(rOhm)) {
-      const unit = $('ohmUUnit').value;
-      const voltage = iA * rOhm;
-      let text = 'U = ' + fmtNum(voltage / unitFactor[unit]) + ' ' + unitLabel[unit]
-        + ' · P = ' + fmtPower(voltage * iA);
-      if (iA === 0 || rOhm === 0) {
-        const zeroParts = [];
-        if (iA === 0) zeroParts.push('电流为 0');
-        if (rOhm === 0) zeroParts.push('电阻为 0');
-        text += '（' + zeroParts.join('、') + '，因此 U 和 P 均为 0）';
-      }
-      result.textContent = text;
-    }
-  }
-
-  function calcDivider() {
-    const result = $('dividerResult');
-    const vin = readNum('dividerVin') * unitFactor[$('dividerVinUnit').value];
-    const r1 = readNum('dividerR1') * unitFactor[$('dividerR1Unit').value];
-    const r2 = readNum('dividerR2') * unitFactor[$('dividerR2Unit').value];
-    if (!isFinite(vin) || !isFinite(r1) || !isFinite(r2)) {
-      result.textContent = '请完整填写 Vin、R1、R2。';
-      return;
-    }
-    if (r1 + r2 === 0) {
-      result.textContent = 'R1 + R2 不能为 0。';
-      return;
-    }
-    const vout = vin * r2 / (r1 + r2);
-    result.textContent = 'Vout ≈ ' + fmtNum(vout) + ' V · 分压比 ' + (r2 / (r1 + r2)).toFixed(3);
-  }
-
-  function calcRC() {
-    const result = $('rcResult');
-    const r = readNum('rcR') * unitFactor[$('rcRUnit').value];
-    const c = readNum('rcC') * unitFactor[$('rcCUnit').value];
-    if (!isFinite(r) || !isFinite(c)) {
-      result.textContent = '请完整填写 R 和 C。';
-      return;
-    }
-    if (r <= 0 || c <= 0) {
-      result.textContent = 'R 和 C 必须大于 0，才能计算 τ、5τ 和 fc。';
-      return;
-    }
-    const tau = r * c;
-    if (!isFinite(tau) || tau === 0) {
-      result.textContent = '结果超出可计算范围，请调整 R 或 C。';
-      return;
-    }
-    const cutoff = 1 / (2 * Math.PI * tau);
-    result.textContent = 'τ ≈ ' + fmtTime(tau) + ' · 5τ ≈ ' + fmtTime(tau * 5)
-      + ' · fc ≈ ' + fmtFrequency(cutoff) + '（一阶 RC 低通/高通）';
-  }
-
-  function calcPowerEnergy() {
-    const result = $('powerResult');
-    const u = readNum('powerU') * unitFactor[$('powerUUnit').value];
-    const i = readNum('powerI') * unitFactor[$('powerIUnit').value];
-    const t = readNum('powerT') * unitFactor[$('powerTUnit').value];
-    if (!isFinite(u) || !isFinite(i) || !isFinite(t)) {
-      result.textContent = '请完整填写电压 U、电流 I 和时间 t。';
-      return;
-    }
-    if (u < 0 || i < 0 || t < 0) {
-      result.textContent = '电压、电流和时间不能为负数。';
-      return;
-    }
-    const power = u * i;
-    const energy = power * t;
-    if (!isFinite(power) || !isFinite(energy)) {
-      result.textContent = '结果超出可计算范围，请缩小输入值。';
-      return;
-    }
-    result.textContent = 'P = ' + fmtNum(power) + ' W（' + fmtNum(power * 1000) + ' mW） · E = '
-      + fmtNum(energy) + ' J（' + fmtNum(energy * 1000) + ' mJ）';
-  }
-
-  function calcResistorNetwork() {
-    const result = $('resistorNetworkResult');
-    const values = readNumList('resistorNetworkValues');
-    if (!values || values.length < 2) {
-      result.textContent = '请用逗号、中文逗号或空格分隔至少两个电阻。';
-      return;
-    }
-    if (values.some(function (value) { return value <= 0; })) {
-      result.textContent = '所有电阻值必须大于 0。';
-      return;
-    }
-    const factor = unitFactor[$('resistorNetworkUnit').value];
-    const resistances = values.map(function (value) { return value * factor; });
-    const series = resistances.reduce(function (sum, value) { return sum + value; }, 0);
-    const conductance = resistances.reduce(function (sum, value) { return sum + 1 / value; }, 0);
-    const parallel = 1 / conductance;
-    if (!isFinite(series) || !isFinite(parallel) || parallel <= 0) {
-      result.textContent = '结果超出可计算范围，请调整电阻值。';
-      return;
-    }
-    result.textContent = '串联 Rs ≈ ' + fmtResistance(series) + ' · 并联 Rp ≈ ' + fmtResistance(parallel);
-  }
-
-  function calcOpampGain() {
-    const result = $('opampGainResult');
-    const rf = readNum('opampRf') * unitFactor[$('opampRfUnit').value];
-    const rin = readNum('opampRin') * unitFactor[$('opampRinUnit').value];
-    if (!isFinite(rf) || !isFinite(rin)) {
-      result.textContent = '请完整填写 Rf 和 Rin/Rg。';
-      return;
-    }
-    if (rf <= 0 || rin <= 0) {
-      result.textContent = 'Rf 和 Rin/Rg 必须大于 0。';
-      return;
-    }
-    const mode = $('opampMode').value;
-    const av = mode === 'inverting' ? -rf / rin : 1 + rf / rin;
-    const gainDb = 20 * Math.log10(Math.abs(av));
-    if (!isFinite(av) || !isFinite(gainDb)) {
-      result.textContent = '结果超出可计算范围，请调整电阻值。';
-      return;
-    }
-    result.textContent = 'Av ≈ ' + fmtNum(av) + ' · 增益 ≈ ' + fmtNum(gainDb) + ' dB'
-      + '（' + (mode === 'inverting' ? '反相' : '同相') + '）';
-  }
-
-  function calcLedResistor() {
-    const result = $('ledResistorResult');
-    const vs = readNum('ledVs');
-    const vf = readNum('ledVf');
-    const currentMa = readNum('ledIf');
-    if (!isFinite(vs) || !isFinite(vf) || !isFinite(currentMa)) {
-      result.textContent = '请完整填写 Vs、Vf 和 If。';
-      return;
-    }
-    if (vs < 0 || vf < 0 || vs <= vf || currentMa <= 0) {
-      result.textContent = '必须满足 Vs ≥ 0、Vf ≥ 0、Vs > Vf 且 If > 0。';
-      return;
-    }
-    const voltageDrop = vs - vf;
-    const resistance = voltageDrop / (currentMa / 1000);
-    const powerMw = voltageDrop * currentMa;
-    if (!isFinite(resistance) || !isFinite(powerMw)) {
-      result.textContent = '结果超出可计算范围，请调整输入值。';
-      return;
-    }
-    result.textContent = 'R ≈ ' + fmtResistance(resistance) + ' · P ≈ ' + fmtNum(powerMw) + ' mW';
-  }
-
-  function calcPcbDrop() {
-    const result = $('pcbDropResult');
-    const lengthMm = readNum('pcbLength');
-    const widthMm = readNum('pcbWidth');
-    const current = readNum('pcbCurrent');
-    const copperOz = Number($('pcbCopper').value);
-    if (!isFinite(lengthMm) || !isFinite(widthMm) || !isFinite(current)) {
-      result.textContent = '请完整填写走线长度、宽度、铜厚和负载电流。';
-      return;
-    }
-    if (lengthMm <= 0 || widthMm <= 0 || current <= 0) {
-      result.textContent = '走线长度、宽度和负载电流必须大于 0。';
-      return;
-    }
-    const lengthM = lengthMm / 1000;
-    const widthM = widthMm / 1000;
-    const thicknessM = copperOz === 2 ? 69.58e-6 : 34.79e-6;
-    const resistance = 1.72e-8 * lengthM / (widthM * thicknessM);
-    const drop = current * resistance;
-    const power = current * current * resistance;
-    if (!isFinite(resistance) || !isFinite(drop) || !isFinite(power)) {
-      result.textContent = '结果超出可计算范围，请调整输入值。';
-      return;
-    }
-    result.textContent = 'R ≈ ' + fmtNum(resistance * 1000) + ' mΩ · ΔV ≈ '
-      + fmtNum(drop * 1000) + ' mV · P ≈ ' + fmtNum(power * 1000) + ' mW';
-  }
-
-  function calcBatteryLife() {
-    const result = $('batteryLifeResult');
-    const capacity = readNum('batteryCapacity');
-    const current = readNum('batteryCurrent');
-    const efficiency = readNum('batteryEfficiency');
-    if (!isFinite(capacity) || !isFinite(current) || !isFinite(efficiency)) {
-      result.textContent = '请完整填写容量、平均负载电流和效率。';
-      return;
-    }
-    if (capacity <= 0 || current <= 0 || efficiency <= 0 || efficiency > 100) {
-      result.textContent = '必须满足 C > 0、I > 0 且 0 < η ≤ 100%。';
-      return;
-    }
-    const hours = capacity / current * (efficiency / 100);
-    if (!isFinite(hours) || hours < 0) {
-      result.textContent = '结果超出可计算范围，请调整输入值。';
-      return;
-    }
-    let wholeHours = Math.floor(hours);
-    let minutes = Math.round((hours - wholeHours) * 60);
-    if (minutes === 60) {
-      wholeHours += 1;
-      minutes = 0;
-    }
-    if (wholeHours === 0 && minutes === 0) {
-      const seconds = Math.round(hours * 3600);
-      result.textContent = '预计续航 ' + fmtNum(seconds) + ' 秒（' + fmtNum(hours)
-        + ' 小时，约 ' + fmtNum(hours / 24) + ' 天）';
-    } else {
-      result.textContent = '预计续航 ' + fmtNum(wholeHours) + ' 小时 ' + minutes + ' 分钟（'
-        + fmtNum(hours) + ' 小时，约 ' + fmtNum(hours / 24) + ' 天）';
-    }
-  }
-
-  $('ohmBtn').addEventListener('click', calcOhm);
-  $('dividerBtn').addEventListener('click', calcDivider);
-  $('rcBtn').addEventListener('click', calcRC);
-  $('powerBtn').addEventListener('click', calcPowerEnergy);
-  $('resistorNetworkBtn').addEventListener('click', calcResistorNetwork);
-  $('opampGainBtn').addEventListener('click', calcOpampGain);
-  $('ledResistorBtn').addEventListener('click', calcLedResistor);
-  $('pcbDropBtn').addEventListener('click', calcPcbDrop);
-  $('batteryLifeBtn').addEventListener('click', calcBatteryLife);
-  [
-    'ohmForm', 'dividerForm', 'rcForm', 'powerForm', 'resistorNetworkForm',
-    'opampGainForm', 'ledResistorForm', 'pcbDropForm', 'batteryLifeForm'
-  ].forEach(function (id) {
-    $(id).addEventListener('submit', function (event) {
-      event.preventDefault();
-    });
-  });
-
-  // ---------- 财经计算器 ----------
-  function fmtMoney(value) {
-    return Number(value).toFixed(2);
-  }
-
-  function fmtPercent(value) {
-    return Number(value).toFixed(2) + '%';
-  }
-
-  function calcFinanceCompound() {
-    const result = $('financeCompoundResult');
-    const principal = readNum('financeCompoundPrincipal');
-    const contribution = readNum('financeCompoundContribution');
-    const annualRate = readNum('financeCompoundRate');
-    const years = readNum('financeCompoundYears');
-    const periodsPerYear = Number($('financeCompoundFrequency').value);
-    if (![principal, contribution, annualRate, years, periodsPerYear].every(function (n) { return isFinite(n); })
-        || principal < 0 || contribution < 0 || annualRate < 0 || years <= 0) {
-      result.textContent = '请输入有效的非负本金、定投、收益率和大于 0 的年限。';
-      return;
-    }
-    const periods = years * periodsPerYear;
-    const periodRate = annualRate / 100 / periodsPerYear;
-    if (!isFinite(periods) || periods <= 0 || !isFinite(periodRate)) {
-      result.textContent = '投资年限或定投频率无效。';
-      return;
-    }
-    let futureValue;
-    if (periodRate === 0) {
-      futureValue = principal + contribution * periods;
-    } else {
-      const growth = Math.pow(1 + periodRate, periods);
-      futureValue = principal * growth + contribution * (growth - 1) / periodRate;
-    }
-    const totalInvested = principal + contribution * periods;
-    const totalReturn = futureValue - totalInvested;
-    const returnRate = totalInvested === 0 ? 0 : totalReturn / totalInvested * 100;
-    if (!isFinite(futureValue) || !isFinite(totalInvested) || !isFinite(totalReturn) || !isFinite(returnRate)) {
-      result.textContent = '结果超出可计算范围，请缩小金额或年限。';
-      return;
-    }
-    result.textContent = '到期总价值 ' + fmtMoney(futureValue) + ' 元 · 累计投入 ' + fmtMoney(totalInvested)
-      + ' 元 · 累计收益 ' + fmtMoney(totalReturn) + ' 元 · 总收益率 ' + fmtPercent(returnRate);
-  }
-
-  function calcFinanceLoan() {
-    const result = $('financeLoanResult');
-    const loanAmount = readNum('financeLoanAmount');
-    const annualRate = readNum('financeLoanRate');
-    const years = readNum('financeLoanYears');
-    if (![loanAmount, annualRate, years].every(function (n) { return isFinite(n); })
-        || loanAmount < 0 || annualRate < 0 || years <= 0) {
-      result.textContent = '请输入有效的非负贷款本金、年利率和大于 0 的贷款年限。';
-      return;
-    }
-    const monthlyRate = annualRate / 100 / 12;
-    const months = years * 12;
-    if (!isFinite(months) || months <= 0) {
-      result.textContent = '请输入大于 0 的贷款年限。';
-      return;
-    }
-    let monthlyPayment;
-    if (monthlyRate === 0) {
-      monthlyPayment = loanAmount / months;
-    } else {
-      const growth = Math.pow(1 + monthlyRate, months);
-      monthlyPayment = loanAmount * monthlyRate * growth / (growth - 1);
-    }
-    const totalPayment = monthlyPayment * months;
-    const totalInterest = totalPayment - loanAmount;
-    if (![monthlyPayment, totalPayment, totalInterest].every(function (n) { return isFinite(n); })) {
-      result.textContent = '结果超出可计算范围，请缩小金额或年限。';
-      return;
-    }
-    result.textContent = '每月还款 ' + fmtMoney(monthlyPayment) + ' 元 · 还款总额 ' + fmtMoney(totalPayment)
-      + ' 元 · 总利息 ' + fmtMoney(totalInterest) + ' 元';
-  }
-
-  function calcFinanceReturn() {
-    const result = $('financeReturnResult');
-    const startValue = readNum('financeReturnStart');
-    const endValue = readNum('financeReturnEnd');
-    const holdingDays = readNum('financeReturnDays');
-    if (![startValue, endValue, holdingDays].every(function (n) { return isFinite(n); })
-        || startValue < 0 || endValue < 0 || holdingDays <= 0) {
-      result.textContent = '请输入有效的非负金额和大于 0 的持有天数。';
-      return;
-    }
-    if (startValue === 0) {
-      result.textContent = '初始投入金额必须大于 0，无法计算收益率。';
-      return;
-    }
-    const profit = endValue - startValue;
-    const totalReturnRate = profit / startValue * 100;
-    const annualizedReturn = (Math.pow(endValue / startValue, 365 / holdingDays) - 1) * 100;
-    if (![profit, totalReturnRate, annualizedReturn].every(function (n) { return isFinite(n); })) {
-      result.textContent = '结果超出可计算范围，请检查输入。';
-      return;
-    }
-    result.textContent = '绝对收益 ' + fmtMoney(profit) + ' 元 · 总收益率 ' + fmtPercent(totalReturnRate)
-      + ' · 年化收益率 ' + fmtPercent(annualizedReturn);
-  }
-
-  $('financeCompoundBtn').addEventListener('click', calcFinanceCompound);
-  $('financeLoanBtn').addEventListener('click', calcFinanceLoan);
-  $('financeReturnBtn').addEventListener('click', calcFinanceReturn);
-  ['financeCompoundForm', 'financeLoanForm', 'financeReturnForm'].forEach(function (id) {
-    $(id).addEventListener('submit', function (event) {
-      event.preventDefault();
-    });
-  });
-
-  // ---------- 经济管理计算器 ----------
-  function readNumList(id) {
-    const raw = $(id).value.trim();
-    if (!raw) return [];
-    const parts = raw.split(/[,，\s]+/).filter(Boolean);
-    const values = parts.map(Number);
-    return values.every(function (n) { return isFinite(n); }) ? values : null;
-  }
-
-  function calcBreakEven() {
-    const result = $('managementBreakEvenResult');
-    const fixedCost = readNum('managementBreakEvenFC');
-    const price = readNum('managementBreakEvenPrice');
-    const variableCost = readNum('managementBreakEvenVC');
-    if (![fixedCost, price, variableCost].every(function (n) { return isFinite(n); })
-        || fixedCost < 0 || price <= 0 || variableCost < 0) {
-      result.textContent = '请输入非负固定成本、大于 0 的单价和非负单位变动成本。';
-      return;
-    }
-    const contributionMargin = price - variableCost;
-    if (contributionMargin <= 0) {
-      result.textContent = '单价必须高于单位变动成本，否则不存在盈亏平衡点。';
-      return;
-    }
-    const quantity = fixedCost / contributionMargin;
-    const sales = price * quantity;
-    const contributionMarginRate = contributionMargin / price * 100;
-    if (!isFinite(quantity) || !isFinite(sales) || !isFinite(contributionMarginRate)) {
-      result.textContent = '结果超出可计算范围，请检查固定成本、售价和变动成本。';
-      return;
-    }
-    result.textContent = '盈亏平衡销量 Q* = ' + fmtNum(quantity) + ' 件 · 盈亏平衡销售额 S* = '
-      + fmtMoney(sales) + ' 元 · 贡献毛益率 ' + fmtPercent(contributionMarginRate);
-  }
-
-  function calcPayback() {
-    const result = $('managementPaybackResult');
-    const investment = readNum('managementPaybackInvestment');
-    const cashFlows = readNumList('managementPaybackCFs');
-    const mode = $('managementPaybackMode').value;
-    if (!isFinite(investment) || investment < 0 || !cashFlows || cashFlows.length === 0) {
-      result.textContent = '请输入非负初始投资和有效的净现金流。';
-      return;
-    }
-    if (investment === 0) {
-      result.textContent = '静态回收期 PP = 0.00 年。';
-      return;
-    }
-    if (mode === 'equal') {
-      if (cashFlows.length !== 1 || cashFlows[0] <= 0) {
-        result.textContent = '等额模式只填写一个大于 0 的每期净现金流。';
-        return;
-      }
-      const payback = investment / cashFlows[0];
-      result.textContent = '静态回收期 PP ≈ ' + fmtNum(payback) + ' 年。';
-      return;
-    }
-    let cumulative = 0;
-    let payback = null;
-    for (let i = 0; i < cashFlows.length; i += 1) {
-      const cashFlow = cashFlows[i];
-      if (cashFlow > 0 && cumulative + cashFlow >= investment) {
-        payback = i + (investment - cumulative) / cashFlow;
-        break;
-      }
-      cumulative += cashFlow;
-    }
-    result.textContent = payback === null
-      ? '在给定现金流期内无法回收初始投资。'
-      : '静态回收期 PP ≈ ' + fmtNum(payback) + ' 年。';
-  }
-
-  function npvAt(rate, investment, cashFlows) {
-    return -investment + cashFlows.reduce(function (sum, cashFlow, index) {
-      return sum + cashFlow / Math.pow(1 + rate, index + 1);
-    }, 0);
-  }
-
-  function solveIrr(investment, cashFlows) {
-    let low = -0.9999;
-    let high = 10;
-    let lowValue = npvAt(low, investment, cashFlows);
-    let highValue = npvAt(high, investment, cashFlows);
-    if (!isFinite(lowValue) || !isFinite(highValue)) return null;
-    if (lowValue === 0) return low;
-    if (highValue === 0) return high;
-    if ((lowValue < 0 && highValue < 0) || (lowValue > 0 && highValue > 0)) return null;
-    for (let iteration = 0; iteration < 120; iteration += 1) {
-      const middle = (low + high) / 2;
-      const middleValue = npvAt(middle, investment, cashFlows);
-      if (!isFinite(middleValue)) return null;
-      if (Math.abs(middleValue) < 1e-8 || high - low < 1e-10) return middle;
-      if ((lowValue < 0 && middleValue > 0) || (lowValue > 0 && middleValue < 0)) {
-        high = middle;
-        highValue = middleValue;
-      } else {
-        low = middle;
-        lowValue = middleValue;
-      }
-    }
-    return (low + high) / 2;
-  }
-
-  function calcNpvIrr() {
-    const result = $('managementNpvResult');
-    const investment = readNum('managementNpvInvestment');
-    const discountRate = readNum('managementNpvRate');
-    const cashFlows = readNumList('managementNpvCFs');
-    if (!isFinite(investment) || investment < 0 || !isFinite(discountRate)
-        || discountRate <= -100 || !cashFlows || cashFlows.length === 0) {
-      result.textContent = '请输入非负初始投资、大于 -100% 的折现率和至少一期有效现金流。';
-      return;
-    }
-    const rate = discountRate / 100;
-    const npv = npvAt(rate, investment, cashFlows);
-    if (!isFinite(npv)) {
-      result.textContent = 'NPV 结果超出可计算范围，请检查输入。';
-      return;
-    }
-    const hasPositiveCashFlow = cashFlows.some(function (cashFlow) { return cashFlow > 0; });
-    if (investment <= 0 || !hasPositiveCashFlow) {
-      result.textContent = 'NPV ≈ ' + fmtMoney(npv) + ' 元 · IRR 无解（需正初始投资和至少一笔正向现金流）。';
-      return;
-    }
-    const signedFlows = [-investment].concat(cashFlows);
-    let signChanges = 0;
-    for (let i = 1; i < signedFlows.length; i += 1) {
-      if (signedFlows[i] !== 0 && signedFlows[i - 1] !== 0
-          && Math.sign(signedFlows[i]) !== Math.sign(signedFlows[i - 1])) {
-        signChanges += 1;
-      }
-    }
-    const irr = solveIrr(investment, cashFlows);
-    let text = 'NPV ≈ ' + fmtMoney(npv) + ' 元 · ';
-    if (irr === null) {
-      text += '在 -99.99% 至 1000% 区间内未找到 IRR';
-    } else {
-      text += 'IRR ≈ ' + fmtPercent(irr * 100);
-    }
-    if (signChanges > 1) {
-      text += '（现金流多次变号，IRR 可能不唯一）';
-    }
-    result.textContent = text;
-  }
-
-  $('managementBreakEvenBtn').addEventListener('click', calcBreakEven);
-  $('managementPaybackBtn').addEventListener('click', calcPayback);
-  $('managementNpvBtn').addEventListener('click', calcNpvIrr);
-  ['managementBreakEvenForm', 'managementPaybackForm', 'managementNpvForm'].forEach(function (id) {
-    $(id).addEventListener('submit', function (event) {
-      event.preventDefault();
-    });
   });
 
   // ---------- 身份与关键日期 ----------
@@ -4069,7 +2653,6 @@
   });
 
   // ---------- 初始化 ----------
-  renderCourses();
   renderCountdowns();
   renderMajorSelect();
   applyMajor(activeMajorId);

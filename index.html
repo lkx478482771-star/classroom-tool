@@ -6,12 +6,12 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#0f2e2d">
-<meta name="description" content="安大学生工具箱：绩点计算、考试倒计时、校历、专业成长路线、电路计算、竞赛日历与学习导航。">
+<meta name="description" content="安大学生工具箱：专业路线、校历、考试倒计时、竞赛日历、学习导航与课堂整理。">
 <title>安大学生工具箱</title>
 <link rel="canonical" href="https://lkx478482771-star.github.io/classroom-tool/">
 <meta property="og:type" content="website">
 <meta property="og:title" content="安大学生工具箱">
-<meta property="og:description" content="安大学生工具箱：绩点计算、考试倒计时、校历、专业成长路线、电路计算、竞赛日历与学习导航。">
+<meta property="og:description" content="安大学生工具箱：专业路线、校历、考试倒计时、竞赛日历、学习导航与课堂整理。">
 <meta property="og:url" content="https://lkx478482771-star.github.io/classroom-tool/">
 <meta property="og:site_name" content="安大学生工具箱">
 <meta name="twitter:card" content="summary">
@@ -223,13 +223,14 @@
 
   .hero-panel-rows {
     display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 12px;
   }
 
   .hero-panel-rows > div {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
     gap: 12px;
     padding: 12px 14px;
     border-radius: 13px;
@@ -243,7 +244,7 @@
   }
 
   .hero-panel-rows strong {
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 800;
     color: #99f6e4;
   }
@@ -414,6 +415,9 @@
     .hero {
       padding: 32px 16px 24px;
     }
+    .hero-panel-rows {
+      grid-template-columns: 1fr;
+    }
     .module-section {
       padding: 22px 16px 44px;
     }
@@ -469,7 +473,6 @@
     </a>
     <nav class="home-links" aria-label="首页导航">
       <a href="index.html" class="active" aria-current="page">首页</a>
-      <a href="student-toolkit.html#gpa">绩点</a>
       <a href="student-toolkit.html#calendar">校历</a>
       <a href="student-toolkit.html#major">专业路线</a>
       <a href="classroom.html">课堂整理</a>
@@ -486,7 +489,7 @@
     <div>
       <span class="hero-kicker">AHU STUDENT TOOLKIT</span>
       <h1>一个清爽的<br>大学生工具箱</h1>
-      <p>绩点与专业计算器、考试倒计时、校历、专业成长路线、竞赛与学习导航，全部集中在一个工作台里，数据保存在本机浏览器。</p>
+      <p>专业路线、校历、考试倒计时、竞赛日历、学习导航与课堂整理，集中在一个工作台里，方便随时查看和使用。</p>
       <div class="hero-actions">
         <a class="btn btn-primary" href="student-toolkit.html#home">进入工具箱</a>
         <a class="btn-ghost-light" href="student-toolkit.html#major">查看专业成长路线</a>
@@ -494,11 +497,14 @@
     </div>
     <div class="hero-visual">
       <div class="hero-panel">
-        <div class="hero-panel-head">今日工作台</div>
+        <div class="hero-panel-head">常用入口</div>
         <div class="hero-panel-rows">
-          <div><span>当前学期</span><strong id="termText">秋季学期</strong></div>
-          <div><span>成长路线</span><strong>多阶段</strong></div>
-          <div><span>可勾选任务</span><strong>可勾选</strong></div>
+          <div><strong>专业路线</strong></div>
+          <div><strong>校历</strong></div>
+          <div><strong>考试倒计时</strong></div>
+          <div><strong>竞赛日历</strong></div>
+          <div><strong>学习导航</strong></div>
+          <div><strong>课堂整理</strong></div>
         </div>
       </div>
     </div>
@@ -515,11 +521,6 @@
         <h3>我的专业</h3>
         <p>切换、新建、复制或导出专业模板</p>
       </a>
-      <a class="module-card" href="student-toolkit.html#gpa">
-        <span class="card-icon teal"><svg class="icon icon-xl"><use href="#icon-target"></use></svg></span>
-        <h3>绩点计算器</h3>
-        <p>按安大规则计算加权平均绩点</p>
-      </a>
       <a class="module-card" href="student-toolkit.html#countdown">
         <span class="card-icon rose"><svg class="icon icon-xl"><use href="#icon-clock"></use></svg></span>
         <h3>考试倒计时</h3>
@@ -535,15 +536,10 @@
         <h3>四年成长路线</h3>
         <p>按专业提供阶段任务，可勾选进度</p>
       </a>
-      <a class="module-card" href="student-toolkit.html#circuit">
-        <span class="card-icon sky"><svg class="icon icon-xl"><use href="#icon-zap"></use></svg></span>
-        <h3>电路计算器</h3>
-        <p>欧姆定律、分压与 RC 时间常数</p>
-      </a>
       <a class="module-card" href="student-toolkit.html#contest">
         <span class="card-icon rose"><svg class="icon icon-xl"><use href="#icon-calendar"></use></svg></span>
         <h3>竞赛日历</h3>
-        <p>集创赛、电赛、蓝桥杯等赛事信息</p>
+        <p>按专业显示竞赛与报名节点</p>
       </a>
       <a class="module-card" href="student-toolkit.html#tools">
         <span class="card-icon teal"><svg class="icon icon-xl"><use href="#icon-toolkit"></use></svg></span>
@@ -570,12 +566,6 @@
 
 <script>
   (function () {
-    var now = new Date();
-    var month = now.getMonth() + 1;
-    var term = (month >= 9 || month <= 1) ? '秋季学期' : '春季学期';
-    var el = document.getElementById('termText');
-    if (el) el.textContent = term;
-
     function pad2(value) { return String(value).padStart(2, '0'); }
     function updateHomeClock() {
       var current = new Date();
