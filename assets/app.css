@@ -1656,6 +1656,24 @@ a:hover {
   text-decoration: underline;
 }
 
+.tool-link-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 12px;
+}
+
+.tool-link-group .tool-link {
+  font-size: 12px;
+}
+
+.nav-subtitle {
+  margin: 14px 0 8px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-2);
+}
+
 .tool-desc {
   flex-basis: 100%;
   font-size: 12.5px;
