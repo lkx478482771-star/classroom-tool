@@ -1,0 +1,49 @@
+name: 提交专业模板
+description: 提交新的本科专业成长路线模板
+title: "[专业模板] "
+labels:
+  - major-template
+body:
+  - type: input
+    id: major_name
+    attributes:
+      label: 专业名称
+      description: 请填写完整专业名称
+      placeholder: 例如：材料科学与工程
+    validations:
+      required: true
+  - type: textarea
+    id: intro
+    attributes:
+      label: 专业简介
+      description: 用一两句话说明这个专业的学习重点
+      placeholder: 面向……方向，重点学习……
+    validations:
+      required: true
+  - type: textarea
+    id: roadmap
+    attributes:
+      label: 成长路线
+      description: 按学期列出阶段目标和任务
+      placeholder: |
+        大一上：……
+        - 任务 1
+        - 任务 2
+    validations:
+      required: true
+  - type: textarea
+    id: tools
+    attributes:
+      label: 学习资源
+      description: 每行一个资源，格式为“名称 | 网址 | 说明”
+      placeholder: |
+        中国大学MOOC | https://www.icourse163.org/ | 公开课
+    validations:
+      required: true
+  - type: textarea
+    id: contests
+    attributes:
+      label: 竞赛信息
+      description: 每行一个竞赛，格式为“名称 | 全称 | 网址 | 预计时间 | 说明”
+    validations:
+      required: false
