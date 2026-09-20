@@ -2267,6 +2267,306 @@
     updatedAt: 0
   };
 
+  const BUILTIN_CS = {
+    id: 'cs',
+    name: '计算机科学与技术',
+    intro: '面向软件、算法、系统与 Web/后端方向，按 8 个学期从 C 语言与数据结构起步，逐步覆盖操作系统、计算机网络、数据库、软件工程、AI 入门与项目竞赛。',
+    roadmap: [
+      {
+        year: '大一上',
+        title: '专业认知与 C 语言起步',
+        goal: '完成高中到大学的转型，掌握 C 语言和基础编程习惯',
+        items: [
+          '浏览计算机学院培养方案，标注核心课程、学分和毕业要求',
+          'C 语言：学完变量、分支、循环、数组、函数和指针基础',
+          '配置编译环境并独立调试 3 个小程序',
+          '学习 Git 基础，建立 GitHub 账号并创建第一个代码仓库',
+          '高等数学与线性代数跟课，建立每周做题和错题整理习惯',
+          '参加 1 次编程入门讲座或新生赛，了解算法竞赛路线'
+        ]
+      },
+      {
+        year: '大一下',
+        title: 'C++ 与数据结构入门',
+        goal: '掌握 C++ 与基础数据结构，开始系统刷题',
+        items: [
+          'C++：学完类、对象、STL 容器和常用算法',
+          '数据结构：掌握顺序表、链表、栈和队列的存储结构与实现',
+          '算法：学完二分、排序、递归与基础复杂度分析',
+          '在洛谷或 LeetCode 完成 30 道基础题，记录题解',
+          'Python 基础：列表、字典、函数和文件处理，完成 1 个小脚本',
+          '参加蓝桥杯或程序设计新生赛，完成组队与报名'
+        ]
+      },
+      {
+        year: '大二上',
+        title: '算法进阶与数据库',
+        goal: '系统掌握算法与数据结构，打通数据库基础',
+        items: [
+          '数据结构进阶：树、图、哈希表和优先队列',
+          '算法进阶：动态规划、贪心、图遍历与最短路',
+          '数据库：学完关系模型、SQL 查询、连接与聚合',
+          '使用 SQLZoo 或牛客 SQL 题练手，完成至少 50 题',
+          'Codeforces 或牛客周赛刷题，整理模板和错题本',
+          '阅读 1 篇数据结构或算法方向中文综述，画知识地图'
+        ]
+      },
+      {
+        year: '大二下',
+        title: '计算机系统与 Web 基础',
+        goal: '建立计算机系统认知，完成第一个 Web 小作品',
+        items: [
+          '计算机组成原理：掌握数据表示、运算器、存储层次与指令系统',
+          '操作系统入门：进程、线程、内存与文件系统基本概念',
+          '计算机网络：掌握分层模型、IP、TCP、UDP 与 HTTP',
+          'Web 前端：HTML、CSS、JavaScript 完成 1 个响应式页面',
+          '软件工程：理解需求分析、版本管理、测试与文档',
+          '完成 1 个课程设计小项目并推到 GitHub，写 README'
+        ]
+      },
+      {
+        year: '大三上',
+        title: '系统深入与后端项目',
+        goal: '深入操作系统与网络，完成第一个后端服务',
+        items: [
+          '操作系统：学完同步互斥、调度、虚拟内存与磁盘',
+          '计算机网络：学完 DNS、HTTP/HTTPS、Socket 编程与常见协议',
+          '数据库进阶：索引、事务、SQL 优化与简单后端 CRUD',
+          '后端开发：选择 Java/Spring 或 Python/FastAPI 完成 1 个 API 服务',
+          '参与蓝桥杯国赛、ICPC/CCPC 区域赛或校队训练',
+          '启动 1 个 Web/后端综合项目，完成需求、架构和数据库设计'
+        ]
+      },
+      {
+        year: '大三下',
+        title: 'AI 入门与项目竞赛',
+        goal: '接触 AI 基础，把项目与竞赛经历沉淀为作品集',
+        items: [
+          'AI 入门：机器学习基础概念，完成 numpy/pandas/scikit-learn 小实验',
+          '完成 Web/后端项目，联调前端、部署并写测试',
+          '软件工程实践：用 Git 分支、Code Review 和 CI 协作开发',
+          '参加中国大学生计算机设计大赛或项目类竞赛',
+          '整理 GitHub 作品集，补充架构图、演示视频和文档',
+          '投递暑期实习或科研训练，更新简历并复盘面试'
+        ]
+      },
+      {
+        year: '大四上',
+        title: '毕设与去向冲刺',
+        goal: '完成毕业设计开题，同步推进考研、保研或就业',
+        items: [
+          '毕业设计：完成选题、文献综述与开题报告',
+          '确定考研、保研、就业或留学主方案并制定月度日历',
+          '秋招投递、考研报名、夏令营联系导师三线并行',
+          '刷 LeetCode 高频题与专业面试题，模拟面试',
+          '完善简历，把项目、竞赛和实习写成量化成果',
+          '整理四年课程笔记与项目源码，建立个人资源库'
+        ]
+      },
+      {
+        year: '大四下',
+        title: '答辩与四年复盘',
+        goal: '完成毕设答辩与毕业手续，沉淀可复用的学习资源',
+        items: [
+          '完成毕设核心实现、测试与中期检查',
+          '撰写毕业论文并准备答辩 PPT',
+          '办理学分、成绩单、档案等毕业手续',
+          '归档项目代码、论文、获奖证书和作品截图',
+          '给学弟学妹写 1 份课程与竞赛路线建议',
+          '做四年总复盘：目标、成果、遗憾与下一阶段计划'
+        ]
+      }
+    ],
+    tools: [
+      { tag: '算法', name: 'LeetCode', url: 'https://leetcode.cn/', desc: '算法面试与竞赛刷题，按标签分类练习并查看题解' },
+      { tag: '算法', name: '洛谷', url: 'https://www.luogu.com.cn/', desc: '竞赛题单、评测与题解社区，适合系统刷题' },
+      { tag: '算法', name: 'Codeforces', url: 'https://codeforces.com/', desc: '国际在线算法竞赛，定期参加比赛保持状态' },
+      { tag: '求职', name: '牛客网', url: 'https://www.nowcoder.com/', desc: '校招笔试面试、面经与在线练习，含企业真题' },
+      { tag: '课程', name: '中国大学MOOC', url: 'https://www.icourse163.org/', desc: '数据结构、操作系统、计算机网络、数据库等公开课' },
+      { tag: '文档', name: '菜鸟教程', url: 'https://www.runoob.com/', desc: 'C/C++、Python、SQL、Web 等入门文档' },
+      { tag: '代码', name: 'GitHub', url: 'https://github.com/', desc: '版本控制与个人作品集，归档课程项目与代码' },
+      { tag: '算法', name: 'OI Wiki', url: 'https://oi-wiki.org/', desc: '数据结构与算法知识库，适合系统复习和模板整理' },
+      { tag: '可视化', name: 'VisuAlgo', url: 'https://visualgo.net/zh', desc: '通过动画理解排序、图、树等经典算法' },
+      { tag: 'Web', name: 'MDN Web Docs', url: 'https://developer.mozilla.org/zh-CN/', desc: 'HTML、CSS、JavaScript 与 Web 标准权威文档' },
+      { tag: '数据库', name: 'SQLZoo', url: 'https://sqlzoo.net/', desc: '在线 SQL 练习，掌握查询、连接、聚合与子查询' },
+      { tag: '竞赛', name: '蓝桥杯官网', url: 'https://dasai.lanqiao.cn/', desc: '蓝桥杯报名、真题与训练资源，软件类主打算法' }
+    ],
+    contests: [
+      {
+        name: '蓝桥杯',
+        full: '蓝桥杯全国软件和信息技术专业人才大赛',
+        url: 'https://dasai.lanqiao.cn/',
+        date: '2027-04-01',
+        note: '软件类以 C/C++ 算法为主，个人赛制易上手，适合本科阶段持续参加'
+      },
+      {
+        name: 'ICPC/CCPC',
+        full: '国际大学生程序设计竞赛（ICPC）/中国大学生程序设计竞赛（CCPC）',
+        url: 'https://icpc.global/',
+        date: '2027-09-01',
+        note: 'CCPC 官网为 https://ccpc.io/，区域赛通常通过校内 ACM 集训队统一报名'
+      },
+      {
+        name: '计算机设计大赛',
+        full: '中国大学生计算机设计大赛',
+        url: 'http://jsjds.blcu.edu.cn/index.htm',
+        date: '2027-04-01',
+        note: '按校赛、省赛、国赛逐级晋级，覆盖软件应用与开发、Web 与 AI 等赛道'
+      }
+    ],
+    updatedAt: 0
+  };
+
+  const BUILTIN_AUTOMATION = {
+    id: 'automation',
+    name: '自动化',
+    intro: '面向控制、电子、嵌入式与工业自动化方向，按 8 个学期从电路与 C 语言起步，逐步覆盖自动控制原理、现代控制理论、传感器、单片机、PLC、机器人、MATLAB/Simulink 与竞赛实践。',
+    roadmap: [
+      {
+        year: '大一上',
+        title: '电路分析与 C 语言起步',
+        goal: '打牢电路与编程基础，建立自动化专业认知',
+        items: [
+          '浏览自动化专业培养方案，标注核心课程与毕业要求',
+          '高等数学：学完极限、连续、导数与一元积分初步',
+          '电路分析：掌握 KCL、KVL、戴维南与叠加定理',
+          'C 语言：学完顺序、分支、循环、数组、函数与指针基础',
+          '用万用表和面包板完成电阻、电容、二极管基础实验',
+          '学习 Git 基础，建立 GitHub 账号归档实验与笔记'
+        ]
+      },
+      {
+        year: '大一下',
+        title: '模数电子与信号起步',
+        goal: '掌握模拟与数字电路，建立信号与系统概念',
+        items: [
+          '模拟电子技术：学完二极管、三极管放大电路与负反馈',
+          '数字电子技术：学完组合逻辑、触发器、计数器与状态机',
+          '信号与系统：学完 LTI 系统、卷积与傅里叶变换概念',
+          'C 语言进阶：结构体、链表与文件读写，完成课程设计',
+          '用 Arduino 完成 1 个传感器小作品（温湿度、超声波等）',
+          '制定暑假计划：MATLAB 入门、电赛基础训练、英语'
+        ]
+      },
+      {
+        year: '大二上',
+        title: '自动控制与 MATLAB',
+        goal: '进入控制理论核心，会用 MATLAB/Simulink 做仿真',
+        items: [
+          '自动控制原理：学完传递函数、时域分析、根轨迹与频域分析',
+          '用 MATLAB/Simulink 搭建一阶、二阶系统并做阶跃响应仿真',
+          '传感器与检测技术：掌握温度、压力、位移、光电等常见传感器',
+          '学习 PID 控制概念，完成 1 个仿真调参实验',
+          '数字电子课程设计：设计计数器或状态机并仿真',
+          '加入电子设计或智能车兴趣小组，找 1-2 位队友'
+        ]
+      },
+      {
+        year: '大二下',
+        title: '单片机与嵌入式',
+        goal: '掌握单片机与嵌入式开发，走通硬件到代码的完整流程',
+        items: [
+          '单片机：掌握 GPIO、中断、定时器、PWM、ADC 与串口',
+          '嵌入式系统：学习 STM32 标准库/HAL 库，跑通编译下载流程',
+          '信号与系统：学完采样、拉普拉斯变换与系统函数',
+          '用 STM32 完成 PWM 调速、ADC 采集和串口调试小项目',
+          'PLC 入门：理解梯形图、IO、定时器和计数器的基本概念',
+          '参加电赛或智能车校赛，完成选题、分工与基础调试'
+        ]
+      },
+      {
+        year: '大三上',
+        title: '现代控制与机器人',
+        goal: '掌握现代控制理论，跑通机器人仿真与多任务嵌入式开发',
+        items: [
+          '现代控制理论：学完状态空间描述、能控性、能观性与极点配置',
+          '嵌入式进阶：学习 FreeRTOS 或实时调度基础，完成多任务小实验',
+          '机器人：学习 ROS 节点、话题、服务，跑通 TurtleBot 仿真',
+          '用 MATLAB/Simulink 完成状态反馈控制器设计仿真',
+          '电赛或智能车省赛作品开发，完成硬件、算法与联调',
+          '阅读 1 篇控制或机器人方向中文综述，明确方向'
+        ]
+      },
+      {
+        year: '大三下',
+        title: 'PLC 与工业控制',
+        goal: '掌握 PLC 与工业控制，把竞赛和项目沉淀为作品集',
+        items: [
+          'PLC 进阶：完成顺序控制、模拟量、PID 与触摸屏/组态基础实验',
+          '工业控制：理解现场总线、伺服、变频器和典型控制回路',
+          '完成机器人或嵌入式综合项目，写文档、演示视频和测试报告',
+          '竞赛作品收尾，提交并复盘技术点',
+          '投递暑期实习、科研训练或夏令营申请',
+          '整理 GitHub 作品集，形成电路、嵌入式、控制项目案例'
+        ]
+      },
+      {
+        year: '大四上',
+        title: '毕设与去向冲刺',
+        goal: '完成毕业设计开题，同步推进考研、保研或就业',
+        items: [
+          '毕业设计：完成选题、文献调研与开题报告',
+          '确定考研、保研、就业或留学方向并制定月度日历',
+          '秋招投递、考研报名、联系导师三线并行',
+          '完善简历，把竞赛、项目和实习写成量化成果',
+          '针对目标岗位刷笔试与专业面试题（控制、嵌入式、PLC）',
+          '整理四年课程笔记、电路图和项目源码'
+        ]
+      },
+      {
+        year: '大四下',
+        title: '答辩与四年复盘',
+        goal: '完成毕设答辩与毕业手续，沉淀可复用的工程经验',
+        items: [
+          '完成毕设核心实现、调试与中期检查',
+          '撰写毕业论文并准备答辩 PPT',
+          '办理学分、成绩单、档案等毕业手续',
+          '归档代码、电路图、仿真文件、论文与获奖材料',
+          '给学弟学妹写 1 份路线建议（课程、工具、竞赛）',
+          '做四年总复盘：目标、成果、遗憾与下一阶段计划'
+        ]
+      }
+    ],
+    tools: [
+      { tag: '课程', name: '中国大学MOOC', url: 'https://www.icourse163.org/', desc: '电路、模拟/数字电子、自动控制原理、信号与系统等公开课' },
+      { tag: '仿真', name: 'MATLAB', url: 'https://www.mathworks.com/products/matlab.html', desc: '矩阵计算、控制系统设计与数据分析，自动控制课程常用' },
+      { tag: '仿真', name: 'Simulink', url: 'https://www.mathworks.com/products/simulink.html', desc: '框图建模仿真，搭建电机、PID 与控制系统模型' },
+      { tag: '单片机', name: 'STM32', url: 'https://www.st.com/en/microcontrollers-microprocessors/stm32-32-bit-arm-cortex-mcus.html', desc: 'ST 官方 STM32 产品、数据手册与开发工具入口' },
+      { tag: '开源硬件', name: 'Arduino', url: 'https://www.arduino.cc/', desc: '开源硬件平台与官方教程，适合传感器和快速原型' },
+      { tag: '机器人', name: 'ROS Docs', url: 'https://docs.ros.org/', desc: '机器人操作系统官方文档，从概念到节点、话题和服务' },
+      { tag: 'PLC', name: '西门子工业支持中心', url: 'https://support.industry.siemens.com/cs/cn/zh/', desc: '西门子 PLC、工业自动化资料、手册与技术支持入口' },
+      { tag: 'EDA', name: 'KiCad', url: 'https://www.kicad.org/', desc: '开源原理图与 PCB 设计，适合课程设计与电子制作' },
+      { tag: '社区', name: '与非网 EEFOCUS', url: 'https://www.eefocus.com/', desc: '电子与自动化行业资讯、教程和社区讨论' },
+      { tag: '竞赛', name: '电子设计竞赛培训网', url: 'https://www.nuedc-training.com.cn/', desc: '电赛官方培训平台，历年赛题、通知与培训资源' },
+      { tag: '视频', name: 'B站学习区', url: 'https://www.bilibili.com/', desc: '搜索“自动控制原理”“嵌入式”“PLC”等课程与实验视频' },
+      { tag: '代码', name: 'GitHub', url: 'https://github.com/', desc: '版本管理与个人作品集，归档嵌入式、控制与机器人项目' }
+    ],
+    contests: [
+      {
+        name: '电赛',
+        full: '全国大学生电子设计竞赛',
+        url: 'https://www.nuedc-training.com.cn/',
+        date: '2027-08-01',
+        note: '偶数年全国赛、奇数年省赛或邀请赛，强调硬件与系统设计'
+      },
+      {
+        name: '智能汽车竞赛',
+        full: '全国大学生智能汽车竞赛',
+        url: 'https://www.smartcar.zone/',
+        date: '2027-07-01',
+        note: '涵盖竞速组、创意组等赛道，是嵌入式与自动控制的核心实践赛事'
+      },
+      {
+        name: '中国机器人大赛',
+        full: '中国机器人大赛暨 RoboCup 机器人世界杯中国赛',
+        url: 'https://rcccaa.drct-caa.org.cn/',
+        date: '2027-08-01',
+        note: '中国自动化学会主办，涵盖服务机器人、空中机器人、RoboCup 等赛项'
+      }
+    ],
+    updatedAt: 0
+  };
+
   function normalizeProfile(p) {
     if (!p || typeof p !== 'object') return null;
     function safeExternalUrl(value) {
@@ -2346,7 +2646,7 @@
   }
 
   function allProfiles() {
-    return [BUILTIN_IC, BUILTIN_FINANCE, BUILTIN_MICROELECTRONICS, BUILTIN_MANAGEMENT].concat(customProfiles);
+    return [BUILTIN_IC, BUILTIN_FINANCE, BUILTIN_MICROELECTRONICS, BUILTIN_MANAGEMENT, BUILTIN_CS, BUILTIN_AUTOMATION].concat(customProfiles);
   }
 
   function getProfile(id) {
@@ -2354,7 +2654,7 @@
   }
 
   function isBuiltin(id) {
-    return ['ic', 'finance', 'microelectronics', 'management'].indexOf(id) !== -1;
+    return ['ic', 'finance', 'microelectronics', 'management', 'cs', 'automation'].indexOf(id) !== -1;
   }
 
   function encodeBase64Url(str) {
