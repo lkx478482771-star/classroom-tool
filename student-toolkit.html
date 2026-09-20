@@ -458,6 +458,7 @@
     </a>
     <nav class="nav-links" aria-label="页面导航">
       <a href="#home" class="active" aria-current="page">总览</a>
+      <a href="#search">搜索</a>
       <a href="#majorManager">我的专业</a>
       <a href="#countdown">倒计时</a>
       <a href="#calendar">校历</a>
@@ -532,6 +533,16 @@
         <h3>数据备份</h3>
         <p>导出和恢复本机上的全部数据</p>
       </a>
+    </div>
+  </section>
+
+  <section class="section" id="search">
+    <div class="card">
+      <h2><svg class="icon"><use href="#icon-search"></use></svg>全局搜索</h2>
+      <label class="visually-hidden" for="globalSearchInput">搜索任务、竞赛、资源或模块</label>
+      <input class="input" id="globalSearchInput" type="search" placeholder="搜索任务、竞赛、资源或模块..." autocomplete="off">
+      <div class="search-results" id="searchResults"></div>
+      <p class="hint" style="margin-top:10px">搜索范围：当前专业的成长任务、竞赛、学习资源和页面模块。</p>
     </div>
   </section>
 
@@ -2088,6 +2099,7 @@
     renderRoadmap();
     renderTools();
     renderContests();
+    renderSearchResults($('globalSearchInput').value);
   }
 
   $('majorSelect').addEventListener('change', function () {
@@ -2416,6 +2428,140 @@
     if (!btn) return;
     quickAdd(btn.dataset.name, btn.dataset.date);
   });
+
+  // ---------- 全局搜索 ----------
+  const SEARCH_MODULES = [
+    { id: 'majorManager', title: '我的专业', desc: '切换、新建、复制或导出专业模板' },
+    { id: 'countdown', title: '考试倒计时', desc: '添加考试和重要日期，自动倒计时' },
+    { id: 'calendar', title: '校历', desc: '秋季春季学期、节假日与重要节点' },
+    { id: 'major', title: '专业路线', desc: '按专业查看阶段任务和成长路线' },
+    { id: 'contest', title: '竞赛日历', desc: '查看竞赛信息和报名节点' },
+    { id: 'tools', title: '学习导航', desc: '课程、文献、社区与常用学习资源' },
+    { id: 'nav', title: '校园导航', desc: '校园入口与专业资源网站' },
+    { id: 'backup', title: '数据备份', desc: '导出和恢复本机上的全部数据' }
+  ];
+
+  function buildSearchIndex() {
+    const items = [];
+    SEARCH_MODULES.forEach(function (item) {
+      items.push({
+        type: '模块',
+        title: item.title,
+        desc: item.desc,
+        meta: '页面模块',
+        href: '#' + item.id
+      });
+    });
+    roadmapData.forEach(function (stage, si) {
+      stage.items.forEach(function (task, ii) {
+        const key = activeMajorId + '_' + si + '_' + ii;
+        items.push({
+          type: '任务',
+          title: task,
+          desc: stage.year + ' · ' + stage.title + ' · ' + stage.goal,
+          meta: roadmapDone[key] ? '已完成' : '未完成',
+          href: '#major'
+        });
+      });
+    });
+    toolData.forEach(function (tool) {
+      items.push({
+        type: '资源',
+        title: tool.name,
+        desc: tool.desc,
+        meta: tool.tag,
+        url: tool.url
+      });
+    });
+    contestData.forEach(function (contest) {
+      items.push({
+        type: '竞赛',
+        title: contest.name + ' · ' + contest.full,
+        desc: contest.note,
+        meta: contest.date,
+        contest: contest
+      });
+    });
+    return items;
+  }
+
+  function renderSearchResults(query) {
+    const box = $('searchResults');
+    const keyword = String(query || '').trim().toLowerCase();
+    clearNode(box);
+    if (!keyword) {
+      box.appendChild(el('div', {
+        className: 'search-empty',
+        textContent: '输入关键词开始搜索。'
+      }));
+      return;
+    }
+    const matches = buildSearchIndex().filter(function (item) {
+      return [item.title, item.desc, item.meta, item.type].join(' ').toLowerCase().indexOf(keyword) !== -1;
+    }).slice(0, 30);
+    if (!matches.length) {
+      box.appendChild(el('div', {
+        className: 'search-empty',
+        textContent: '没有找到匹配结果。'
+      }));
+      return;
+    }
+    matches.forEach(function (item) {
+      const card = el('div', { className: 'search-item' });
+      const head = el('div', { className: 'search-item-head' });
+      head.appendChild(el('span', { className: 'search-item-title', textContent: item.title }));
+      head.appendChild(el('span', { className: 'search-item-meta', textContent: item.type + ' · ' + item.meta }));
+      card.appendChild(head);
+      if (item.desc) card.appendChild(el('p', { className: 'search-item-desc', textContent: item.desc }));
+      const actions = el('div', { className: 'search-item-actions' });
+      if (item.href) {
+        actions.appendChild(el('a', {
+          href: item.href,
+          textContent: '打开模块',
+          dataset: { action: 'search-goto', target: item.href.slice(1) }
+        }));
+      }
+      if (item.url) {
+        actions.appendChild(el('a', {
+          href: item.url,
+          target: '_blank',
+          rel: 'noopener noreferrer',
+          textContent: '打开网站'
+        }));
+      }
+      if (item.contest) {
+        actions.appendChild(el('button', {
+          type: 'button',
+          className: 'btn btn-soft btn-sm',
+          textContent: '加入倒计时',
+          dataset: {
+            action: 'search-countdown',
+            name: item.contest.name + ' · ' + item.contest.full,
+            date: item.contest.date
+          }
+        }));
+      }
+      if (actions.children.length) card.appendChild(actions);
+      box.appendChild(card);
+    });
+  }
+
+  $('globalSearchInput').addEventListener('input', function () {
+    renderSearchResults(this.value);
+  });
+
+  $('searchResults').addEventListener('click', function (event) {
+    const goto = event.target.closest('[data-action="search-goto"]');
+    if (goto) {
+      event.preventDefault();
+      switchView(goto.dataset.target);
+      return;
+    }
+    const countdown = event.target.closest('[data-action="search-countdown"]');
+    if (countdown) quickAdd(countdown.dataset.name, countdown.dataset.date);
+  });
+
+  renderSearchResults('');
 
   // ---------- 身份与关键日期 ----------
   const PROFILE_KEY = 'gradeData';
