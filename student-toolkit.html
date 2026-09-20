@@ -463,6 +463,7 @@
       <a href="#countdown">倒计时</a>
       <a href="#reminders">提醒</a>
       <a href="#calendar">校历</a>
+      <a href="#timetable">课表</a>
       <a href="#major">专业路线</a>
       <a href="#contest">竞赛</a>
       <a href="#tools">学习导航</a>
@@ -482,14 +483,14 @@
     <div class="home-hero">
       <span class="home-kicker">AHU STUDENT TOOLKIT</span>
       <h2>安大学生工具箱</h2>
-      <p>专业路线、校历、考试倒计时、竞赛日历、学习导航和课堂整理集中在一个工作台。选择下面的模块直接进入，功能数据保存在本机浏览器中。</p>
+      <p>专业路线、校历、课表、考试倒计时、竞赛日历、学习导航和课堂整理集中在一个工作台。选择下面的模块直接进入，功能数据保存在本机浏览器中。</p>
       <div class="home-actions">
         <a class="btn btn-primary" href="#major">查看专业成长路线</a>
         <a class="btn btn-secondary" href="#calendar">打开校历</a>
         <button type="button" class="btn btn-secondary" id="openWelcomeBtn">使用说明</button>
       </div>
       <div class="home-stats">
-        <div class="home-stat"><strong id="homeModuleCount">8</strong><span>常用模块</span></div>
+        <div class="home-stat"><strong id="homeModuleCount">9</strong><span>常用模块</span></div>
         <div class="home-stat"><strong id="homeStageCount">16</strong><span>成长阶段</span></div>
         <div class="home-stat"><strong id="homeTaskCount">96</strong><span>可勾选任务</span></div>
       </div>
@@ -509,6 +510,11 @@
         <span class="home-card-icon"><svg class="icon icon-xl"><use href="#icon-calendar"></use></svg></span>
         <h3>校历</h3>
         <p>秋季春季学期、节假日与重要节点</p>
+      </a>
+      <a class="home-card" href="#timetable">
+        <span class="home-card-icon"><svg class="icon icon-xl"><use href="#icon-list"></use></svg></span>
+        <h3>课表导入</h3>
+        <p>粘贴课表文本，按星期查看课程</p>
       </a>
       <a class="home-card" href="#major">
         <span class="home-card-icon"><svg class="icon icon-xl"><use href="#icon-book"></use></svg></span>
@@ -645,6 +651,56 @@
         <ul class="official-notes" id="officialNotes"></ul>
       </details>
       <p class="hint">二学期制：秋季20周 + 寒假31天 + 春季20周 + 暑假7.5周；法定节假日具体放假时间另行通知。</p>
+    </div>
+  </section>
+
+  <section class="section" id="timetable">
+    <div class="card">
+      <h2><svg class="icon"><use href="#icon-calendar"></use></svg>课表导入</h2>
+      <p class="section-intro">粘贴智慧安大或其他课表文本，自动识别课程名、星期、时间和地点；也可以手动添加。</p>
+      <label class="field">
+        <span class="label">粘贴课表文本</span>
+        <textarea class="textarea" id="timetableText" rows="5" placeholder="示例：&#10;高等数学    周一    08:00-09:40    A101&#10;大学物理    周三    第3-4节    教学楼B203"></textarea>
+      </label>
+      <div class="result-actions">
+        <button type="button" class="btn btn-primary btn-sm" id="parseTimetableBtn">解析并保存</button>
+        <button type="button" class="btn btn-danger btn-sm" id="clearTimetableBtn">清空课表</button>
+      </div>
+      <div class="editor-section">
+        <div class="editor-section-head">
+          <h4>手动添加课程</h4>
+        </div>
+        <label class="field">
+          <span class="label">课程名</span>
+          <input class="input" id="ttName" placeholder="例如：高等数学" autocomplete="off">
+        </label>
+        <label class="field">
+          <span class="label">星期</span>
+          <select class="select" id="ttWeekday">
+            <option value="周一">周一</option>
+            <option value="周二">周二</option>
+            <option value="周三">周三</option>
+            <option value="周四">周四</option>
+            <option value="周五">周五</option>
+            <option value="周六">周六</option>
+            <option value="周日">周日</option>
+          </select>
+        </label>
+        <label class="field">
+          <span class="label">时间</span>
+          <input class="input" id="ttTime" placeholder="例如：08:00-09:40 或 第1-2节" autocomplete="off">
+        </label>
+        <label class="field">
+          <span class="label">地点</span>
+          <input class="input" id="ttLocation" placeholder="例如：A101" autocomplete="off">
+        </label>
+        <div class="result-actions">
+          <button type="button" class="btn btn-secondary btn-sm" id="addTimetableBtn">添加课程</button>
+        </div>
+      </div>
+      <div id="timetableToday"></div>
+      <div id="timetableList"></div>
+      <p class="hint" style="margin-top:10px">解析结果保存在当前浏览器，建议定期使用“数据备份”导出。</p>
     </div>
   </section>
 
@@ -1261,6 +1317,194 @@
     event.preventDefault();
     addCountdown();
   });
+
+  // ---------- 课表 ----------
+  const TIMETABLE_KEY = 'ahutTimetable';
+  const WEEKDAYS = ['周一', '周二', '周三', '周四', '周五', '周六', '周日'];
+  let timetableState = [];
+  try {
+    const rawTimetable = localStorage.getItem(TIMETABLE_KEY);
+    const parsedTimetable = rawTimetable ? JSON.parse(rawTimetable) : [];
+    timetableState = Array.isArray(parsedTimetable) ? parsedTimetable : [];
+  } catch (err) {
+    timetableState = [];
+  }
+
+  function saveTimetable() {
+    try {
+      localStorage.setItem(TIMETABLE_KEY, JSON.stringify(timetableState));
+    } catch (err) {
+      showToast('本地存储不可用', true);
+    }
+  }
+
+  function normalizeWeekday(text) {
+    const value = String(text || '').trim();
+    const match = value.match(/(周[一二三四五六日天]|星期[一二三四五六日天]|礼拜[一二三四五六日天]|周[1-7])/);
+    if (!match) return '';
+    const raw = match[1];
+    const map = {
+      '周1': '周一', '周2': '周二', '周3': '周三', '周4': '周四',
+      '周5': '周五', '周6': '周六', '周7': '周日'
+    };
+    if (map[raw]) return map[raw];
+    if (raw.indexOf('天') !== -1) return '周日';
+    return raw.replace('星期', '周').replace('礼拜', '周');
+  }
+
+  function extractTime(text) {
+    const value = String(text || '');
+    const match = value.match(/(\d{1,2}[:：]\d{2}\s*[-~至]\s*\d{1,2}[:：]\d{2})|(第?\d{1,2}\s*[-~,，至]\s*\d{1,2}\s*节)/);
+    return match ? match[0].replace(/：/g, ':') : '';
+  }
+
+  function parseTimetableLine(line) {
+    const raw = String(line || '').trim();
+    if (!raw) return null;
+    const weekdayMatch = raw.match(/(周[一二三四五六日天]|星期[一二三四五六日天]|礼拜[一二三四五六日天]|周[1-7])/);
+    const weekday = weekdayMatch ? normalizeWeekday(weekdayMatch[0]) : '';
+    if (!weekday) return null;
+    const time = extractTime(raw);
+    let location = '';
+    const atMatch = raw.match(/@\s*([^\s\t,，;；]+)/);
+    if (atMatch) {
+      location = atMatch[1];
+    } else {
+      const locMatch = raw.match(/([A-Za-z]{1,4}-?\d{2,4}[A-Za-z]?|[东南西北]-?\d{2,4}|[^\s\t,，;；]*(?:教室|实验室|楼|室|校区|馆|中心)[^\s\t,，;；]*)/);
+      if (locMatch) location = locMatch[1];
+    }
+    let name = raw;
+    [weekdayMatch && weekdayMatch[0], time, atMatch && atMatch[0], location].forEach(function (token) {
+      if (token) name = name.replace(token, ' ');
+    });
+    name = name.replace(/[\t,，;；|]+/g, ' ').replace(/\s+/g, ' ').trim();
+    if (!name) return null;
+    return {
+      id: 't' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+      name: name,
+      weekday: weekday,
+      time: time,
+      location: location,
+      raw: raw
+    };
+  }
+
+  function timetableCourseRow(course) {
+    const row = el('div', { className: 'timetable-course' });
+    row.appendChild(el('span', { className: 'timetable-course-name', textContent: course.name }));
+    row.appendChild(el('span', {
+      className: 'timetable-course-meta',
+      textContent: [course.time, course.location].filter(Boolean).join(' · ') || '时间地点待定'
+    }));
+    row.appendChild(el('button', {
+      type: 'button',
+      className: 'btn btn-danger btn-sm',
+      textContent: '删除',
+      dataset: { action: 'delete-timetable', id: course.id }
+    }));
+    return row;
+  }
+
+  function renderTimetable() {
+    const todayBox = $('timetableToday');
+    const listBox = $('timetableList');
+    clearNode(todayBox);
+    clearNode(listBox);
+    if (!timetableState.length) {
+      listBox.appendChild(el('div', {
+        className: 'search-empty',
+        textContent: '暂无课程。可以粘贴课表文本或手动添加。'
+      }));
+      return;
+    }
+    const todayIndex = (new Date().getDay() + 6) % 7;
+    const todayName = WEEKDAYS[todayIndex];
+    const todayCourses = timetableState.filter(function (course) { return course.weekday === todayName; });
+    if (todayCourses.length) {
+      const todayCard = el('div', { className: 'timetable-today' });
+      todayCard.appendChild(el('h4', { textContent: '今天 · ' + todayName }));
+      todayCourses.forEach(function (course) { todayCard.appendChild(timetableCourseRow(course)); });
+      todayBox.appendChild(todayCard);
+    }
+    WEEKDAYS.forEach(function (day) {
+      const courses = timetableState.filter(function (course) { return course.weekday === day; });
+      if (!courses.length) return;
+      const card = el('div', { className: 'timetable-day' });
+      card.appendChild(el('h4', { textContent: day }));
+      courses.forEach(function (course) { card.appendChild(timetableCourseRow(course)); });
+      listBox.appendChild(card);
+    });
+  }
+
+  function parseTimetableInput() {
+    const lines = $('timetableText').value.split(/\r?\n/).map(function (line) { return line.trim(); }).filter(Boolean);
+    if (!lines.length) {
+      showToast('请先粘贴课表文本', true);
+      return;
+    }
+    let added = 0;
+    let skipped = 0;
+    lines.forEach(function (line) {
+      const course = parseTimetableLine(line);
+      if (course) {
+        timetableState.push(course);
+        added += 1;
+      } else {
+        skipped += 1;
+      }
+    });
+    saveTimetable();
+    renderTimetable();
+    renderSearchResults($('globalSearchInput').value);
+    $('timetableText').value = '';
+    showToast('已添加 ' + added + ' 门课程' + (skipped ? '，跳过 ' + skipped + ' 行' : ''));
+  }
+
+  $('parseTimetableBtn').addEventListener('click', parseTimetableInput);
+  $('addTimetableBtn').addEventListener('click', function () {
+    const name = $('ttName').value.trim();
+    if (!name) {
+      showToast('请填写课程名', true);
+      return;
+    }
+    timetableState.push({
+      id: 't' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+      name: name,
+      weekday: $('ttWeekday').value,
+      time: $('ttTime').value.trim(),
+      location: $('ttLocation').value.trim(),
+      raw: ''
+    });
+    saveTimetable();
+    renderTimetable();
+    renderSearchResults($('globalSearchInput').value);
+    $('ttName').value = '';
+    $('ttTime').value = '';
+    $('ttLocation').value = '';
+    showToast('课程已添加');
+  });
+  $('clearTimetableBtn').addEventListener('click', function () {
+    if (!timetableState.length) {
+      showToast('课表已经是空的');
+      return;
+    }
+    if (!confirm('确定清空全部课程？')) return;
+    timetableState = [];
+    saveTimetable();
+    renderTimetable();
+    renderSearchResults($('globalSearchInput').value);
+    showToast('课表已清空');
+  });
+  $('timetableList').addEventListener('click', function (event) {
+    const button = event.target.closest('button[data-action="delete-timetable"]');
+    if (!button) return;
+    timetableState = timetableState.filter(function (course) { return course.id !== button.dataset.id; });
+    saveTimetable();
+    renderTimetable();
+    renderSearchResults($('globalSearchInput').value);
+    showToast('课程已删除');
+  });
+  renderTimetable();
 
   // ---------- 时钟 ----------
   function pad2(value) { return String(value).padStart(2, '0'); }
@@ -3163,6 +3407,15 @@
         url: tool.url
       });
     });
+    timetableState.forEach(function (course) {
+      items.push({
+        type: '课程',
+        title: course.name,
+        desc: [course.weekday, course.time, course.location].filter(Boolean).join(' · '),
+        meta: '课表',
+        href: '#timetable'
+      });
+    });
     getMajorContests().forEach(function (contest) {
       items.push({
         type: '竞赛',
@@ -3643,6 +3896,7 @@
     'majorCustomContests',
     'gradeData',
     'cdData',
+    'ahutTimetable',
     'ahut_notifications_enabled',
     'dark_mode',
     'classroom_organizer',
