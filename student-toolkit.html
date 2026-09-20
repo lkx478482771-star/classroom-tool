@@ -639,6 +639,13 @@
       <h2><svg class="icon"><use href="#icon-target"></use></svg><span id="majorTitle">IC 四年成长路线</span></h2>
       <p class="section-intro" id="majorIntro">把大一到大四拆成可勾选的阶段目标，每完成一项就点一下，进度会保存在本机。</p>
       <div class="road-progress" id="roadProgress"></div>
+      <div class="road-filters" id="roadFilters">
+        <button type="button" class="road-filter active" data-filter="all">全部</button>
+        <button type="button" class="road-filter" data-filter="todo">未完成</button>
+        <button type="button" class="road-filter" data-filter="done">已完成</button>
+        <button type="button" class="road-filter" data-filter="current">当季任务</button>
+      </div>
+      <div class="road-summary" id="roadSummary"></div>
       <div class="major-grid" id="roadmapBox"></div>
     </div>
   </section>
@@ -1982,47 +1989,111 @@
   } catch (err) {
     roadmapDone = {};
   }
+  let roadFilter = 'all';
 
   function renderRoadmap() {
     const box = $('roadmapBox');
     const progress = $('roadProgress');
+    const summary = $('roadSummary');
     clearNode(box);
+    clearNode(summary);
     let doneCount = 0;
     let total = 0;
+    const yearStats = {};
+    const month = new Date().getMonth() + 1;
+    const currentTerm = (month >= 9 || month <= 1) ? '秋季' : '春季';
+    const currentTermAvailable = roadmapData.some(function (stage) {
+      return String(stage.year).indexOf(currentTerm) !== -1;
+    });
+    const currentFilterButton = document.querySelector('#roadFilters button[data-filter="current"]');
+    if (currentFilterButton) {
+      currentFilterButton.textContent = currentTermAvailable ? '当季 · ' + currentTerm : '当季（模板未分期）';
+    }
+
+    const stageStats = roadmapData.map(function (stage, si) {
+      let stageDone = 0;
+      stage.items.forEach(function (item, ii) {
+        const key = activeMajorId + '_' + si + '_' + ii;
+        if (roadmapDone[key]) stageDone += 1;
+      });
+      const stageTotal = stage.items.length;
+      doneCount += stageDone;
+      total += stageTotal;
+      const yearMatch = /大[一二三四]/.exec(stage.year);
+      const yearKey = yearMatch ? yearMatch[0] : '其他';
+      if (!yearStats[yearKey]) yearStats[yearKey] = { done: 0, total: 0 };
+      yearStats[yearKey].done += stageDone;
+      yearStats[yearKey].total += stageTotal;
+      return {
+        done: stageDone,
+        total: stageTotal,
+        pct: stageTotal ? Math.round(stageDone / stageTotal * 100) : 0
+      };
+    });
 
     roadmapData.forEach(function (stage, si) {
-      const card = el('div', { className: 'road-stage' });
+      const stats = stageStats[si];
+      const isCurrent = String(stage.year).indexOf(currentTerm) !== -1;
+      if (roadFilter === 'current' && currentTermAvailable && !isCurrent) return;
+      if (roadFilter === 'todo' && stats.done === stats.total) return;
+      if (roadFilter === 'done' && stats.done === 0) return;
+      const visibleItems = stage.items.map(function (item, ii) {
+        const key = activeMajorId + '_' + si + '_' + ii;
+        return { text: item, key: key, done: !!roadmapDone[key] };
+      }).filter(function (entry) {
+        if (roadFilter === 'todo') return !entry.done;
+        if (roadFilter === 'done') return entry.done;
+        return true;
+      });
+      if (!visibleItems.length) return;
+
+      const card = el('div', { className: 'road-stage' + (stats.pct < 50 ? ' lagging' : '') });
       const head = el('div', { className: 'road-head' });
       head.appendChild(el('span', { className: 'road-year', textContent: stage.year }));
       head.appendChild(el('span', { className: 'road-title', textContent: stage.title }));
+      head.appendChild(el('span', {
+        className: 'stage-progress' + (stats.pct < 50 ? ' warn' : ''),
+        textContent: stats.done + '/' + stats.total + ' · ' + stats.pct + '%'
+      }));
       card.appendChild(head);
       card.appendChild(el('p', { className: 'road-goal', textContent: stage.goal }));
 
       const list = el('ul', { className: 'road-list' });
-      stage.items.forEach(function (item, ii) {
-        const key = activeMajorId + '_' + si + '_' + ii;
-        const done = !!roadmapDone[key];
-        if (done) doneCount += 1;
-        total += 1;
-        const label = el('label', { className: done ? 'done' : '' });
-        const cb = el('input', { type: 'checkbox', dataset: { key: key } });
-        cb.checked = done;
+      visibleItems.forEach(function (entry) {
+        const label = el('label', { className: entry.done ? 'done' : '' });
+        const cb = el('input', { type: 'checkbox', dataset: { key: entry.key } });
+        cb.checked = entry.done;
         label.appendChild(cb);
-        label.appendChild(el('span', { textContent: item }));
+        label.appendChild(el('span', { textContent: entry.text }));
         list.appendChild(label);
       });
       card.appendChild(list);
       box.appendChild(card);
     });
 
+    if (!box.children.length) {
+      box.appendChild(el('div', {
+        className: 'search-empty',
+        textContent: '当前筛选下没有任务。'
+      }));
+    }
+
     const pct = total ? Math.round(doneCount / total * 100) : 0;
     clearNode(progress);
-    progress.appendChild(el('span', { textContent: '已勾选 ' + doneCount + ' / ' + total + ' 项 · 进度 ' + pct + '%' }));
+    progress.appendChild(el('span', { textContent: '已勾选 ' + doneCount + ' / ' + total + ' 项 · 总进度 ' + pct + '%' }));
     const bar = el('span', { className: 'road-progress-bar' });
     const fill = el('i');
     fill.style.width = pct + '%';
     bar.appendChild(fill);
     progress.appendChild(bar);
+
+    Object.keys(yearStats).forEach(function (year) {
+      const stat = yearStats[year];
+      const yearPct = stat.total ? Math.round(stat.done / stat.total * 100) : 0;
+      summary.appendChild(el('span', {
+        textContent: year + ' ' + stat.done + '/' + stat.total + ' · ' + yearPct + '%'
+      }));
+    });
   }
 
   $('roadmapBox').addEventListener('change', function (event) {
@@ -2034,6 +2105,13 @@
     } catch (err) {
       showToast('本地存储不可用', true);
     }
+    renderRoadmap();
+  });
+
+  $('roadFilters').addEventListener('click', function (event) {
+    const button = event.target.closest('button[data-filter]');
+    if (!button) return;
+    roadFilter = button.dataset.filter;
     renderRoadmap();
   });
 
@@ -2123,6 +2201,7 @@
     renderMajorSelect();
     renderMajorManageInfo();
     updateHomeMajorStats(profile);
+    roadFilter = 'all';
     renderRoadmap();
     renderTools();
     renderContests();

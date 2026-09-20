@@ -1953,6 +1953,61 @@ a:hover {
   color: var(--text-3);
 }
 
+.road-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0 0 12px;
+}
+
+.road-filter {
+  padding: 5px 10px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--text-2);
+  font-size: 11px;
+  font-weight: 650;
+}
+
+.road-filter.active {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.road-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.road-summary span {
+  padding: 5px 9px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface-2);
+  color: var(--text-2);
+  font-size: 11px;
+}
+
+.road-stage.lagging {
+  border-color: var(--warn);
+}
+
+.stage-progress {
+  margin-left: auto;
+  color: var(--text-3);
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+.stage-progress.warn {
+  color: var(--warn);
+  font-weight: 650;
+}
+
 .calc-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
