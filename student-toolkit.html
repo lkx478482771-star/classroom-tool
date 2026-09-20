@@ -461,6 +461,7 @@
       <a href="#search">搜索</a>
       <a href="#majorManager">我的专业</a>
       <a href="#countdown">倒计时</a>
+      <a href="#reminders">提醒</a>
       <a href="#calendar">校历</a>
       <a href="#major">专业路线</a>
       <a href="#contest">竞赛</a>
@@ -583,6 +584,19 @@
         <input class="input" id="cdDate" type="date">
         <button type="submit" class="btn btn-primary">添加</button>
       </form>
+    </div>
+  </section>
+
+  <section class="section" id="reminders">
+    <div class="card">
+      <h2><svg class="icon"><use href="#icon-clock"></use></svg>到期提醒</h2>
+      <p class="section-intro">汇总倒计时和成长任务中的截止日期，临期和逾期事项会优先显示。</p>
+      <div id="reminderList"></div>
+      <div class="result-actions">
+        <button type="button" class="btn btn-primary btn-sm" id="enableNotifyBtn">开启浏览器提醒</button>
+        <button type="button" class="btn btn-secondary btn-sm" id="refreshReminderBtn">刷新提醒</button>
+      </div>
+      <p class="hint" style="margin-top:10px">浏览器提醒只在页面打开或浏览器仍在后台运行时有效，纯静态站点无法做服务器推送。</p>
     </div>
   </section>
 
@@ -1108,6 +1122,7 @@
 
   function renderCountdowns() {
     clearNode(countdownListEl);
+    renderReminders();
     if (countdownState.length === 0) {
       countdownListEl.appendChild(el('div', { className: 'empty' },
         [el('svg', { className: 'icon' },
@@ -2254,6 +2269,7 @@
         textContent: '暂缓/跳过 ' + pausedCount + ' 项'
       }));
     }
+    renderReminders();
   }
 
   $('roadmapBox').addEventListener('change', function (event) {
@@ -2341,6 +2357,139 @@
       closeTaskMeta();
     }
   });
+
+  // ---------- 到期提醒 ----------
+  const NOTIFY_KEY = 'ahut_notifications_enabled';
+
+  function reminderDaysUntil(dateText) {
+    const target = parseLocalDate(dateText);
+    if (!target) return null;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return Math.round((target - today) / 86400000);
+  }
+
+  function collectReminders() {
+    const reminders = [];
+    countdownState.forEach(function (item) {
+      const days = reminderDaysUntil(item.date);
+      if (days !== null) {
+        reminders.push({ type: '倒计时', title: item.name, date: item.date, days: days });
+      }
+    });
+    roadmapData.forEach(function (stage, si) {
+      stage.items.forEach(function (item, ii) {
+        const key = activeMajorId + '_' + si + '_' + ii;
+        if (roadmapDone[key]) return;
+        const meta = taskMeta[key] || {};
+        if (!meta.due || meta.status === 'paused' || meta.status === 'skipped') return;
+        const days = reminderDaysUntil(meta.due);
+        if (days !== null) {
+          reminders.push({ type: '任务', title: item, date: meta.due, days: days, key: key });
+        }
+      });
+    });
+    reminders.sort(function (a, b) { return a.days - b.days; });
+    return reminders;
+  }
+
+  function renderReminders() {
+    const box = $('reminderList');
+    if (!box) return;
+    clearNode(box);
+    const reminders = collectReminders();
+    if (!reminders.length) {
+      box.appendChild(el('div', {
+        className: 'search-empty',
+        textContent: '暂无带截止日期的提醒。可以在倒计时或任务详情中添加日期。'
+      }));
+      return;
+    }
+    reminders.slice(0, 30).forEach(function (reminder) {
+      const row = el('div', {
+        className: 'reminder-item'
+          + (reminder.days < 0 ? ' overdue' : (reminder.days <= 7 ? ' soon' : ''))
+      });
+      row.appendChild(el('span', { className: 'reminder-type', textContent: reminder.type }));
+      row.appendChild(el('span', { className: 'reminder-title', textContent: reminder.title }));
+      const dayText = reminder.days < 0
+        ? '已逾期 ' + Math.abs(reminder.days) + ' 天'
+        : (reminder.days === 0 ? '今天到期' : '还剩 ' + reminder.days + ' 天');
+      row.appendChild(el('span', {
+        className: 'reminder-date',
+        textContent: reminder.date + ' · ' + dayText
+      }));
+      const alreadyAdded = countdownState.some(function (item) {
+        return item.name === reminder.title && item.date === reminder.date;
+      });
+      if (reminder.type === '任务' && !alreadyAdded) {
+        row.appendChild(el('button', {
+          type: 'button',
+          className: 'btn btn-soft btn-sm',
+          textContent: '加入倒计时',
+          dataset: { action: 'add-reminder', name: reminder.title, date: reminder.date }
+        }));
+      }
+      box.appendChild(row);
+    });
+  }
+
+  function updateNotifyButton() {
+    const button = $('enableNotifyBtn');
+    if (!button) return;
+    let enabled = false;
+    try { enabled = localStorage.getItem(NOTIFY_KEY) === '1'; } catch (err) {}
+    button.textContent = enabled ? '浏览器提醒已开启' : '开启浏览器提醒';
+  }
+
+  function sendDueNotifications() {
+    if (!('Notification' in window) || Notification.permission !== 'granted') return;
+    let enabled = false;
+    try { enabled = localStorage.getItem(NOTIFY_KEY) === '1'; } catch (err) {}
+    if (!enabled) return;
+    const today = todayStamp();
+    let last = '';
+    try { last = localStorage.getItem('ahut_notification_last') || ''; } catch (err) {}
+    if (last === today) return;
+    const urgent = collectReminders().filter(function (item) { return item.days <= 7; });
+    if (!urgent.length) return;
+    const names = urgent.slice(0, 5).map(function (item) { return item.title; }).join('、');
+    new Notification('安大学生工具箱：有 ' + urgent.length + ' 个临期事项', {
+      body: names + (urgent.length > 5 ? ' 等' : '')
+    });
+    try { localStorage.setItem('ahut_notification_last', today); } catch (err) {}
+  }
+
+  function enableReminders() {
+    if (!('Notification' in window)) {
+      showToast('当前浏览器不支持通知', true);
+      return;
+    }
+    Notification.requestPermission().then(function (permission) {
+      if (permission === 'granted') {
+        try { localStorage.setItem(NOTIFY_KEY, '1'); } catch (err) {}
+        updateNotifyButton();
+        showToast('浏览器提醒已开启');
+        sendDueNotifications();
+      } else {
+        showToast('未获得通知权限', true);
+      }
+    });
+  }
+
+  $('enableNotifyBtn').addEventListener('click', enableReminders);
+  $('refreshReminderBtn').addEventListener('click', function () {
+    renderReminders();
+    showToast('提醒已刷新');
+  });
+  $('reminderList').addEventListener('click', function (event) {
+    const button = event.target.closest('button[data-action="add-reminder"]');
+    if (!button) return;
+    quickAdd(button.dataset.name, button.dataset.date);
+  });
+  renderReminders();
+  updateNotifyButton();
+  setTimeout(sendDueNotifications, 1200);
 
   function renderTools() {
     const box = $('toolBox');
@@ -3285,6 +3434,7 @@
     'majorTaskMeta',
     'gradeData',
     'cdData',
+    'ahut_notifications_enabled',
     'dark_mode',
     'classroom_organizer',
     'courseData'
