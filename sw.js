@@ -1,5 +1,5 @@
 const CACHE_PREFIX = 'ahutk-';
-const CACHE = CACHE_PREFIX + 'v14';
+const CACHE = CACHE_PREFIX + 'v15';
 const URLS = [
   './',
   './index.html',

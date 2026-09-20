@@ -6,6 +6,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#0f2e2d">
+<script>(function(){try{var d=localStorage.getItem('dark_mode')==='true';document.documentElement.dataset.theme=d?'dark':'light';var m=document.querySelector('meta[name="theme-color"]');if(m)m.content=d?'#0d0e13':'#0f2e2d';}catch(e){}})();</script>
 <meta name="description" content="安大学生工具箱：专业路线、校历、考试倒计时、竞赛日历、学习导航与课堂整理。">
 <title>安大学生工具箱</title>
 <link rel="canonical" href="https://lkx478482771-star.github.io/classroom-tool/">
@@ -24,6 +25,14 @@
     --home-teal: #0f766e;
     --home-teal-2: #14b8a6;
     --home-soft: #e6f4f1;
+  }
+
+  html[data-theme="dark"] {
+    --home-bg: #0d0e13;
+    --home-ink: #e8f3f1;
+    --home-teal: #2dd4bf;
+    --home-teal-2: #14b8a6;
+    --home-soft: #12302d;
   }
 
   body.home-page {
@@ -225,6 +234,83 @@
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 12px;
+  }
+
+  .theme-toggle {
+    padding: 6px 10px;
+    border-radius: 8px;
+    border: 1px solid rgba(15, 46, 45, 0.18);
+    background: #fff;
+    color: #3f4f4c;
+    font-size: 12px;
+    font-weight: 650;
+    white-space: nowrap;
+  }
+
+  .theme-toggle:hover {
+    border-color: rgba(15, 118, 110, 0.45);
+    color: var(--home-teal);
+  }
+
+  html[data-theme="dark"] .home-header {
+    background: rgba(13, 14, 19, 0.9);
+    border-bottom-color: rgba(255, 255, 255, 0.1);
+  }
+
+  html[data-theme="dark"] .home-links a {
+    color: #a9b8b5;
+  }
+
+  html[data-theme="dark"] .home-links a:hover,
+  html[data-theme="dark"] .home-links a.active {
+    color: #5eead4;
+    background: #12302d;
+  }
+
+  html[data-theme="dark"] .home-clock {
+    background: #12302d;
+    border-color: rgba(45, 212, 191, 0.2);
+  }
+
+  html[data-theme="dark"] .home-clock #homeClockTime {
+    color: #5eead4;
+  }
+
+  html[data-theme="dark"] .home-clock #homeClockDate {
+    color: #8fa39f;
+  }
+
+  html[data-theme="dark"] .theme-toggle {
+    background: #15171f;
+    border-color: rgba(255, 255, 255, 0.15);
+    color: #a9b8b5;
+  }
+
+  html[data-theme="dark"] .module-card {
+    background: #15171f;
+    border-color: rgba(255, 255, 255, 0.08);
+    color: var(--home-ink);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  }
+
+  html[data-theme="dark"] .module-card:hover {
+    border-color: rgba(45, 212, 191, 0.35);
+    box-shadow: 0 16px 34px rgba(0, 0, 0, 0.4);
+  }
+
+  html[data-theme="dark"] .module-card p,
+  html[data-theme="dark"] .module-head p {
+    color: #9fb0ac;
+  }
+
+  html[data-theme="dark"] .home-footer {
+    border-top-color: rgba(255, 255, 255, 0.1);
+    color: #71827e;
+  }
+
+  html[data-theme="dark"] .hero-panel-rows > div {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.12);
   }
 
   .hero-panel-rows > div {
@@ -481,6 +567,7 @@
       <span id="homeClockTime">00:00:00</span>
       <span id="homeClockDate">--</span>
     </div>
+    <button type="button" class="theme-toggle" id="themeToggle" aria-label="切换深色模式">深色</button>
   </div>
 </header>
 
@@ -576,6 +663,28 @@
     }
     updateHomeClock();
     setInterval(updateHomeClock, 1000);
+  })();
+</script>
+<script>
+  (function () {
+    var key = 'dark_mode';
+    var button = document.getElementById('themeToggle');
+    function apply(dark) {
+      document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+      if (button) button.textContent = dark ? '浅色' : '深色';
+      var meta = document.querySelector('meta[name="theme-color"]');
+      if (meta) meta.content = dark ? '#0d0e13' : '#0f2e2d';
+    }
+    var dark = false;
+    try { dark = localStorage.getItem(key) === 'true'; } catch (err) {}
+    apply(dark);
+    if (button) {
+      button.addEventListener('click', function () {
+        dark = !dark;
+        try { localStorage.setItem(key, dark ? 'true' : 'false'); } catch (err) {}
+        apply(dark);
+      });
+    }
   })();
 </script>
 <script>
