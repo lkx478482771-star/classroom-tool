@@ -845,7 +845,6 @@
     let moved = false;
     let startX = 0;
     let startScroll = 0;
-    let pointerId = null;
 
     nav.addEventListener('pointerdown', function (event) {
       if (event.pointerType === 'touch' || (event.pointerType === 'mouse' && event.button !== 0)) return;
@@ -853,11 +852,9 @@
       moved = false;
       startX = event.clientX;
       startScroll = nav.scrollLeft;
-      pointerId = event.pointerId;
-      if (nav.setPointerCapture) nav.setPointerCapture(pointerId);
     });
 
-    nav.addEventListener('pointermove', function (event) {
+    function onPointerMove(event) {
       if (!dragging) return;
       const dx = event.clientX - startX;
       if (Math.abs(dx) > 4) {
@@ -865,16 +862,15 @@
         nav.scrollLeft = startScroll - dx;
         event.preventDefault();
       }
-    });
+    }
 
     function endDrag() {
       dragging = false;
-      pointerId = null;
     }
 
-    nav.addEventListener('pointerup', endDrag);
-    nav.addEventListener('pointercancel', endDrag);
-    nav.addEventListener('pointerleave', endDrag);
+    window.addEventListener('pointermove', onPointerMove, { passive: false });
+    window.addEventListener('pointerup', endDrag);
+    window.addEventListener('pointercancel', endDrag);
     nav.addEventListener('click', function (event) {
       if (moved) {
         event.preventDefault();

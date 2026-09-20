@@ -593,10 +593,9 @@
       moved = false;
       startX = event.clientX;
       startScroll = nav.scrollLeft;
-      if (nav.setPointerCapture) nav.setPointerCapture(event.pointerId);
     });
 
-    nav.addEventListener('pointermove', function (event) {
+    function onPointerMove(event) {
       if (!dragging) return;
       var distance = event.clientX - startX;
       if (Math.abs(distance) > 4) {
@@ -604,15 +603,15 @@
         nav.scrollLeft = startScroll - distance;
         event.preventDefault();
       }
-    });
+    }
 
     function endDrag() {
       dragging = false;
     }
 
-    nav.addEventListener('pointerup', endDrag);
-    nav.addEventListener('pointercancel', endDrag);
-    nav.addEventListener('pointerleave', endDrag);
+    window.addEventListener('pointermove', onPointerMove, { passive: false });
+    window.addEventListener('pointerup', endDrag);
+    window.addEventListener('pointercancel', endDrag);
     nav.addEventListener('click', function (event) {
       if (moved) {
         event.preventDefault();
