@@ -485,6 +485,7 @@
       <div class="home-actions">
         <a class="btn btn-primary" href="#major">查看专业成长路线</a>
         <a class="btn btn-secondary" href="#calendar">打开校历</a>
+        <button type="button" class="btn btn-secondary" id="openWelcomeBtn">使用说明</button>
       </div>
       <div class="home-stats">
         <div class="home-stat"><strong id="homeModuleCount">8</strong><span>常用模块</span></div>
@@ -799,6 +800,32 @@
     <div class="modal-foot">
       <button type="button" class="btn btn-secondary" data-close-major>取消</button>
       <button type="button" class="btn btn-primary" id="saveMajorBtn">保存专业</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="welcomeModal">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="welcomeTitle">
+    <div class="modal-head">
+      <h3 id="welcomeTitle">欢迎使用安大学生工具箱</h3>
+      <button type="button" class="modal-close" data-close-welcome aria-label="关闭">
+        <svg class="icon"><use href="#icon-x"></use></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p>这是一个面向安徽大学的本地学习工具箱，数据默认只保存在当前浏览器中。</p>
+      <ul class="welcome-list">
+        <li><strong>我的专业</strong>：切换集成电路、微电子、财经、经济管理等内置模板，也可以新建自己的模板。</li>
+        <li><strong>专业路线</strong>：按学期勾选成长任务，进度自动保存在本机。</li>
+        <li><strong>倒计时与校历</strong>：手动添加考试节点，或从校历一键加入倒计时。</li>
+        <li><strong>搜索</strong>：快速查找任务、竞赛、学习资源和页面模块。</li>
+        <li><strong>数据备份</strong>：清除浏览器数据或更换设备前，先导出 JSON 备份。</li>
+      </ul>
+      <p class="hint">云端账号、自动成绩同步和教务 API 需要后端服务，纯静态 GitHub Pages 暂不支持。</p>
+    </div>
+    <div class="modal-foot">
+      <button type="button" class="btn btn-secondary" id="welcomeBackupBtn">去备份</button>
+      <button type="button" class="btn btn-primary" id="welcomeStartBtn">开始使用</button>
     </div>
   </div>
 </div>
@@ -2900,6 +2927,49 @@
     const item = quickMineDate(button.dataset.sem, button.dataset.kind);
     quickAdd(item.name, item.date);
   });
+
+  // ---------- 新手引导 ----------
+  const WELCOME_KEY = 'ahut_welcome_seen';
+
+  function openWelcome() {
+    const modal = $('welcomeModal');
+    if (!modal) return;
+    modal.classList.add('show');
+    const focusTarget = modal.querySelector('.modal-close');
+    if (focusTarget) {
+      setTimeout(function () { focusTarget.focus(); }, 50);
+    }
+  }
+
+  function closeWelcome() {
+    const modal = $('welcomeModal');
+    if (!modal) return;
+    modal.classList.remove('show');
+    try { localStorage.setItem(WELCOME_KEY, '1'); } catch (err) {}
+  }
+
+  $('openWelcomeBtn').addEventListener('click', openWelcome);
+  $('welcomeStartBtn').addEventListener('click', closeWelcome);
+  $('welcomeBackupBtn').addEventListener('click', function () {
+    closeWelcome();
+    switchView('backup');
+  });
+  document.querySelectorAll('[data-close-welcome]').forEach(function (btn) {
+    btn.addEventListener('click', closeWelcome);
+  });
+  $('welcomeModal').addEventListener('click', function (event) {
+    if (event.target === $('welcomeModal')) closeWelcome();
+  });
+  document.addEventListener('keydown', function (event) {
+    if (event.key === 'Escape' && $('welcomeModal').classList.contains('show')) {
+      closeWelcome();
+    }
+  });
+  try {
+    if (localStorage.getItem(WELCOME_KEY) !== '1') {
+      setTimeout(openWelcome, 600);
+    }
+  } catch (err) {}
 
   // ---------- 数据备份与恢复 ----------
   const BACKUP_TIME_KEY = 'ahut_last_backup_at';

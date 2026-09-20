@@ -451,6 +451,20 @@ a:hover {
   color: var(--text);
 }
 
+.welcome-list {
+  margin: 0;
+  padding-left: 18px;
+  display: grid;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--text-2);
+  line-height: 1.6;
+}
+
+.welcome-list strong {
+  color: var(--text);
+}
+
 /* ---------- Tabs ---------- */
 .tabs {
   display: flex;
