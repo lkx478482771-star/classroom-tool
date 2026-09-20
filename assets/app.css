@@ -2010,6 +2010,22 @@ a:hover {
   color: var(--text-2);
 }
 
+.task-badge.active {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.task-badge.paused {
+  background: var(--warn-soft);
+  color: var(--warn);
+}
+
+.task-badge.skipped {
+  background: var(--surface-3);
+  color: var(--text-3);
+  text-decoration: line-through;
+}
+
 .task-meta-btn {
   border: none;
   background: transparent;

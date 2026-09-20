@@ -643,6 +643,7 @@
         <button type="button" class="road-filter active" data-filter="all">全部</button>
         <button type="button" class="road-filter" data-filter="todo">未完成</button>
         <button type="button" class="road-filter" data-filter="done">已完成</button>
+        <button type="button" class="road-filter" data-filter="paused">暂缓/跳过</button>
         <button type="button" class="road-filter" data-filter="current">当季任务</button>
       </div>
       <div class="road-summary" id="roadSummary"></div>
@@ -871,6 +872,15 @@
           <option value="high">高</option>
           <option value="medium">中</option>
           <option value="low">低</option>
+        </select>
+      </label>
+      <label class="field">
+        <span class="label">任务状态</span>
+        <select class="select" id="taskMetaStatus">
+          <option value="">默认</option>
+          <option value="active">进行中</option>
+          <option value="paused">暂缓</option>
+          <option value="skipped">跳过</option>
         </select>
       </label>
       <label class="field">
@@ -2081,6 +2091,7 @@
     let doneCount = 0;
     let total = 0;
     let overdueCount = 0;
+    let pausedCount = 0;
     const yearStats = {};
     const month = new Date().getMonth() + 1;
     const currentTerm = (month >= 9 || month <= 1) ? '秋季' : '春季';
@@ -2098,7 +2109,11 @@
         const key = activeMajorId + '_' + si + '_' + ii;
         if (roadmapDone[key]) stageDone += 1;
         const meta = taskMeta[key] || {};
-        if (!roadmapDone[key] && meta.due && meta.due < todayStamp()) overdueCount += 1;
+        if (!roadmapDone[key] && meta.due && meta.due < todayStamp()
+            && meta.status !== 'paused' && meta.status !== 'skipped') {
+          overdueCount += 1;
+        }
+        if (meta.status === 'paused' || meta.status === 'skipped') pausedCount += 1;
       });
       const stageTotal = stage.items.length;
       doneCount += stageDone;
@@ -2127,6 +2142,9 @@
       }).filter(function (entry) {
         if (roadFilter === 'todo') return !entry.done;
         if (roadFilter === 'done') return entry.done;
+        if (roadFilter === 'paused') {
+          return entry.meta.status === 'paused' || entry.meta.status === 'skipped';
+        }
         return true;
       });
       if (!visibleItems.length) return;
@@ -2159,6 +2177,13 @@
           badges.appendChild(el('span', {
             className: 'task-badge ' + meta.priority,
             textContent: priorityLabels[meta.priority]
+          }));
+        }
+        const statusLabels = { active: '进行中', paused: '暂缓', skipped: '跳过' };
+        if (meta.status && statusLabels[meta.status]) {
+          badges.appendChild(el('span', {
+            className: 'task-badge ' + meta.status,
+            textContent: statusLabels[meta.status]
           }));
         }
         if (meta.due) {
@@ -2224,6 +2249,11 @@
         textContent: '逾期任务 ' + overdueCount + ' 项'
       }));
     }
+    if (pausedCount) {
+      summary.appendChild(el('span', {
+        textContent: '暂缓/跳过 ' + pausedCount + ' 项'
+      }));
+    }
   }
 
   $('roadmapBox').addEventListener('change', function (event) {
@@ -2253,6 +2283,7 @@
     $('taskMetaText').textContent = text || '任务详情';
     $('taskMetaDue').value = meta.due || '';
     $('taskMetaPriority').value = meta.priority || '';
+    $('taskMetaStatus').value = meta.status || '';
     $('taskMetaNote').value = meta.note || '';
     $('taskMetaLink').value = meta.link || '';
     $('taskMetaModal').classList.add('show');
@@ -2268,11 +2299,13 @@
     if (!editingTaskKey) return;
     const due = $('taskMetaDue').value;
     const priority = $('taskMetaPriority').value;
+    const status = $('taskMetaStatus').value;
     const note = $('taskMetaNote').value.trim();
     const rawLink = $('taskMetaLink').value.trim();
     const next = {};
     if (due) next.due = due;
     if (priority) next.priority = priority;
+    if (status) next.status = status;
     if (note) next.note = note;
     if (rawLink) {
       const safeLink = safeTaskLink(rawLink);
