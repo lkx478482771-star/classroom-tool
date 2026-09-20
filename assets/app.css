@@ -1953,6 +1953,76 @@ a:hover {
   color: var(--text-3);
 }
 
+.road-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.road-item > label {
+  flex: 1;
+  min-width: 0;
+}
+
+.task-badges {
+  display: flex;
+  flex-basis: 100%;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-left: 23px;
+}
+
+.task-badge {
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: var(--surface-3);
+  color: var(--text-3);
+  font-size: 9px;
+  font-weight: 650;
+  text-decoration: none;
+}
+
+.task-badge.high,
+.task-badge.overdue {
+  background: var(--danger-soft);
+  color: var(--danger);
+}
+
+.task-badge.medium {
+  background: var(--warn-soft);
+  color: var(--warn);
+}
+
+.task-badge.low {
+  background: var(--ok-soft);
+  color: var(--ok);
+}
+
+.task-badge.due,
+.task-badge.link {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.task-badge.note {
+  background: var(--surface-3);
+  color: var(--text-2);
+}
+
+.task-meta-btn {
+  border: none;
+  background: transparent;
+  color: var(--text-3);
+  padding: 2px 4px;
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+.task-meta-btn:hover {
+  color: var(--accent);
+}
+
 .road-filters {
   display: flex;
   flex-wrap: wrap;
@@ -1990,6 +2060,12 @@ a:hover {
   background: var(--surface-2);
   color: var(--text-2);
   font-size: 11px;
+}
+
+.road-summary span.warn {
+  border-color: var(--warn);
+  background: var(--warn-soft);
+  color: var(--warn);
 }
 
 .road-stage.lagging {

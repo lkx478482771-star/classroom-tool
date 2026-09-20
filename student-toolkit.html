@@ -837,6 +837,45 @@
   </div>
 </div>
 
+<div class="modal-overlay" id="taskMetaModal">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="taskMetaTitle">
+    <div class="modal-head">
+      <h3 id="taskMetaTitle">任务详情</h3>
+      <button type="button" class="modal-close" data-close-task-meta aria-label="关闭">
+        <svg class="icon"><use href="#icon-x"></use></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p class="hint" id="taskMetaText"></p>
+      <label class="field">
+        <span class="label">截止日期</span>
+        <input class="input" id="taskMetaDue" type="date">
+      </label>
+      <label class="field">
+        <span class="label">优先级</span>
+        <select class="select" id="taskMetaPriority">
+          <option value="">无</option>
+          <option value="high">高</option>
+          <option value="medium">中</option>
+          <option value="low">低</option>
+        </select>
+      </label>
+      <label class="field">
+        <span class="label">备注</span>
+        <textarea class="textarea" id="taskMetaNote" rows="3" placeholder="补充资料、老师要求或自己的提醒"></textarea>
+      </label>
+      <label class="field">
+        <span class="label">相关链接</span>
+        <input class="input" id="taskMetaLink" type="url" placeholder="https://...">
+      </label>
+    </div>
+    <div class="modal-foot">
+      <button type="button" class="btn btn-secondary" data-close-task-meta>取消</button>
+      <button type="button" class="btn btn-primary" id="saveTaskMetaBtn">保存</button>
+    </div>
+  </div>
+</div>
+
 <button type="button" class="back-top" id="backTop" aria-label="回到顶部" hidden>
   <svg class="icon"><use href="#icon-arrow-up"></use></svg>
 </button>
@@ -1989,7 +2028,36 @@
   } catch (err) {
     roadmapDone = {};
   }
+  const TASK_META_KEY = 'majorTaskMeta';
+  let taskMeta = {};
+  try {
+    taskMeta = JSON.parse(localStorage.getItem(TASK_META_KEY)) || {};
+  } catch (err) {
+    taskMeta = {};
+  }
   let roadFilter = 'all';
+
+  function todayStamp() {
+    const now = new Date();
+    return now.getFullYear() + '-' + pad2(now.getMonth() + 1) + '-' + pad2(now.getDate());
+  }
+
+  function safeTaskLink(value) {
+    try {
+      const url = new URL(String(value || ''), location.href);
+      return (url.protocol === 'http:' || url.protocol === 'https:') ? url.href : '';
+    } catch (err) {
+      return '';
+    }
+  }
+
+  function saveTaskMetaStore() {
+    try {
+      localStorage.setItem(TASK_META_KEY, JSON.stringify(taskMeta));
+    } catch (err) {
+      showToast('本地存储不可用', true);
+    }
+  }
 
   function renderRoadmap() {
     const box = $('roadmapBox');
@@ -1999,6 +2067,7 @@
     clearNode(summary);
     let doneCount = 0;
     let total = 0;
+    let overdueCount = 0;
     const yearStats = {};
     const month = new Date().getMonth() + 1;
     const currentTerm = (month >= 9 || month <= 1) ? '秋季' : '春季';
@@ -2015,6 +2084,8 @@
       stage.items.forEach(function (item, ii) {
         const key = activeMajorId + '_' + si + '_' + ii;
         if (roadmapDone[key]) stageDone += 1;
+        const meta = taskMeta[key] || {};
+        if (!roadmapDone[key] && meta.due && meta.due < todayStamp()) overdueCount += 1;
       });
       const stageTotal = stage.items.length;
       doneCount += stageDone;
@@ -2039,7 +2110,7 @@
       if (roadFilter === 'done' && stats.done === 0) return;
       const visibleItems = stage.items.map(function (item, ii) {
         const key = activeMajorId + '_' + si + '_' + ii;
-        return { text: item, key: key, done: !!roadmapDone[key] };
+        return { text: item, key: key, done: !!roadmapDone[key], meta: taskMeta[key] || {} };
       }).filter(function (entry) {
         if (roadFilter === 'todo') return !entry.done;
         if (roadFilter === 'done') return entry.done;
@@ -2060,12 +2131,52 @@
 
       const list = el('ul', { className: 'road-list' });
       visibleItems.forEach(function (entry) {
+        const item = el('li', { className: 'road-item' });
         const label = el('label', { className: entry.done ? 'done' : '' });
         const cb = el('input', { type: 'checkbox', dataset: { key: entry.key } });
         cb.checked = entry.done;
         label.appendChild(cb);
         label.appendChild(el('span', { textContent: entry.text }));
-        list.appendChild(label);
+        item.appendChild(label);
+
+        const badges = el('div', { className: 'task-badges' });
+        const meta = entry.meta || {};
+        const priorityLabels = { high: '高优先级', medium: '中优先级', low: '低优先级' };
+        if (meta.priority && priorityLabels[meta.priority]) {
+          badges.appendChild(el('span', {
+            className: 'task-badge ' + meta.priority,
+            textContent: priorityLabels[meta.priority]
+          }));
+        }
+        if (meta.due) {
+          const overdue = !entry.done && meta.due < todayStamp();
+          badges.appendChild(el('span', {
+            className: 'task-badge ' + (overdue ? 'overdue' : 'due'),
+            textContent: (overdue ? '已逾期 ' : '截止 ') + meta.due.slice(5)
+          }));
+        }
+        if (meta.note) {
+          badges.appendChild(el('span', { className: 'task-badge note', textContent: '有备注' }));
+        }
+        const safeLink = safeTaskLink(meta.link);
+        if (safeLink) {
+          badges.appendChild(el('a', {
+            className: 'task-badge link',
+            href: safeLink,
+            target: '_blank',
+            rel: 'noopener noreferrer',
+            textContent: '相关链接'
+          }));
+        }
+        if (badges.children.length) item.appendChild(badges);
+
+        item.appendChild(el('button', {
+          type: 'button',
+          className: 'task-meta-btn',
+          textContent: '详情',
+          dataset: { action: 'edit-task', key: entry.key, text: entry.text }
+        }));
+        list.appendChild(item);
       });
       card.appendChild(list);
       box.appendChild(card);
@@ -2094,6 +2205,12 @@
         textContent: year + ' ' + stat.done + '/' + stat.total + ' · ' + yearPct + '%'
       }));
     });
+    if (overdueCount) {
+      summary.appendChild(el('span', {
+        className: 'warn',
+        textContent: '逾期任务 ' + overdueCount + ' 项'
+      }));
+    }
   }
 
   $('roadmapBox').addEventListener('change', function (event) {
@@ -2113,6 +2230,70 @@
     if (!button) return;
     roadFilter = button.dataset.filter;
     renderRoadmap();
+  });
+
+  let editingTaskKey = null;
+
+  function openTaskMeta(key, text) {
+    const meta = taskMeta[key] || {};
+    editingTaskKey = key;
+    $('taskMetaText').textContent = text || '任务详情';
+    $('taskMetaDue').value = meta.due || '';
+    $('taskMetaPriority').value = meta.priority || '';
+    $('taskMetaNote').value = meta.note || '';
+    $('taskMetaLink').value = meta.link || '';
+    $('taskMetaModal').classList.add('show');
+    setTimeout(function () { $('taskMetaDue').focus(); }, 50);
+  }
+
+  function closeTaskMeta() {
+    $('taskMetaModal').classList.remove('show');
+    editingTaskKey = null;
+  }
+
+  function saveTaskMetaFromModal() {
+    if (!editingTaskKey) return;
+    const due = $('taskMetaDue').value;
+    const priority = $('taskMetaPriority').value;
+    const note = $('taskMetaNote').value.trim();
+    const rawLink = $('taskMetaLink').value.trim();
+    const next = {};
+    if (due) next.due = due;
+    if (priority) next.priority = priority;
+    if (note) next.note = note;
+    if (rawLink) {
+      const safeLink = safeTaskLink(rawLink);
+      if (!safeLink) {
+        showToast('相关链接必须是 http 或 https 地址', true);
+        return;
+      }
+      next.link = safeLink;
+    }
+    if (Object.keys(next).length) taskMeta[editingTaskKey] = next;
+    else delete taskMeta[editingTaskKey];
+    saveTaskMetaStore();
+    closeTaskMeta();
+    renderRoadmap();
+    showToast('任务详情已保存');
+  }
+
+  $('roadmapBox').addEventListener('click', function (event) {
+    const button = event.target.closest('button[data-action="edit-task"]');
+    if (!button) return;
+    openTaskMeta(button.dataset.key, button.dataset.text);
+  });
+
+  $('saveTaskMetaBtn').addEventListener('click', saveTaskMetaFromModal);
+  document.querySelectorAll('[data-close-task-meta]').forEach(function (btn) {
+    btn.addEventListener('click', closeTaskMeta);
+  });
+  $('taskMetaModal').addEventListener('click', function (event) {
+    if (event.target === $('taskMetaModal')) closeTaskMeta();
+  });
+  document.addEventListener('keydown', function (event) {
+    if (event.key === 'Escape' && $('taskMetaModal').classList.contains('show')) {
+      closeTaskMeta();
+    }
   });
 
   function renderTools() {
@@ -3055,6 +3236,7 @@
   const BACKUP_KEYS = [
     'ahutMajorProfiles_v1',
     'majorRoadmap',
+    'majorTaskMeta',
     'gradeData',
     'cdData',
     'dark_mode',
