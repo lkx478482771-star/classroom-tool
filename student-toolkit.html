@@ -667,7 +667,10 @@
 
   <section class="section" id="contest">
     <div class="card">
-      <h2><svg class="icon"><use href="#icon-calendar"></use></svg>竞赛日历</h2>
+      <div class="section-head">
+        <h2><svg class="icon"><use href="#icon-calendar"></use></svg>竞赛日历</h2>
+        <button type="button" class="btn btn-secondary btn-sm" id="addContestBtn">新增竞赛</button>
+      </div>
       <div class="contest-grid" id="contestBox"></div>
       <p class="hint" style="margin-top:12px">“加入倒计时”会使用预计时间，正式安排请以官网通知为准。</p>
     </div>
@@ -909,6 +912,55 @@
     <div class="modal-foot">
       <button type="button" class="btn btn-secondary" data-close-task-meta>取消</button>
       <button type="button" class="btn btn-primary" id="saveTaskMetaBtn">保存</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="contestEditorModal">
+  <div class="modal modal-wide" role="dialog" aria-modal="true" aria-labelledby="contestEditorTitle">
+    <div class="modal-head">
+      <h3 id="contestEditorTitle">新增竞赛</h3>
+      <button type="button" class="modal-close" data-close-contest-editor aria-label="关闭">
+        <svg class="icon"><use href="#icon-x"></use></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <label class="field">
+        <span class="label">竞赛简称</span>
+        <input class="input" id="contestEditorName" placeholder="例如：校电子设计竞赛" autocomplete="off">
+      </label>
+      <label class="field">
+        <span class="label">竞赛全称</span>
+        <input class="input" id="contestEditorFull" placeholder="例如：安徽大学电子设计竞赛" autocomplete="off">
+      </label>
+      <label class="field">
+        <span class="label">官网链接</span>
+        <input class="input" id="contestEditorUrl" type="url" placeholder="https://...">
+      </label>
+      <label class="field">
+        <span class="label">主时间 / 预计时间</span>
+        <input class="input" id="contestEditorDate" type="date">
+      </label>
+      <label class="field">
+        <span class="label">报名截止</span>
+        <input class="input" id="contestEditorRegistration" type="date">
+      </label>
+      <label class="field">
+        <span class="label">初赛 / 作品提交</span>
+        <input class="input" id="contestEditorPrelim" type="date">
+      </label>
+      <label class="field">
+        <span class="label">决赛 / 答辩</span>
+        <input class="input" id="contestEditorFinal" type="date">
+      </label>
+      <label class="field">
+        <span class="label">说明</span>
+        <textarea class="textarea" id="contestEditorNote" rows="3" placeholder="参赛对象、组队要求、报名入口说明等"></textarea>
+      </label>
+    </div>
+    <div class="modal-foot">
+      <button type="button" class="btn btn-secondary" data-close-contest-editor>取消</button>
+      <button type="button" class="btn btn-primary" id="saveContestEditorBtn">保存竞赛</button>
     </div>
   </div>
 </div>
@@ -2059,6 +2111,13 @@
   let roadmapData = getProfile(activeMajorId).roadmap;
   let toolData = getProfile(activeMajorId).tools;
   let contestData = getProfile(activeMajorId).contests;
+  const CUSTOM_CONTEST_KEY = 'majorCustomContests';
+  let customContests = {};
+  try {
+    customContests = JSON.parse(localStorage.getItem(CUSTOM_CONTEST_KEY)) || {};
+  } catch (err) {
+    customContests = {};
+  }
 
   let roadmapDone = {};
   try {
@@ -2086,6 +2145,32 @@
       return (url.protocol === 'http:' || url.protocol === 'https:') ? url.href : '';
     } catch (err) {
       return '';
+    }
+  }
+
+  function getMajorContests() {
+    const customs = Array.isArray(customContests[activeMajorId]) ? customContests[activeMajorId] : [];
+    return contestData.concat(customs.map(function (item) {
+      return {
+        id: String(item.id || ''),
+        name: String(item.name || ''),
+        full: String(item.full || ''),
+        url: safeTaskLink(item.url),
+        date: String(item.date || ''),
+        registrationDate: String(item.registrationDate || ''),
+        prelimDate: String(item.prelimDate || ''),
+        finalDate: String(item.finalDate || ''),
+        note: String(item.note || ''),
+        custom: true
+      };
+    }));
+  }
+
+  function saveCustomContests() {
+    try {
+      localStorage.setItem(CUSTOM_CONTEST_KEY, JSON.stringify(customContests));
+    } catch (err) {
+      showToast('本地存储不可用', true);
     }
   }
 
@@ -2512,21 +2597,59 @@
   function renderContests() {
     const box = $('contestBox');
     clearNode(box);
-    contestData.forEach(function (item) {
+    const contests = getMajorContests();
+    if (!contests.length) {
+      box.appendChild(el('div', { className: 'empty', textContent: '暂无竞赛信息。' }));
+      return;
+    }
+    contests.forEach(function (item) {
       const card = el('div', { className: 'contest-card' });
       const head = el('div', { className: 'contest-head' });
       head.appendChild(el('span', { className: 'contest-name', textContent: item.name }));
-      const site = el('a', { className: 'contest-site', href: item.url, target: '_blank', rel: 'noopener noreferrer' });
-      site.appendChild(el('svg', { className: 'icon icon-sm' }, [el('use', { href: '#icon-external' })]));
-      head.appendChild(site);
+      const safeUrl = safeTaskLink(item.url);
+      if (safeUrl) {
+        const site = el('a', { className: 'contest-site', href: safeUrl, target: '_blank', rel: 'noopener noreferrer' });
+        site.appendChild(el('svg', { className: 'icon icon-sm' }, [el('use', { href: '#icon-external' })]));
+        head.appendChild(site);
+      }
       card.appendChild(head);
       card.appendChild(el('div', { className: 'contest-full', textContent: item.full }));
       card.appendChild(el('p', { className: 'contest-note', textContent: item.note }));
-      const btn = el('button', {
-        type: 'button', className: 'btn btn-soft btn-sm', textContent: '加入倒计时',
-        dataset: { action: 'add-contest', name: item.name + ' · ' + item.full, date: item.date }
-      });
-      card.appendChild(btn);
+      const milestones = [
+        { label: '报名', date: item.registrationDate },
+        { label: '初赛', date: item.prelimDate },
+        { label: '决赛', date: item.finalDate }
+      ].filter(function (milestone) { return milestone.date; });
+      if (milestones.length) {
+        const milestoneRow = el('div', { className: 'contest-milestones' });
+        milestones.forEach(function (milestone) {
+          milestoneRow.appendChild(el('button', {
+            type: 'button',
+            className: 'contest-milestone',
+            textContent: milestone.label + ' ' + milestone.date.slice(5),
+            dataset: {
+              action: 'add-contest-date',
+              name: item.name + ' · ' + milestone.label,
+              date: milestone.date
+            }
+          }));
+        });
+        card.appendChild(milestoneRow);
+      }
+      const actions = el('div', { className: 'contest-actions' });
+      if (item.date) {
+        actions.appendChild(el('button', {
+          type: 'button', className: 'btn btn-soft btn-sm', textContent: '加入倒计时',
+          dataset: { action: 'add-contest', name: item.name + ' · ' + item.full, date: item.date }
+        }));
+      }
+      if (item.custom) {
+        actions.appendChild(el('button', {
+          type: 'button', className: 'btn btn-danger btn-sm', textContent: '删除',
+          dataset: { action: 'delete-custom-contest', id: item.id }
+        }));
+      }
+      if (actions.children.length) card.appendChild(actions);
       box.appendChild(card);
     });
   }
@@ -2905,10 +3028,95 @@
     btn.addEventListener('click', closeMajorEditor);
   });
 
+  function openContestEditor() {
+    $('contestEditorName').value = '';
+    $('contestEditorFull').value = '';
+    $('contestEditorUrl').value = '';
+    $('contestEditorDate').value = '';
+    $('contestEditorRegistration').value = '';
+    $('contestEditorPrelim').value = '';
+    $('contestEditorFinal').value = '';
+    $('contestEditorNote').value = '';
+    $('contestEditorModal').classList.add('show');
+    setTimeout(function () { $('contestEditorName').focus(); }, 50);
+  }
+
+  function closeContestEditor() {
+    $('contestEditorModal').classList.remove('show');
+  }
+
+  function saveContestFromEditor() {
+    const name = $('contestEditorName').value.trim();
+    if (!name) {
+      showToast('请填写竞赛简称', true);
+      return;
+    }
+    const rawUrl = $('contestEditorUrl').value.trim();
+    const url = rawUrl ? safeTaskLink(rawUrl) : '';
+    if (rawUrl && !url) {
+      showToast('官网链接必须是 http 或 https 地址', true);
+      return;
+    }
+    const fullName = $('contestEditorFull').value.trim() || name;
+    const item = {
+      id: 'c' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+      name: name,
+      full: fullName,
+      url: url,
+      date: $('contestEditorDate').value,
+      registrationDate: $('contestEditorRegistration').value,
+      prelimDate: $('contestEditorPrelim').value,
+      finalDate: $('contestEditorFinal').value,
+      note: $('contestEditorNote').value.trim(),
+      custom: true
+    };
+    if (!Array.isArray(customContests[activeMajorId])) customContests[activeMajorId] = [];
+    customContests[activeMajorId].push(item);
+    saveCustomContests();
+    closeContestEditor();
+    renderContests();
+    renderSearchResults($('globalSearchInput').value);
+    showToast('竞赛已添加');
+  }
+
+  function deleteCustomContest(id) {
+    const list = Array.isArray(customContests[activeMajorId]) ? customContests[activeMajorId] : [];
+    const item = list.find(function (contest) { return contest.id === id; });
+    if (!item) return;
+    if (!confirm('确定删除“' + item.name + '”？')) return;
+    customContests[activeMajorId] = list.filter(function (contest) { return contest.id !== id; });
+    saveCustomContests();
+    renderContests();
+    renderSearchResults($('globalSearchInput').value);
+    showToast('竞赛已删除');
+  }
+
+  $('addContestBtn').addEventListener('click', openContestEditor);
+  $('saveContestEditorBtn').addEventListener('click', saveContestFromEditor);
+  document.querySelectorAll('[data-close-contest-editor]').forEach(function (btn) {
+    btn.addEventListener('click', closeContestEditor);
+  });
+  $('contestEditorModal').addEventListener('click', function (event) {
+    if (event.target === $('contestEditorModal')) closeContestEditor();
+  });
+  document.addEventListener('keydown', function (event) {
+    if (event.key === 'Escape' && $('contestEditorModal').classList.contains('show')) {
+      closeContestEditor();
+    }
+  });
   $('contestBox').addEventListener('click', function (event) {
-    const btn = event.target.closest('button[data-action="add-contest"]');
-    if (!btn) return;
-    quickAdd(btn.dataset.name, btn.dataset.date);
+    const add = event.target.closest('button[data-action="add-contest"]');
+    if (add) {
+      quickAdd(add.dataset.name, add.dataset.date);
+      return;
+    }
+    const milestone = event.target.closest('button[data-action="add-contest-date"]');
+    if (milestone) {
+      quickAdd(milestone.dataset.name, milestone.dataset.date);
+      return;
+    }
+    const remove = event.target.closest('button[data-action="delete-custom-contest"]');
+    if (remove) deleteCustomContest(remove.dataset.id);
   });
 
   // ---------- 全局搜索 ----------
@@ -2955,7 +3163,7 @@
         url: tool.url
       });
     });
-    contestData.forEach(function (contest) {
+    getMajorContests().forEach(function (contest) {
       items.push({
         type: '竞赛',
         title: contest.name + ' · ' + contest.full,
@@ -3432,6 +3640,7 @@
     'ahutMajorProfiles_v1',
     'majorRoadmap',
     'majorTaskMeta',
+    'majorCustomContests',
     'gradeData',
     'cdData',
     'ahut_notifications_enabled',

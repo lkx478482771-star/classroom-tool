@@ -2262,6 +2262,38 @@ a:hover {
   line-height: 1.5;
 }
 
+.contest-milestones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.contest-milestone {
+  padding: 3px 8px;
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--text-2);
+  font-size: 10px;
+  font-weight: 650;
+}
+
+.contest-milestone:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.contest-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: auto;
+}
+
+.contest-actions .btn {
+  margin-top: 0;
+}
+
 .contest-card .btn {
   align-self: flex-start;
   margin-top: auto;
