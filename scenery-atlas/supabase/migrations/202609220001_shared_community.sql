@@ -445,7 +445,7 @@ create policy "users can delete their scenery images"
   using (
     bucket_id = 'scenery-images'
     and (
-      owner_id = auth.uid()
+      owner_id = auth.uid()::text
       or public.is_admin()
     )
   );
