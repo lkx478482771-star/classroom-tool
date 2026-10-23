@@ -10,7 +10,7 @@
   ];
 
   var DEFAULT_DATA = {
-    "version": 2,
+    "version": 3,
     "groups": [
       {
         "id": "g-campus",
@@ -180,12 +180,6 @@
             "name": "研招网",
             "url": "https://yz.chsi.com.cn/",
             "desc": "考研报名与院校信息"
-          },
-          {
-            "id": "academic-9",
-            "name": "国家哲学社科文献中心",
-            "url": "https://www.ncpssd.org/",
-            "desc": "免费人文社科文献"
           }
         ]
       },
@@ -304,18 +298,6 @@
             "desc": "笔试题库与求职"
           },
           {
-            "id": "code-5",
-            "name": "蓝桥杯",
-            "url": "https://dasai.lanqiao.cn/",
-            "desc": "蓝桥杯官网"
-          },
-          {
-            "id": "code-6",
-            "name": "OI Wiki",
-            "url": "https://oi-wiki.org/",
-            "desc": "算法竞赛知识库"
-          },
-          {
             "id": "code-7",
             "name": "VisuAlgo",
             "url": "https://visualgo.net/zh",
@@ -332,12 +314,6 @@
             "name": "菜鸟教程",
             "url": "https://www.runoob.com/",
             "desc": "编程语言快速入门"
-          },
-          {
-            "id": "code-10",
-            "name": "SQLZoo",
-            "url": "https://sqlzoo.net/",
-            "desc": "SQL 在线练习"
           }
         ]
       },
@@ -359,36 +335,6 @@
             "desc": "系统仿真"
           },
           {
-            "id": "research-2",
-            "name": "ROS 文档",
-            "url": "https://docs.ros.org/",
-            "desc": "机器人操作系统文档"
-          },
-          {
-            "id": "research-3",
-            "name": "西门子工业支持",
-            "url": "https://support.industry.siemens.com/cs/cn/zh/",
-            "desc": "PLC 与自动化资料"
-          },
-          {
-            "id": "research-4",
-            "name": "Materials Project",
-            "url": "https://materialsproject.org/",
-            "desc": "材料计算数据库"
-          },
-          {
-            "id": "research-5",
-            "name": "VESTA",
-            "url": "https://jp-minerals.org/vesta/en/",
-            "desc": "晶体结构可视化"
-          },
-          {
-            "id": "research-6",
-            "name": "LAMMPS",
-            "url": "https://www.lammps.org/",
-            "desc": "分子动力学模拟"
-          },
-          {
             "id": "research-7",
             "name": "OriginLab",
             "url": "https://www.originlab.com/",
@@ -401,22 +347,10 @@
             "desc": "元素周期表"
           },
           {
-            "id": "research-9",
-            "name": "PubChem",
-            "url": "https://pubchem.ncbi.nlm.nih.gov/",
-            "desc": "化合物数据库"
-          },
-          {
             "id": "research-10",
             "name": "小木虫",
             "url": "https://muchong.com/",
             "desc": "科研经验交流社区"
-          },
-          {
-            "id": "research-11",
-            "name": "Crystallography Open Database",
-            "url": "http://www.crystallography.net/cod/",
-            "desc": "晶体结构开放数据库"
           }
         ]
       },
@@ -454,29 +388,11 @@
             "name": "Convertio",
             "url": "https://convertio.co",
             "desc": "文件格式互转"
-          },
-          {
-            "id": "tools-5",
-            "name": "国家统计局",
-            "url": "https://www.stats.gov.cn/",
-            "desc": "宏观统计数据"
-          },
-          {
-            "id": "tools-6",
-            "name": "东方财富网",
-            "url": "https://www.eastmoney.com/",
-            "desc": "行情与财经资讯"
-          },
-          {
-            "id": "tools-7",
-            "name": "巨潮资讯网",
-            "url": "https://www.cninfo.com.cn/",
-            "desc": "上市公司公告"
           }
         ]
       }
     ]
-  };
+  };;
 
   function $(id) { return document.getElementById(id); }
 
@@ -567,8 +483,25 @@
 
   /* 当默认分类有更新时，把新增链接合并进老用户本地数据（不覆盖用户改过的内容） */
   var SEED_KEY = 'ahut_links_seed';
-  var SEED_VERSION = 2;
+  var SEED_VERSION = 3;
 
+  // 与集成电路专业无关、已从默认清单移除的条目，迁移时一并清理
+  var REMOVED_URLS = {
+    "https://www.ncpssd.org/": 1,
+    "https://dasai.lanqiao.cn/": 1,
+    "https://oi-wiki.org/": 1,
+    "https://sqlzoo.net/": 1,
+    "https://docs.ros.org/": 1,
+    "https://support.industry.siemens.com/cs/cn/zh/": 1,
+    "https://materialsproject.org/": 1,
+    "https://jp-minerals.org/vesta/en/": 1,
+    "https://www.lammps.org/": 1,
+    "https://pubchem.ncbi.nlm.nih.gov/": 1,
+    "http://www.crystallography.net/cod/": 1,
+    "https://www.stats.gov.cn/": 1,
+    "https://www.eastmoney.com/": 1,
+    "https://www.cninfo.com.cn/": 1
+  };
   var GROUP_ALIAS = {
     '学习平台': '学习与课程',
     '专业与竞赛': '集成电路与硬件'
@@ -582,7 +515,7 @@
           id: g.id,
           name: GROUP_ALIAS[g.name] || g.name,
           collapsed: g.collapsed,
-          links: g.links.slice()
+          links: g.links.filter(function (l) { return !REMOVED_URLS[l.url]; })
         };
       })
     };
@@ -951,7 +884,7 @@
 
   function exportData() {
     var payload = {
-      app: '安大学生工具箱 · 网址导航',
+      app: '集成电路学习工具箱 · 网址导航',
       version: 1,
       exportedAt: new Date().toISOString(),
       groups: state.groups
