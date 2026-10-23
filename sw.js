@@ -1,11 +1,13 @@
-const CACHE_PREFIX = 'ahutk-';
-const CACHE = CACHE_PREFIX + 'v30';
+﻿const CACHE_PREFIX = 'ahutk-';
+const CACHE = CACHE_PREFIX + 'v31';
 const URLS = [
   './',
   './index.html',
-  './classroom.html',
+  './links.html',
   './student-toolkit.html',
   './assets/app.css',
+  './assets/links.css',
+  './assets/links.js',
   './assets/icons.svg',
   './assets/favicon.svg',
   './data/official.json'

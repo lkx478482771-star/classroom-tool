@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN" data-theme="light">
 <head>
 <meta charset="UTF-8">
@@ -7,12 +7,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#0f2e2d">
 <script>(function(){try{var d=localStorage.getItem('dark_mode')==='true';document.documentElement.dataset.theme=d?'dark':'light';var m=document.querySelector('meta[name="theme-color"]');if(m)m.content=d?'#0d0e13':'#0f2e2d';}catch(e){}})();</script>
-<meta name="description" content="安大学生工具箱：专业路线、校历、考试倒计时、竞赛日历、学习导航与课堂整理。">
+<meta name="description" content="安大学生工具箱：专业成长路线、学习导航、网址集成与数据备份。">
 <title>安大学生工具箱</title>
 <link rel="canonical" href="https://lkx478482771-star.github.io/classroom-tool/">
 <meta property="og:type" content="website">
 <meta property="og:title" content="安大学生工具箱">
-<meta property="og:description" content="安大学生工具箱：专业路线、校历、考试倒计时、竞赛日历、学习导航与课堂整理。">
+<meta property="og:description" content="安大学生工具箱：专业成长路线、学习导航、网址集成与数据备份。">
 <meta property="og:url" content="https://lkx478482771-star.github.io/classroom-tool/">
 <meta property="og:site_name" content="安大学生工具箱">
 <meta name="twitter:card" content="summary">
@@ -559,9 +559,9 @@
     </a>
     <nav class="home-links" aria-label="首页导航">
       <a href="index.html" class="active" aria-current="page">首页</a>
-      <a href="student-toolkit.html#calendar">校历</a>
+      <a href="student-toolkit.html#majorManager">我的专业</a>
       <a href="student-toolkit.html#major">专业路线</a>
-      <a href="classroom.html">课堂整理</a>
+      <a href="links.html">网址集成</a>
     </nav>
     <div class="home-clock" aria-label="当前时间">
       <span id="homeClockTime">00:00:00</span>
@@ -576,7 +576,7 @@
     <div>
       <span class="hero-kicker">AHU STUDENT TOOLKIT</span>
       <h1>一个清爽的<br>大学生工具箱</h1>
-      <p>专业路线、校历、考试倒计时、竞赛日历、学习导航与课堂整理，集中在一个工作台里，方便随时查看和使用。</p>
+      <p>专业路线、学习导航、校园导航与网址集成，集中在一个工作台里，方便随时查看和使用。</p>
       <div class="hero-actions">
         <a class="btn btn-primary" href="student-toolkit.html#home">进入工具箱</a>
         <a class="btn-ghost-light" href="student-toolkit.html#major">查看专业成长路线</a>
@@ -586,12 +586,12 @@
       <div class="hero-panel">
         <div class="hero-panel-head">常用入口</div>
         <div class="hero-panel-rows">
-          <div><strong>专业路线</strong></div>
-          <div><strong>校历</strong></div>
-          <div><strong>考试倒计时</strong></div>
-          <div><strong>竞赛日历</strong></div>
+          <div><strong>网址集成</strong></div>
+          <div><strong>我的专业</strong></div>
+          <div><strong>四年成长路线</strong></div>
           <div><strong>学习导航</strong></div>
-          <div><strong>课堂整理</strong></div>
+          <div><strong>校园导航</strong></div>
+          <div><strong>数据备份</strong></div>
         </div>
       </div>
     </div>
@@ -608,25 +608,10 @@
         <h3>我的专业</h3>
         <p>切换、新建、复制或导出专业模板</p>
       </a>
-      <a class="module-card" href="student-toolkit.html#countdown">
-        <span class="card-icon rose"><svg class="icon icon-xl"><use href="#icon-clock"></use></svg></span>
-        <h3>考试倒计时</h3>
-        <p>添加考试和重要日期，自动倒计时</p>
-      </a>
-      <a class="module-card" href="student-toolkit.html#calendar">
-        <span class="card-icon indigo"><svg class="icon icon-xl"><use href="#icon-calendar"></use></svg></span>
-        <h3>校历</h3>
-        <p>秋季春季学期、节假日与重要节点</p>
-      </a>
       <a class="module-card" href="student-toolkit.html#major">
         <span class="card-icon amber"><svg class="icon icon-xl"><use href="#icon-book"></use></svg></span>
         <h3>四年成长路线</h3>
         <p>按专业提供阶段任务，可勾选进度</p>
-      </a>
-      <a class="module-card" href="student-toolkit.html#contest">
-        <span class="card-icon rose"><svg class="icon icon-xl"><use href="#icon-calendar"></use></svg></span>
-        <h3>竞赛日历</h3>
-        <p>按专业显示竞赛与报名节点</p>
       </a>
       <a class="module-card" href="student-toolkit.html#tools">
         <span class="card-icon teal"><svg class="icon icon-xl"><use href="#icon-toolkit"></use></svg></span>
@@ -638,10 +623,10 @@
         <h3>校园导航</h3>
         <p>学院官网、智慧安大与校园服务入口</p>
       </a>
-      <a class="module-card" href="classroom.html">
-        <span class="card-icon slate"><svg class="icon icon-xl"><use href="#icon-book"></use></svg></span>
-        <h3>课堂整理</h3>
-        <p>课程笔记、语音记录、AI 总结与待办</p>
+      <a class="module-card" href="links.html">
+        <span class="card-icon teal"><svg class="icon icon-xl"><use href="#icon-external"></use></svg></span>
+        <h3>网址集成</h3>
+        <p>校园入口、学习工具与常用网站，自己添加、永久保存</p>
       </a>
     </div>
   </section>

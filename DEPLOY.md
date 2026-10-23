@@ -17,7 +17,7 @@
 2. 连接 GitHub 仓库。
 3. Build command 留空。
 4. Publish directory 填 `.`。
-5. 部署后检查首页、工具箱和课堂整理页面。
+5. 部署后检查首页、工具箱和网址集成页面。
 
 ## Vercel
 
