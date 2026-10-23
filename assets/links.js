@@ -1,4 +1,4 @@
-﻿/* 网址导航 —— 纯前端，数据保存在 localStorage（键 ahut_links_v1） */
+/* 网址导航 —— 纯前端，数据保存在 localStorage（键 ahut_links_v1） */
 (function () {
   'use strict';
 
@@ -10,7 +10,7 @@
   ];
 
   var DEFAULT_DATA = {
-    "version": 3,
+    "version": 4,
     "groups": [
       {
         "id": "g-campus",
@@ -107,18 +107,6 @@
             "name": "Kimi",
             "url": "https://kimi.moonshot.cn/",
             "desc": "长文档阅读与整理"
-          },
-          {
-            "id": "study-5",
-            "name": "LexiPath 词汇",
-            "url": "https://lexipath-vocab-journey.pengyudeng92.chatgpt.site",
-            "desc": "网页版 SRS 背单词"
-          },
-          {
-            "id": "study-6",
-            "name": "Notion",
-            "url": "https://www.notion.so",
-            "desc": "个人知识库与资料整理"
           }
         ]
       },
@@ -150,18 +138,6 @@
             "name": "Web of Science",
             "url": "https://www.webofscience.com/",
             "desc": "外文文献引文检索"
-          },
-          {
-            "id": "academic-4",
-            "name": "IEEE Xplore",
-            "url": "https://ieeexplore.ieee.org/",
-            "desc": "电子电气领域论文"
-          },
-          {
-            "id": "academic-5",
-            "name": "Sci-Hub",
-            "url": "https://sci-hub.se",
-            "desc": "外文论文原文下载"
           },
           {
             "id": "academic-6",
@@ -213,12 +189,6 @@
             "desc": "Verilog 在线练习"
           },
           {
-            "id": "ic-4",
-            "name": "Cadence Virtuoso",
-            "url": "https://www.cadence.com/en_US/home/tools/custom-ic-analog-rf-design.html",
-            "desc": "模拟/定制电路设计平台"
-          },
-          {
             "id": "ic-5",
             "name": "Sentaurus TCAD",
             "url": "https://www.synopsys.com/silicon/tcad.html",
@@ -267,12 +237,6 @@
         "name": "编程与算法",
         "collapsed": false,
         "links": [
-          {
-            "id": "code-0",
-            "name": "GitHub",
-            "url": "https://github.com/",
-            "desc": "代码托管与开源项目"
-          },
           {
             "id": "code-1",
             "name": "LeetCode",
@@ -483,7 +447,7 @@
 
   /* 当默认分类有更新时，把新增链接合并进老用户本地数据（不覆盖用户改过的内容） */
   var SEED_KEY = 'ahut_links_seed';
-  var SEED_VERSION = 3;
+  var SEED_VERSION = 4;
 
   // 与集成电路专业无关、已从默认清单移除的条目，迁移时一并清理
   var REMOVED_URLS = {
@@ -500,7 +464,13 @@
     "http://www.crystallography.net/cod/": 1,
     "https://www.stats.gov.cn/": 1,
     "https://www.eastmoney.com/": 1,
-    "https://www.cninfo.com.cn/": 1
+    "https://www.cninfo.com.cn/": 1,
+    "https://lexipath-vocab-journey.pengyudeng92.chatgpt.site": 1,
+    "https://www.notion.so": 1,
+    "https://ieeexplore.ieee.org/": 1,
+    "https://sci-hub.se": 1,
+    "https://www.cadence.com/en_US/home/tools/custom-ic-analog-rf-design.html": 1,
+    "https://github.com/": 1
   };
   var GROUP_ALIAS = {
     '学习平台': '学习与课程',
