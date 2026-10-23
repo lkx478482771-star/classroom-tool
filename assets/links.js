@@ -1,4 +1,4 @@
-/* 网址集成 —— 纯前端，数据保存在 localStorage（键 ahut_links_v1） */
+﻿/* 网址导航 —— 纯前端，数据保存在 localStorage（键 ahut_links_v1） */
 (function () {
   'use strict';
 
@@ -10,44 +10,469 @@
   ];
 
   var DEFAULT_DATA = {
-    version: 1,
-    groups: [
+    "version": 2,
+    "groups": [
       {
-        id: 'g-campus', name: '校园入口', collapsed: false,
-        links: [
-          { id: 'u-campus', name: 'U校园', url: 'https://www.eduplus.net/', desc: '本科课程与课外学习平台' },
-          { id: 'ahu-site', name: '安徽大学', url: 'https://www.ahu.edu.cn/', desc: '学校官网与通知公告' },
-          { id: 'ahu-jwc', name: '教务处', url: 'https://jwc.ahu.edu.cn/', desc: '选课、成绩与教学通知' },
-          { id: 'ahu-lib', name: '图书馆', url: 'https://lib.ahu.edu.cn/', desc: '馆藏检索与借阅续借' },
-          { id: 'ahu-mail', name: '校园邮箱', url: 'https://mail.ahu.edu.cn/', desc: '学校邮箱登录' }
+        "id": "g-campus",
+        "name": "校园入口",
+        "collapsed": false,
+        "links": [
+          {
+            "id": "campus-0",
+            "name": "U校园",
+            "url": "https://www.eduplus.net/",
+            "desc": "本科课程与课外学习平台"
+          },
+          {
+            "id": "campus-1",
+            "name": "安徽大学",
+            "url": "https://www.ahu.edu.cn/",
+            "desc": "学校官网与通知公告"
+          },
+          {
+            "id": "campus-2",
+            "name": "集成电路学院",
+            "url": "https://ic.ahu.edu.cn",
+            "desc": "学院新闻、通知与教学科研"
+          },
+          {
+            "id": "campus-3",
+            "name": "产教研融合研究院",
+            "url": "https://imtic.ahu.edu.cn/",
+            "desc": "集成电路先进材料与技术研究平台"
+          },
+          {
+            "id": "campus-4",
+            "name": "智慧安大",
+            "url": "https://adwmh.ahu.edu.cn/index/wx/login",
+            "desc": "教务、学工与办事服务"
+          },
+          {
+            "id": "campus-5",
+            "name": "教务处",
+            "url": "https://jwc.ahu.edu.cn/",
+            "desc": "选课、成绩与教学通知"
+          },
+          {
+            "id": "campus-6",
+            "name": "图书馆",
+            "url": "https://lib.ahu.edu.cn/",
+            "desc": "馆藏检索、借阅与座位预约"
+          },
+          {
+            "id": "campus-7",
+            "name": "校园邮箱",
+            "url": "https://mail.ahu.edu.cn/",
+            "desc": "学校邮箱登录"
+          },
+          {
+            "id": "campus-8",
+            "name": "校友会",
+            "url": "https://alumni.ahu.edu.cn/main.htm",
+            "desc": "校友联络与活动资讯"
+          }
         ]
       },
       {
-        id: 'g-study', name: '学习平台', collapsed: false,
-        links: [
-          { id: 'mooc', name: '中国大学MOOC', url: 'https://www.icourse163.org/', desc: '名校公开课与慕课' },
-          { id: 'chaoxing', name: '学习通', url: 'https://passport2.chaoxing.com/', desc: '课程签到与资料' },
-          { id: 'bilibili', name: '哔哩哔哩', url: 'https://www.bilibili.com/', desc: '课程录播与技术视频' },
-          { id: 'deepseek', name: 'DeepSeek', url: 'https://chat.deepseek.com/', desc: '对话与代码助手' },
-          { id: 'kimi', name: 'Kimi', url: 'https://kimi.moonshot.cn/', desc: '长文档阅读与整理' }
+        "id": "g-study",
+        "name": "学习与课程",
+        "collapsed": false,
+        "links": [
+          {
+            "id": "study-0",
+            "name": "中国大学MOOC",
+            "url": "https://www.icourse163.org/",
+            "desc": "名校公开课与慕课"
+          },
+          {
+            "id": "study-1",
+            "name": "学习通",
+            "url": "https://passport2.chaoxing.com/",
+            "desc": "课程签到与资料"
+          },
+          {
+            "id": "study-2",
+            "name": "哔哩哔哩",
+            "url": "https://www.bilibili.com/",
+            "desc": "课程录播与技术视频"
+          },
+          {
+            "id": "study-3",
+            "name": "DeepSeek",
+            "url": "https://chat.deepseek.com/",
+            "desc": "对话与代码助手"
+          },
+          {
+            "id": "study-4",
+            "name": "Kimi",
+            "url": "https://kimi.moonshot.cn/",
+            "desc": "长文档阅读与整理"
+          },
+          {
+            "id": "study-5",
+            "name": "LexiPath 词汇",
+            "url": "https://lexipath-vocab-journey.pengyudeng92.chatgpt.site",
+            "desc": "网页版 SRS 背单词"
+          },
+          {
+            "id": "study-6",
+            "name": "Notion",
+            "url": "https://www.notion.so",
+            "desc": "个人知识库与资料整理"
+          }
         ]
       },
       {
-        id: 'g-major', name: '专业与竞赛', collapsed: false,
-        links: [
-          { id: 'ciciec', name: '集创赛', url: 'https://univ.ciciec.com/', desc: '全国大学生集成电路创新创业大赛' },
-          { id: 'nuedc', name: '电赛培训网', url: 'https://www.nuedc-training.com.cn/', desc: '电子设计竞赛历年赛题与通知' },
-          { id: 'leetcode', name: 'LeetCode', url: 'https://leetcode.cn/', desc: '算法刷题与题解' },
-          { id: 'luogu', name: '洛谷', url: 'https://www.luogu.com.cn/', desc: '竞赛题单与评测' }
+        "id": "g-academic",
+        "name": "学术与文献",
+        "collapsed": false,
+        "links": [
+          {
+            "id": "academic-0",
+            "name": "中国知网",
+            "url": "https://www.cnki.net/",
+            "desc": "中文学术文献检索"
+          },
+          {
+            "id": "academic-1",
+            "name": "万方数据",
+            "url": "https://www.wanfangdata.com.cn/",
+            "desc": "期刊、学位论文与会议"
+          },
+          {
+            "id": "academic-2",
+            "name": "维普",
+            "url": "https://www.cqvip.com/",
+            "desc": "中文期刊全文检索"
+          },
+          {
+            "id": "academic-3",
+            "name": "Web of Science",
+            "url": "https://www.webofscience.com/",
+            "desc": "外文文献引文检索"
+          },
+          {
+            "id": "academic-4",
+            "name": "IEEE Xplore",
+            "url": "https://ieeexplore.ieee.org/",
+            "desc": "电子电气领域论文"
+          },
+          {
+            "id": "academic-5",
+            "name": "Sci-Hub",
+            "url": "https://sci-hub.se",
+            "desc": "外文论文原文下载"
+          },
+          {
+            "id": "academic-6",
+            "name": "Zotero",
+            "url": "https://www.zotero.org/",
+            "desc": "文献管理与引用"
+          },
+          {
+            "id": "academic-7",
+            "name": "Overleaf",
+            "url": "https://www.overleaf.com/",
+            "desc": "在线 LaTeX 写作"
+          },
+          {
+            "id": "academic-8",
+            "name": "研招网",
+            "url": "https://yz.chsi.com.cn/",
+            "desc": "考研报名与院校信息"
+          },
+          {
+            "id": "academic-9",
+            "name": "国家哲学社科文献中心",
+            "url": "https://www.ncpssd.org/",
+            "desc": "免费人文社科文献"
+          }
         ]
       },
       {
-        id: 'g-tools', name: '常用工具', collapsed: false,
-        links: [
-          { id: 'github', name: 'GitHub', url: 'https://github.com/', desc: '代码托管与开源项目' },
-          { id: 'yuque', name: '语雀', url: 'https://www.yuque.com/', desc: '笔记与文档协作' },
-          { id: 'zhihu', name: '知乎', url: 'https://www.zhihu.com/', desc: '问答与经验帖' },
-          { id: 'pan', name: '百度网盘', url: 'https://pan.baidu.com/', desc: '文件存储与分享' }
+        "id": "g-ic",
+        "name": "集成电路与硬件",
+        "collapsed": false,
+        "links": [
+          {
+            "id": "ic-0",
+            "name": "集创赛",
+            "url": "https://univ.ciciec.com/",
+            "desc": "全国大学生集成电路创新创业大赛"
+          },
+          {
+            "id": "ic-1",
+            "name": "电子设计竞赛",
+            "url": "https://www.nuedc-training.com.cn/",
+            "desc": "电赛历年赛题与通知"
+          },
+          {
+            "id": "ic-2",
+            "name": "与非网 EEFOCUS",
+            "url": "https://www.eefocus.com/",
+            "desc": "电子与芯片行业资讯社区"
+          },
+          {
+            "id": "ic-3",
+            "name": "HDLBits",
+            "url": "https://hdlbits.01xz.net/wiki/Main_Page",
+            "desc": "Verilog 在线练习"
+          },
+          {
+            "id": "ic-4",
+            "name": "Cadence Virtuoso",
+            "url": "https://www.cadence.com/en_US/home/tools/custom-ic-analog-rf-design.html",
+            "desc": "模拟/定制电路设计平台"
+          },
+          {
+            "id": "ic-5",
+            "name": "Sentaurus TCAD",
+            "url": "https://www.synopsys.com/silicon/tcad.html",
+            "desc": "工艺与器件仿真"
+          },
+          {
+            "id": "ic-6",
+            "name": "KLayout",
+            "url": "https://www.klayout.de/",
+            "desc": "版图查看与编辑"
+          },
+          {
+            "id": "ic-7",
+            "name": "ModelSim",
+            "url": "https://eda.sw.siemens.com/en-US/ic/modelsim/",
+            "desc": "数字电路仿真"
+          },
+          {
+            "id": "ic-8",
+            "name": "KiCad",
+            "url": "https://www.kicad.org/",
+            "desc": "开源 PCB 设计"
+          },
+          {
+            "id": "ic-9",
+            "name": "LTspice",
+            "url": "https://www.analog.com/en/design-center/design-tools-and-calculators/ltspice-simulator.html",
+            "desc": "免费电路仿真"
+          },
+          {
+            "id": "ic-10",
+            "name": "STM32",
+            "url": "https://www.st.com/en/microcontrollers-microprocessors/stm32-32-bit-arm-cortex-mcus.html",
+            "desc": "单片机资料与开发工具"
+          },
+          {
+            "id": "ic-11",
+            "name": "Arduino",
+            "url": "https://www.arduino.cc/",
+            "desc": "开源硬件入门"
+          }
+        ]
+      },
+      {
+        "id": "g-code",
+        "name": "编程与算法",
+        "collapsed": false,
+        "links": [
+          {
+            "id": "code-0",
+            "name": "GitHub",
+            "url": "https://github.com/",
+            "desc": "代码托管与开源项目"
+          },
+          {
+            "id": "code-1",
+            "name": "LeetCode",
+            "url": "https://leetcode.cn/",
+            "desc": "算法刷题与题解"
+          },
+          {
+            "id": "code-2",
+            "name": "洛谷",
+            "url": "https://www.luogu.com.cn/",
+            "desc": "竞赛题单与评测"
+          },
+          {
+            "id": "code-3",
+            "name": "Codeforces",
+            "url": "https://codeforces.com/",
+            "desc": "国际算法竞赛"
+          },
+          {
+            "id": "code-4",
+            "name": "牛客网",
+            "url": "https://www.nowcoder.com/",
+            "desc": "笔试题库与求职"
+          },
+          {
+            "id": "code-5",
+            "name": "蓝桥杯",
+            "url": "https://dasai.lanqiao.cn/",
+            "desc": "蓝桥杯官网"
+          },
+          {
+            "id": "code-6",
+            "name": "OI Wiki",
+            "url": "https://oi-wiki.org/",
+            "desc": "算法竞赛知识库"
+          },
+          {
+            "id": "code-7",
+            "name": "VisuAlgo",
+            "url": "https://visualgo.net/zh",
+            "desc": "算法可视化"
+          },
+          {
+            "id": "code-8",
+            "name": "MDN Web Docs",
+            "url": "https://developer.mozilla.org/zh-CN/",
+            "desc": "前端与 Web 标准文档"
+          },
+          {
+            "id": "code-9",
+            "name": "菜鸟教程",
+            "url": "https://www.runoob.com/",
+            "desc": "编程语言快速入门"
+          },
+          {
+            "id": "code-10",
+            "name": "SQLZoo",
+            "url": "https://sqlzoo.net/",
+            "desc": "SQL 在线练习"
+          }
+        ]
+      },
+      {
+        "id": "g-research",
+        "name": "科研与工具",
+        "collapsed": false,
+        "links": [
+          {
+            "id": "research-0",
+            "name": "MATLAB",
+            "url": "https://www.mathworks.com/products/matlab.html",
+            "desc": "数值计算与建模"
+          },
+          {
+            "id": "research-1",
+            "name": "Simulink",
+            "url": "https://www.mathworks.com/products/simulink.html",
+            "desc": "系统仿真"
+          },
+          {
+            "id": "research-2",
+            "name": "ROS 文档",
+            "url": "https://docs.ros.org/",
+            "desc": "机器人操作系统文档"
+          },
+          {
+            "id": "research-3",
+            "name": "西门子工业支持",
+            "url": "https://support.industry.siemens.com/cs/cn/zh/",
+            "desc": "PLC 与自动化资料"
+          },
+          {
+            "id": "research-4",
+            "name": "Materials Project",
+            "url": "https://materialsproject.org/",
+            "desc": "材料计算数据库"
+          },
+          {
+            "id": "research-5",
+            "name": "VESTA",
+            "url": "https://jp-minerals.org/vesta/en/",
+            "desc": "晶体结构可视化"
+          },
+          {
+            "id": "research-6",
+            "name": "LAMMPS",
+            "url": "https://www.lammps.org/",
+            "desc": "分子动力学模拟"
+          },
+          {
+            "id": "research-7",
+            "name": "OriginLab",
+            "url": "https://www.originlab.com/",
+            "desc": "科研绘图"
+          },
+          {
+            "id": "research-8",
+            "name": "Ptable",
+            "url": "https://ptable.com/",
+            "desc": "元素周期表"
+          },
+          {
+            "id": "research-9",
+            "name": "PubChem",
+            "url": "https://pubchem.ncbi.nlm.nih.gov/",
+            "desc": "化合物数据库"
+          },
+          {
+            "id": "research-10",
+            "name": "小木虫",
+            "url": "https://muchong.com/",
+            "desc": "科研经验交流社区"
+          },
+          {
+            "id": "research-11",
+            "name": "Crystallography Open Database",
+            "url": "http://www.crystallography.net/cod/",
+            "desc": "晶体结构开放数据库"
+          }
+        ]
+      },
+      {
+        "id": "g-tools",
+        "name": "常用工具",
+        "collapsed": false,
+        "links": [
+          {
+            "id": "tools-0",
+            "name": "语雀",
+            "url": "https://www.yuque.com/",
+            "desc": "笔记与文档协作"
+          },
+          {
+            "id": "tools-1",
+            "name": "知乎",
+            "url": "https://www.zhihu.com/",
+            "desc": "问答与经验帖"
+          },
+          {
+            "id": "tools-2",
+            "name": "百度网盘",
+            "url": "https://pan.baidu.com/",
+            "desc": "文件存储与分享"
+          },
+          {
+            "id": "tools-3",
+            "name": "WPS Office",
+            "url": "https://www.wps.cn/",
+            "desc": "文档表格演示"
+          },
+          {
+            "id": "tools-4",
+            "name": "Convertio",
+            "url": "https://convertio.co",
+            "desc": "文件格式互转"
+          },
+          {
+            "id": "tools-5",
+            "name": "国家统计局",
+            "url": "https://www.stats.gov.cn/",
+            "desc": "宏观统计数据"
+          },
+          {
+            "id": "tools-6",
+            "name": "东方财富网",
+            "url": "https://www.eastmoney.com/",
+            "desc": "行情与财经资讯"
+          },
+          {
+            "id": "tools-7",
+            "name": "巨潮资讯网",
+            "url": "https://www.cninfo.com.cn/",
+            "desc": "上市公司公告"
+          }
         ]
       }
     ]
@@ -140,17 +565,65 @@
 
   var state = null;
 
+  /* 当默认分类有更新时，把新增链接合并进老用户本地数据（不覆盖用户改过的内容） */
+  var SEED_KEY = 'ahut_links_seed';
+  var SEED_VERSION = 2;
+
+  var GROUP_ALIAS = {
+    '学习平台': '学习与课程',
+    '专业与竞赛': '集成电路与硬件'
+  };
+
+  function mergeDefaults(current) {
+    var merged = {
+      version: 2,
+      groups: current.groups.map(function (g) {
+        return {
+          id: g.id,
+          name: GROUP_ALIAS[g.name] || g.name,
+          collapsed: g.collapsed,
+          links: g.links.slice()
+        };
+      })
+    };
+    var seen = {};
+    merged.groups.forEach(function (g) {
+      g.links.forEach(function (l) { seen[l.url] = true; });
+    });
+    var byName = {};
+    merged.groups.forEach(function (g) { if (!byName[g.name]) byName[g.name] = g; });
+    DEFAULT_DATA.groups.forEach(function (dg) {
+      var target = byName[dg.name];
+      if (!target) {
+        target = { id: dg.id, name: dg.name, collapsed: false, links: [] };
+        merged.groups.push(target);
+        byName[dg.name] = target;
+      }
+      dg.links.forEach(function (l) {
+        if (seen[l.url]) return;
+        seen[l.url] = true;
+        target.links.push({ id: uid('l'), name: l.name, url: l.url, desc: l.desc });
+      });
+    });
+    return merged;
+  }
+
   function load() {
     var parsed = null;
+    var seed = 0;
     try {
       var raw = localStorage.getItem(STORE_KEY);
       if (raw) parsed = JSON.parse(raw);
+      seed = Number(localStorage.getItem(SEED_KEY)) || 0;
     } catch (e) { parsed = null; }
     if (!parsed || !Array.isArray(parsed.groups)) {
       state = normalizeData(DEFAULT_DATA);
-      return;
+    } else {
+      state = normalizeData(parsed);
+      if (seed < SEED_VERSION) state = normalizeData(mergeDefaults(state));
     }
-    state = normalizeData(parsed);
+    try { localStorage.setItem(SEED_KEY, String(SEED_VERSION)); } catch (e) {}
+    persist();
   }
 
   function persist() {
@@ -478,7 +951,7 @@
 
   function exportData() {
     var payload = {
-      app: '安大学生工具箱 · 网址集成',
+      app: '安大学生工具箱 · 网址导航',
       version: 1,
       exportedAt: new Date().toISOString(),
       groups: state.groups

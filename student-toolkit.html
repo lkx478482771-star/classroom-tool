@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#4f5bff">
 <script>(function(){try{var d=localStorage.getItem('dark_mode')==='true';document.documentElement.dataset.theme=d?'dark':'light';var m=document.querySelector('meta[name="theme-color"]');if(m)m.content=d?'#0d0e13':'#4f5bff';}catch(e){}})();</script>
-<meta name="description" content="安大学生工具箱：专业路线、学习导航、网址集成与数据备份。">
+<meta name="description" content="安大学生工具箱：专业路线、网址导航与数据备份。">
 <title>安大学生工具箱</title>
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="assets/app.css">
@@ -457,9 +457,7 @@
       <a href="#search">搜索</a>
       <a href="#majorManager">我的专业</a>
       <a href="#major">专业路线</a>
-      <a href="#tools">学习导航</a>
-      <a href="#nav">校园导航</a>
-      <a href="links.html">网址集成</a>
+      <a href="links.html">网址导航</a>
       <a href="#backup">数据备份</a>
     </nav>
     <div class="top-clock" aria-label="当前时间" role="timer">
@@ -474,7 +472,7 @@
     <div class="home-hero">
       <span class="home-kicker">AHU STUDENT TOOLKIT</span>
       <h2>安大学生工具箱</h2>
-      <p>专业路线、学习导航和网址集成集中在一个工作台。选择下面的模块直接进入，功能数据保存在本机浏览器中。</p>
+      <p>专业路线、网址导航和数据备份集中在一个工作台。选择下面的模块直接进入，功能数据保存在本机浏览器中。</p>
       <div class="home-actions">
         <a class="btn btn-primary" href="#major">查看专业成长路线</a>
         <button type="button" class="btn btn-secondary" id="openWelcomeBtn">使用说明</button>
@@ -498,18 +496,8 @@
       </a>
       <a class="home-card" href="links.html">
         <span class="home-card-icon"><svg class="icon icon-xl"><use href="#icon-external"></use></svg></span>
-        <h3>网址集成</h3>
-        <p>自己添加常用网址，点开直达</p>
-      </a>
-      <a class="home-card" href="#tools">
-        <span class="home-card-icon"><svg class="icon icon-xl"><use href="#icon-toolkit"></use></svg></span>
-        <h3>学习导航</h3>
-        <p>课程、文献、社区与常用学习资源</p>
-      </a>
-      <a class="home-card" href="#nav">
-        <span class="home-card-icon"><svg class="icon icon-xl"><use href="#icon-external"></use></svg></span>
-        <h3>校园导航</h3>
-        <p>学院官网、智慧安大与校园服务入口</p>
+        <h3>网址导航</h3>
+        <p>校园入口、学习资源与常用网站，按分类整理</p>
       </a>
       <a class="home-card" href="#backup">
         <span class="home-card-icon"><svg class="icon icon-xl"><use href="#icon-save"></use></svg></span>
@@ -572,124 +560,10 @@
     </div>
   </section>
 
-  <section class="section" id="tools">
-    <div class="card">
-      <h2><svg class="icon"><use href="#icon-toolkit"></use></svg>学习导航</h2>
-      <div id="toolBox"></div>
-    </div>
-  </section>
-
-  <section class="section" id="nav">
-    <div class="card">
-      <div class="section-head">
-        <h2><svg class="icon" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" fill="none" stroke-width="1.8"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6" rx="1"/><line x1="9" y1="2" x2="9" y2="4"/><line x1="15" y1="2" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="22"/><line x1="15" y1="20" x2="15" y2="22"/><line x1="20" y1="9" x2="22" y2="9"/><line x1="20" y1="14" x2="22" y2="14"/><line x1="2" y1="9" x2="4" y2="9"/><line x1="2" y1="14" x2="4" y2="14"/></svg>校园导航</h2>
-        <button type="button" class="btn btn-secondary btn-sm" id="addResourceBtn">新增资源</button>
-      </div>
-      <div class="tool-card">
-        <span class="tool-tag">科研</span>
-        <a class="tool-link" href="http://imtic.ahu.edu.cn/" target="_blank" rel="noopener noreferrer">集成电路先进材料与技术产教研融合研究院 imtic.ahu.edu.cn <svg class="icon icon-sm"><use href="#icon-external"></use></svg></a>
-        <span class="tool-desc">集成电路先进材料与技术产学研融合研究平台</span>
-      </div>
-      <div class="tool-card">
-        <span class="tool-tag">学院</span>
-        <a class="tool-link" href="https://ic.ahu.edu.cn" target="_blank" rel="noopener noreferrer">集成电路学院 ic.ahu.edu.cn <svg class="icon icon-sm"><use href="#icon-external"></use></svg></a>
-        <span class="tool-desc">集成电路学院官方网站，学院新闻、通知公告、教学科研等信息</span>
-      </div>
-      <div class="tool-card">
-        <span class="tool-tag">校园</span>
-        <a class="tool-link" href="https://adwmh.ahu.edu.cn/index/wx/login" target="_blank" rel="noopener noreferrer">智慧安大 adwmh.ahu.edu.cn <svg class="icon icon-sm"><use href="#icon-external"></use></svg></a>
-        <span class="tool-desc">智慧安大统一入口，教务、学工、办事服务等</span>
-      </div>
-      <div class="tool-card">
-        <span class="tool-tag">校友</span>
-        <a class="tool-link" href="https://alumni.ahu.edu.cn/main.htm" target="_blank" rel="noopener noreferrer">安徽大学校友会 alumni.ahu.edu.cn <svg class="icon icon-sm"><use href="#icon-external"></use></svg></a>
-        <span class="tool-desc">校友联络、捐赠平台、校友活动与资讯</span>
-      </div>
-      <div class="nav-subtitle">专业相关网站</div>
-      <div class="tool-card">
-        <span class="tool-tag">财经</span>
-        <span class="tool-link-group">
-          <a class="tool-link" href="https://www.eastmoney.com/" target="_blank" rel="noopener noreferrer">东方财富</a>
-          <a class="tool-link" href="https://www.cninfo.com.cn/" target="_blank" rel="noopener noreferrer">巨潮资讯</a>
-          <a class="tool-link" href="https://data.stats.gov.cn/" target="_blank" rel="noopener noreferrer">国家统计局</a>
-          <a class="tool-link" href="https://www.cicpa.org.cn/" target="_blank" rel="noopener noreferrer">注册会计师协会</a>
-          <a class="tool-link" href="https://www.amac.org.cn/" target="_blank" rel="noopener noreferrer">基金业协会</a>
-        </span>
-        <span class="tool-desc">金融行情、上市公司公告、宏观数据与证书官方入口</span>
-      </div>
-      <div class="tool-card">
-        <span class="tool-tag">微电子</span>
-        <span class="tool-link-group">
-          <a class="tool-link" href="https://ic.ahu.edu.cn" target="_blank" rel="noopener noreferrer">集成电路学院</a>
-          <a class="tool-link" href="https://imtic.ahu.edu.cn/" target="_blank" rel="noopener noreferrer">产教研融合研究院</a>
-          <a class="tool-link" href="https://www.eefocus.com/" target="_blank" rel="noopener noreferrer">与非网 EEFOCUS</a>
-          <a class="tool-link" href="https://hdlbits.01xz.net/" target="_blank" rel="noopener noreferrer">HDLBits</a>
-          <a class="tool-link" href="https://www.nuedc-training.com.cn/" target="_blank" rel="noopener noreferrer">电子设计竞赛</a>
-        </span>
-        <span class="tool-desc">学院资讯、行业社区、Verilog 练习和电子设计竞赛入口</span>
-      </div>
-      <div class="tool-card">
-        <span class="tool-tag">经管</span>
-        <span class="tool-link-group">
-          <a class="tool-link" href="https://www.cmcc-dlut.cn/" target="_blank" rel="noopener noreferrer">中国管理案例共享中心</a>
-          <a class="tool-link" href="https://data.stats.gov.cn/" target="_blank" rel="noopener noreferrer">国家统计局</a>
-          <a class="tool-link" href="https://www.icourse163.org/" target="_blank" rel="noopener noreferrer">中国大学MOOC</a>
-          <a class="tool-link" href="https://www.yonyou.com/" target="_blank" rel="noopener noreferrer">用友</a>
-          <a class="tool-link" href="https://www.kingdee.com/" target="_blank" rel="noopener noreferrer">金蝶</a>
-          <a class="tool-link" href="https://www.bizsim.cn/" target="_blank" rel="noopener noreferrer">企业竞争模拟大赛</a>
-        </span>
-        <span class="tool-desc">管理案例、统计与课程资源、企业管理软件和竞赛入口</span>
-      </div>
-      <div class="tool-card">
-        <span class="tool-tag">通用</span>
-        <span class="tool-link-group">
-          <a class="tool-link" href="https://www.ahu.edu.cn/" target="_blank" rel="noopener noreferrer">安徽大学官网</a>
-          <a class="tool-link" href="https://lib.ahu.edu.cn/" target="_blank" rel="noopener noreferrer">图书馆</a>
-          <a class="tool-link" href="https://jwc.ahu.edu.cn/" target="_blank" rel="noopener noreferrer">教务处</a>
-        </span>
-        <span class="tool-desc">培养方案、通知公告、图书馆座位预约、文献传递与教务服务</span>
-      </div>
-      <div class="tool-card">
-        <span class="tool-tag">学术</span>
-        <span class="tool-link-group">
-          <a class="tool-link" href="https://yz.chsi.com.cn/" target="_blank" rel="noopener noreferrer">研招网</a>
-          <a class="tool-link" href="https://www.icourse163.org/" target="_blank" rel="noopener noreferrer">中国大学MOOC</a>
-          <a class="tool-link" href="https://www.cnki.net/" target="_blank" rel="noopener noreferrer">中国知网</a>
-          <a class="tool-link" href="https://www.wanfangdata.com.cn/" target="_blank" rel="noopener noreferrer">万方数据</a>
-          <a class="tool-link" href="https://www.cqvip.com/" target="_blank" rel="noopener noreferrer">维普</a>
-          <a class="tool-link" href="https://www.webofscience.com/" target="_blank" rel="noopener noreferrer">Web of Science</a>
-          <a class="tool-link" href="https://ieeexplore.ieee.org/" target="_blank" rel="noopener noreferrer">IEEE Xplore</a>
-          <a class="tool-link" href="https://www.zotero.org/" target="_blank" rel="noopener noreferrer">Zotero</a>
-          <a class="tool-link" href="https://www.overleaf.com/" target="_blank" rel="noopener noreferrer">Overleaf</a>
-        </span>
-        <span class="tool-desc">文献检索、论文管理与在线写作；知网、万方、Web of Science、IEEE 等通常需要校园网或图书馆授权访问。</span>
-      </div>
-      <div class="tool-card">
-        <span class="tool-tag">提示</span>
-        <span class="tool-desc">资源链接由人工维护，如遇网站改版或链接失效，请通过页脚“反馈与建议”提交。</span>
-      </div>
-      <div class="tool-card">
-        <span class="tool-tag">论坛</span>
-        <span class="tool-link">安大论坛 · 逛逛<span style="font-size:10px;padding:2px 8px;border-radius:999px;background:rgba(7,193,96,0.12);color:#07c160;font-weight:650;margin-left:4px">微信小程序</span></span>
-        <span class="tool-desc">安大校园论坛小程序，查课表、找教室、二手交易、校园交流等</span>
-      </div>
-      <div style="margin:10px 0 0 0;padding:10px 14px;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius);font-size:12px;color:var(--text-2);display:flex;align-items:center;gap:10px;flex-wrap:wrap">
-        <span style="font-weight:600">小程序打开：</span>
-        <span>微信内搜索<strong>"安大论坛"</strong>或<strong>"逛逛"</strong></span>
-        <span style="color:var(--text-3)">或</span>
-        <button type="button" id="copyWxBtn" class="btn btn-secondary btn-sm">复制小程序链接 去微信打开</button>
-        <span id="copyWxOk" style="display:none;color:var(--ok);font-weight:600">已复制！去微信粘贴</span>
-      </div>
-      <div class="nav-subtitle">我的自定义资源</div>
-      <div id="customResourceList"></div>
-      <p class="hint" style="margin-top:10px">校园入口与专业资源持续补充，点击链接前往对应网站。</p>
-    </div>
-  </section>
-
   <section class="section" id="backup">
     <div class="card">
       <h2><svg class="icon"><use href="#icon-save"></use></svg>数据备份与恢复</h2>
-      <p class="section-intro">把专业模板、路线勾选进度、自定义资源和主题偏好导出为 JSON 文件。换设备、换浏览器或清理缓存前，建议先导出备份。</p>
+      <p class="section-intro">把专业模板、路线勾选进度和主题偏好导出为 JSON 文件。换设备、换浏览器或清理缓存前，建议先导出备份。</p>
       <div class="backup-status" id="backupStatus">正在检查备份状态…</div>
       <div class="result-actions">
         <button type="button" class="btn btn-primary btn-sm" id="exportAllBtn">导出全部数据</button>
@@ -726,13 +600,6 @@
           </div>
           <div id="roadStageRows"></div>
         </div>
-        <div class="editor-section">
-          <div class="editor-section-head">
-            <h4>资源卡片</h4>
-            <button type="button" class="btn btn-secondary btn-sm" id="addToolRowBtn">添加资源</button>
-          </div>
-          <div id="toolRows"></div>
-        </div>
       </form>
     </div>
     <div class="modal-foot">
@@ -755,7 +622,7 @@
       <ul class="welcome-list">
         <li><strong>我的专业</strong>：切换集成电路、微电子、财经、经济管理等内置模板，也可以新建自己的模板。</li>
         <li><strong>专业路线</strong>：按学期勾选成长任务，进度自动保存在本机。</li>
-        <li><strong>网址集成</strong>：自己添加常用网址，下次打开自动保留。</li>
+        <li><strong>网址导航</strong>：校园入口、学习资源和常用网站分类整理，也可以自己添加，下次打开自动保留。</li>
         <li><strong>搜索</strong>：快速查找任务、学习资源和页面模块。</li>
         <li><strong>数据备份</strong>：清除浏览器数据或更换设备前，先导出 JSON 备份。</li>
       </ul>
@@ -812,39 +679,6 @@
     <div class="modal-foot">
       <button type="button" class="btn btn-secondary" data-close-task-meta>取消</button>
       <button type="button" class="btn btn-primary" id="saveTaskMetaBtn">保存</button>
-    </div>
-  </div>
-</div>
-
-<div class="modal-overlay" id="resourceEditorModal">
-  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="resourceEditorTitle">
-    <div class="modal-head">
-      <h3 id="resourceEditorTitle">新增自定义资源</h3>
-      <button type="button" class="modal-close" data-close-resource-editor aria-label="关闭">
-        <svg class="icon"><use href="#icon-x"></use></svg>
-      </button>
-    </div>
-    <div class="modal-body">
-      <label class="field">
-        <span class="label">名称</span>
-        <input class="input" id="resourceEditorName" placeholder="例如：校园卡服务" autocomplete="off">
-      </label>
-      <label class="field">
-        <span class="label">链接</span>
-        <input class="input" id="resourceEditorUrl" type="url" placeholder="https://...">
-      </label>
-      <label class="field">
-        <span class="label">分类</span>
-        <input class="input" id="resourceEditorTag" placeholder="例如：校园、工具、学习" autocomplete="off">
-      </label>
-      <label class="field">
-        <span class="label">说明</span>
-        <textarea class="textarea" id="resourceEditorDesc" rows="3" placeholder="这个入口有什么用途"></textarea>
-      </label>
-    </div>
-    <div class="modal-foot">
-      <button type="button" class="btn btn-secondary" data-close-resource-editor>取消</button>
-      <button type="button" class="btn btn-primary" id="saveResourceEditorBtn">保存资源</button>
     </div>
   </div>
 </div>
@@ -2478,7 +2312,7 @@
   }
 
   let roadmapData = getProfile(activeMajorId).roadmap;
-  let toolData = getProfile(activeMajorId).tools;
+  
   let roadmapDone = {};
   try {
     roadmapDone = JSON.parse(localStorage.getItem(ROADMAP_KEY)) || {};
@@ -2776,24 +2610,6 @@
     }
   });
 
-  function renderTools() {
-    const box = $('toolBox');
-    clearNode(box);
-    toolData.forEach(function (tool) {
-      const card = el('div', { className: 'tool-card' });
-      card.appendChild(el('span', { className: 'tool-tag', textContent: tool.tag }));
-      const link = el('a', {
-        className: 'tool-link', href: tool.url, target: '_blank',
-        rel: 'noopener noreferrer', textContent: tool.name
-      });
-      link.appendChild(el('svg', { className: 'icon icon-sm' },
-        [el('use', { href: '#icon-external' })]));
-      card.appendChild(link);
-      card.appendChild(el('span', { className: 'tool-desc', textContent: tool.desc }));
-      box.appendChild(card);
-    });
-  }
-
   function renderMajorSelect() {
     const select = $('majorSelect');
     clearNode(select);
@@ -2832,16 +2648,16 @@
     activeMajorId = profile.id;
     saveCustomStore();
     roadmapData = profile.roadmap;
-    toolData = profile.tools;
+    
     $('majorTitle').textContent = profile.name + ' 四年成长路线';
     $('majorIntro').textContent = profile.intro || '把大一到大四拆成可勾选的阶段目标，每完成一项就点一下。';
-    $('majorHint').textContent = '当前模板：' + profile.name + '，路线和资源已自动切换。';
+    $('majorHint').textContent = '当前模板：' + profile.name + '，路线已自动切换。';
     renderMajorSelect();
     renderMajorManageInfo();
     updateHomeMajorStats(profile);
     roadFilter = 'all';
     renderRoadmap();
-    renderTools();
+    
     renderSearchResults($('globalSearchInput').value);
   }
 
@@ -2902,24 +2718,6 @@
     return row;
   }
 
-  function buildToolRow(tool) {
-    const row = el('div', { className: 'editor-row tool-row' });
-    const head = el('div', { className: 'editor-row-head' });
-    head.appendChild(el('span', { className: 'editor-row-label', textContent: '资源' }));
-    head.appendChild(el('button', {
-      type: 'button', className: 'btn btn-danger btn-sm', textContent: '删除资源',
-      dataset: { action: 'remove-tool' }
-    }));
-    row.appendChild(head);
-    const grid = el('div', { className: 'editor-grid' });
-    grid.appendChild(editorField('tag', '标签', tool.tag));
-    grid.appendChild(editorField('name', '名称', tool.name));
-    grid.appendChild(editorField('url', '网址', tool.url));
-    grid.appendChild(editorField('desc', '说明', tool.desc));
-    row.appendChild(grid);
-    return row;
-  }
-
   function renderRoadStageRows(stages) {
     const box = $('roadStageRows');
     clearNode(box);
@@ -2928,33 +2726,15 @@
     });
   }
 
-  function renderToolRows(tools) {
-    const box = $('toolRows');
-    clearNode(box);
-    tools.forEach(function (tool) {
-      box.appendChild(buildToolRow(tool));
-    });
-  }
-
   $('roadStageRows').addEventListener('click', function (event) {
     const btn = event.target.closest('button[data-action="remove-road"]');
     if (btn) btn.closest('.road-stage-row').remove();
-  });
-
-  $('toolRows').addEventListener('click', function (event) {
-    const btn = event.target.closest('button[data-action="remove-tool"]');
-    if (btn) btn.closest('.tool-row').remove();
   });
 
 
   $('addRoadStageBtn').addEventListener('click', function () {
     $('roadStageRows').appendChild(buildRoadStageRow({ year: '', title: '', goal: '', items: [''] }, document.querySelectorAll('#roadStageRows .road-stage-row').length));
   });
-
-  $('addToolRowBtn').addEventListener('click', function () {
-    $('toolRows').appendChild(buildToolRow({ tag: '', name: '', url: '', desc: '' }));
-  });
-
 
   function readEditorProfile() {
     const roadmap = Array.from(document.querySelectorAll('#roadStageRows .road-stage-row')).map(function (row) {
@@ -2966,21 +2746,12 @@
       };
     }).filter(function (s) { return s.title || s.goal || s.items.length; });
 
-    const tools = Array.from(document.querySelectorAll('#toolRows .tool-row')).map(function (row) {
-      return {
-        tag: row.querySelector('[name="tag"]').value.trim(),
-        name: row.querySelector('[name="name"]').value.trim(),
-        url: row.querySelector('[name="url"]').value.trim(),
-        desc: row.querySelector('[name="desc"]').value.trim()
-      };
-    }).filter(function (t) { return t.name || t.url; });
-
     return normalizeProfile({
       id: editingMajorId || '',
       name: $('majorName').value.trim(),
       intro: $('majorIntroInput').value.trim(),
       roadmap: roadmap,
-      tools: tools,
+      
       updatedAt: Date.now()
     });
   }
@@ -2992,7 +2763,7 @@
     $('majorName').value = profile.name;
     $('majorIntroInput').value = profile.intro;
     renderRoadStageRows(profile.roadmap);
-    renderToolRows(profile.tools);
+    
     $('majorEditorModal').classList.add('show');
   }
 
@@ -3034,7 +2805,7 @@
       $('majorName').value = copy.name;
       $('majorIntroInput').value = copy.intro;
       renderRoadStageRows(copy.roadmap);
-      renderToolRows(copy.tools);
+      
       $('majorEditorModal').classList.add('show');
       return;
     }
@@ -3119,126 +2890,10 @@
     btn.addEventListener('click', closeMajorEditor);
   });
 
-  // ---------- 自定义资源 ----------
-  const CUSTOM_RESOURCE_KEY = 'ahutCustomResources';
-  let customResources = [];
-  try {
-    const rawResources = localStorage.getItem(CUSTOM_RESOURCE_KEY);
-    const parsedResources = rawResources ? JSON.parse(rawResources) : [];
-    customResources = Array.isArray(parsedResources) ? parsedResources : [];
-  } catch (err) {
-    customResources = [];
-  }
-
-  function saveCustomResources() {
-    try {
-      localStorage.setItem(CUSTOM_RESOURCE_KEY, JSON.stringify(customResources));
-    } catch (err) {
-      showToast('本地存储不可用', true);
-    }
-  }
-
-  function renderCustomResources() {
-    const box = $('customResourceList');
-    clearNode(box);
-    if (!customResources.length) {
-      box.appendChild(el('p', {
-        className: 'hint',
-        textContent: '还没有自定义资源。可以添加校园卡、校车、校园地图等入口。'
-      }));
-      return;
-    }
-    customResources.forEach(function (item) {
-      const card = el('div', { className: 'tool-card' });
-      card.appendChild(el('span', { className: 'tool-tag', textContent: item.tag || '自定义' }));
-      card.appendChild(el('a', {
-        className: 'tool-link',
-        href: item.url,
-        target: '_blank',
-        rel: 'noopener noreferrer',
-        textContent: item.name
-      }));
-      if (item.desc) card.appendChild(el('span', { className: 'tool-desc', textContent: item.desc }));
-      const actions = el('div', { className: 'contest-actions' });
-      actions.appendChild(el('button', {
-        type: 'button',
-        className: 'btn btn-danger btn-sm',
-        textContent: '删除',
-        dataset: { action: 'delete-resource', id: item.id }
-      }));
-      card.appendChild(actions);
-      box.appendChild(card);
-    });
-  }
-
-  function openResourceEditor() {
-    $('resourceEditorName').value = '';
-    $('resourceEditorUrl').value = '';
-    $('resourceEditorTag').value = '';
-    $('resourceEditorDesc').value = '';
-    $('resourceEditorModal').classList.add('show');
-    setTimeout(function () { $('resourceEditorName').focus(); }, 50);
-  }
-
-  function closeResourceEditor() {
-    $('resourceEditorModal').classList.remove('show');
-  }
-
-  function saveResourceFromEditor() {
-    const name = $('resourceEditorName').value.trim();
-    const rawUrl = $('resourceEditorUrl').value.trim();
-    const url = safeTaskLink(rawUrl);
-    if (!name || !url) {
-      showToast('请填写名称和有效的 http/https 链接', true);
-      return;
-    }
-    customResources.push({
-      id: 'r' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
-      name: name,
-      url: url,
-      tag: $('resourceEditorTag').value.trim() || '自定义',
-      desc: $('resourceEditorDesc').value.trim()
-    });
-    saveCustomResources();
-    closeResourceEditor();
-    renderCustomResources();
-    renderSearchResults($('globalSearchInput').value);
-    showToast('资源已添加');
-  }
-
-  $('addResourceBtn').addEventListener('click', openResourceEditor);
-  $('saveResourceEditorBtn').addEventListener('click', saveResourceFromEditor);
-  document.querySelectorAll('[data-close-resource-editor]').forEach(function (btn) {
-    btn.addEventListener('click', closeResourceEditor);
-  });
-  $('resourceEditorModal').addEventListener('click', function (event) {
-    if (event.target === $('resourceEditorModal')) closeResourceEditor();
-  });
-  document.addEventListener('keydown', function (event) {
-    if (event.key === 'Escape' && $('resourceEditorModal').classList.contains('show')) {
-      closeResourceEditor();
-    }
-  });
-  $('customResourceList').addEventListener('click', function (event) {
-    const button = event.target.closest('button[data-action="delete-resource"]');
-    if (!button) return;
-    const item = customResources.find(function (resource) { return resource.id === button.dataset.id; });
-    if (!item) return;
-    if (!confirm('确定删除“' + item.name + '”？')) return;
-    customResources = customResources.filter(function (resource) { return resource.id !== button.dataset.id; });
-    saveCustomResources();
-    renderCustomResources();
-    renderSearchResults($('globalSearchInput').value);
-    showToast('资源已删除');
-  });
-  renderCustomResources();
-
   // ---------- 全局搜索 ----------
   const SEARCH_MODULES = [
     { id: 'majorManager', title: '我的专业', desc: '切换、新建、复制或导出专业模板' },
     { id: 'major', title: '专业路线', desc: '按专业查看阶段任务和成长路线' },
-    { id: 'tools', title: '学习导航', desc: '课程、文献、社区与常用学习资源' },
-    { id: 'nav', title: '校园导航', desc: '校园入口与专业资源网站' },
     { id: 'backup', title: '数据备份', desc: '导出和恢复本机上的全部数据' }
   ];
 
@@ -3263,24 +2918,6 @@
           meta: roadmapDone[key] ? '已完成' : '未完成',
           href: '#major'
         });
-      });
-    });
-    toolData.forEach(function (tool) {
-      items.push({
-        type: '资源',
-        title: tool.name,
-        desc: tool.desc,
-        meta: tool.tag,
-        url: tool.url
-      });
-    });
-    customResources.forEach(function (resource) {
-      items.push({
-        type: '资源',
-        title: resource.name,
-        desc: resource.desc,
-        meta: resource.tag,
-        url: resource.url
       });
     });
     return items;
@@ -3400,7 +3037,6 @@
     'majorRoadmap',
     'majorTaskMeta',
     'gradeData',
-    'ahutCustomResources',
     'dark_mode'
   ];
 
@@ -3533,31 +3169,6 @@
       navigator.serviceWorker.register('./sw.js', { scope: './' }).catch(function () {});
     });
   }
-  document.getElementById('copyWxBtn').addEventListener('click', function () {
-    var link = '#小程序://逛逛/3Uh0mx4TbPpEyPH';
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(link).then(function () {
-        var ok = document.getElementById('copyWxOk');
-        ok.style.display = 'inline';
-        setTimeout(function () { ok.style.display = 'none'; }, 3000);
-      }).catch(function () { fallbackCopy(link); });
-    } else {
-      fallbackCopy(link);
-    }
-    function fallbackCopy(text) {
-      var ta = document.createElement('textarea');
-      ta.value = text;
-      ta.style.position = 'fixed';
-      ta.style.left = '-9999px';
-      document.body.appendChild(ta);
-      ta.select();
-      document.execCommand('copy');
-      document.body.removeChild(ta);
-      var ok = document.getElementById('copyWxOk');
-      ok.style.display = 'inline';
-      setTimeout(function () { ok.style.display = 'none'; }, 3000);
-    }
-  });
 })();
 </script>
 </body>
